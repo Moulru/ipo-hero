@@ -1,6 +1,6 @@
 import { useStore, type NotifyRarity } from '../store'
 
-const APP_VERSION = '0.9.0'
+const APP_VERSION = '0.0.1'
 
 const RARITY_THRESHOLDS: { v: NotifyRarity; label: string }[] = [
   { v: 'all', label: '전체' },
