@@ -1,0 +1,44 @@
+name: 공모주 데이터 갱신
+
+# 주기적으로 스크래퍼(npm run data)를 돌려 ipos.json을 갱신·커밋한다.
+# 커밋된 public/ipos.json은 raw.githubusercontent 로 즉시 서빙되어(앱이 런타임 fetch) 라이브 갱신된다.
+on:
+  schedule:
+    # 30분마다 (UTC 기준, GitHub 사정상 다소 지연될 수 있음).
+    # ⚠️ 공개(public) repo = Actions 무제한 무료. 비공개(private) repo = 월 2000분 한도이므로
+    #    이 주기면 초과할 수 있음 → 비공개면 '0 * * * *'(매시간)로 낮추거나 공개 repo 권장.
+    - cron: '*/30 * * * *'
+  workflow_dispatch: {} # Actions 탭에서 수동 실행 버튼
+
+permissions:
+  contents: write # ipos.json 커밋/푸시용
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: 데이터 수집 (DART+KIND+38)
+        env:
+          DART_API_KEY: ${{ secrets.DART_API_KEY }} # Settings > Secrets 에 등록
+        run: npm run data
+      - name: 변경분만 커밋
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/ipos.json public/ipos.json
+          if git diff --staged --quiet; then
+            echo "데이터 변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore: 공모주 데이터 자동 갱신"
+            git push
+          fi

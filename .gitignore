@@ -1,0 +1,26 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+
+# 에디터/툴링 (로컬 전용)
+.claude
+.vscode
+.idea
+
+# Capacitor (안드로이드 추가 시)
+android
+ios
+
+# 로그
+npm-debug.log*
+*.log
+
+# 비밀키·캐시 (커밋 금지)
+OpenAPIkey.txt
+*.key
+.env
+.env.*
+scripts/_gradecache.json
+scripts/.cache
