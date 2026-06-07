@@ -42,15 +42,23 @@ npm run data     # 데이터 수집 → src/data/ipos.json · public/ipos.json
 
 수집에는 DART OpenAPI 키가 필요합니다 — 프로젝트 루트 `OpenAPIkey.txt` 또는 환경변수 `DART_API_KEY`.
 
-## 자동 갱신 · 배포
+## 데이터 자동 갱신
 
-GitHub Actions로 무료 운영합니다.
+GitHub Actions(`refresh-data.yml`)가 일정 주기로 데이터를 갱신·커밋합니다 (저장소 Secret `DART_API_KEY` 필요). 앱은 실행 시 호스팅된 `ipos.json`을 가져와 자동으로 최신화하며, 네트워크 실패 시 번들 데이터로 동작합니다. 데이터 URL은 `.env.production`의 `VITE_DATA_URL`로 지정합니다.
 
-- **`refresh-data.yml`** — 일정 주기로 데이터를 갱신·커밋 (저장소 Secret `DART_API_KEY` 필요)
-- **`deploy.yml`** — 코드 변경 시 GitHub Pages로 빌드·배포
-- 앱은 실행 시 호스팅된 `ipos.json`을 가져와 자동으로 최신화하며, 네트워크 실패 시 번들 데이터로 동작합니다.
+## 안드로이드 (Capacitor)
 
-외부 호스팅·모바일 빌드에서는 `VITE_DATA_URL`로 라이브 데이터 URL을 지정합니다.
+```bash
+npm run build              # 웹 자산 빌드 (VITE_DATA_URL 주입)
+npx cap sync android       # android/ 네이티브 프로젝트에 동기화
+```
+
+이후 Android Studio로 `android/`를 열어 실행·빌드하거나, 디버그 APK를 직접 빌드합니다.
+
+```bash
+android\gradlew assembleDebug
+# → android/app/build/outputs/apk/debug/app-debug.apk
+```
 
 ## 프로젝트 구조
 

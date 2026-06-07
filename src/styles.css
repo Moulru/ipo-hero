@@ -104,7 +104,7 @@ button {
 /* ===== TopBar ===== */
 .topbar {
   flex-shrink: 0;
-  padding: 14px 16px 12px;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
   background: var(--scrim);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(8px);
@@ -205,6 +205,7 @@ button {
   background: var(--scrim);
   border-top: 1px solid var(--border);
   backdrop-filter: blur(10px);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .nav-btn {
   flex: 1;

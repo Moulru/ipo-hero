@@ -11,9 +11,9 @@
 | 폰트/테마 | Pretendard(CDN) · 색은 모두 CSS 변수, **라이트 기본(따뜻한 오프화이트)** + `:root.dark` 다크 토글 |
 | 연출 | 순수 CSS + canvas(콘페티) · navigator.vibrate · **사운드 없음** |
 | 데이터 | 하이브리드(`npm run data`) → `ipos.json`. DART(opendart, 키=env `DART_API_KEY` 또는 `OpenAPIkey.txt`) + 거래소(KIND) + 보조 수요지표 |
-| 자동화/배포 | GitHub Actions cron(30분 데이터 갱신) + Pages 배포. 앱은 런타임에 라이브 `ipos.json` fetch |
+| 자동화 | GitHub Actions cron(30분, `public/ipos.json` 갱신). 앱이 런타임에 raw URL로 fetch. **웹 배포 제거**(모바일 전환) |
 | 저장소 | github.com/Moulru/ipo-hero · 라이브 데이터 = `raw.githubusercontent.com/Moulru/ipo-hero/main/public/ipos.json` |
-| 안드로이드 | Capacitor 설정 포함(빌드 추후). 모바일 빌드 시 `VITE_DATA_URL` = 위 raw URL |
+| 모바일 | **Capacitor 6**(JDK 17). `android/` 생성됨. 라이브 URL은 `.env.production`(VITE_DATA_URL)로 빌드 시 주입 |
 
 ## 실행
 
@@ -21,7 +21,9 @@
 npm install
 npm run data   # 실데이터 수집 → src/data/ipos.json (+ public/ipos.json)
 npm run dev    # http://localhost:5173
-npm run build  # tsc --noEmit + vite build
+npm run build  # tsc --noEmit + vite build (.env.production의 VITE_DATA_URL 주입)
+npx cap sync android                 # 모바일: 빌드 결과를 android/에 동기화
+android\gradlew.bat -p android assembleDebug   # 디버그 APK (또는 Android Studio로 android/ 열기)
 ```
 
 ## 탭 구조
@@ -41,7 +43,8 @@ src/
   store.ts  zustand: setSubscription(증거금 에스크로)·settleReal(상장+1·순수손익)·setNotify·setDark·pullRelic·tick
   components/ TopBar·BottomNav · Dashboard·IpoDetail·DropRate · Play·DailyCheckIn·Quests
               My·Dex·RelicDex·Achievements·ClassPicker·SystemSettings · ResultModal·RelicReveal·Toast·CountUp
-.github/workflows/  refresh-data.yml(cron 데이터 갱신) · deploy.yml(Pages 빌드·배포)
+.github/workflows/  refresh-data.yml(cron 데이터 갱신)
+android/  Capacitor 안드로이드 프로젝트 (gitignore · `npx cap add android`로 재생성)
 ```
 
 ## 핵심 도메인 규칙 (반드시 준수)
@@ -66,4 +69,4 @@ src/
 
 ## 추후
 
-데이터 자동화 가동(repo·시크릿·Pages 완료) · 증권사별 경쟁률 수집→배정 비교 · 알림 실제 전달(Capacitor LocalNotifications/푸시=백엔드) · Pretendard 오프라인 번들 · Capacitor 실빌드 · 시즌 랭킹(백엔드)
+증권사별 경쟁률 수집→배정 비교 · 알림 실제 전달(Capacitor LocalNotifications=상장일/푸시=백엔드) · Pretendard 오프라인 번들 · 앱 아이콘·스플래시 · 릴리스 서명·Play Store 출시 · 시즌 랭킹(백엔드)

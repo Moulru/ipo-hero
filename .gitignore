@@ -22,5 +22,6 @@ OpenAPIkey.txt
 *.key
 .env
 .env.*
+!.env.production
 scripts/_gradecache.json
 scripts/.cache
