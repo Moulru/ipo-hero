@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from './store'
-import { refreshIpos, getIpos } from './data/loadIpos'
+import { refreshIpos } from './data/loadIpos'
 import { setupNative, applyStatusBar } from './lib/native'
-import { syncListingNotifications } from './lib/notify'
-import { confetti, haptic, toast } from './lib/juice'
+import { confetti, haptic, toast, setHapticsEnabled } from './lib/juice'
 import { achById } from './data/achievements'
 import { TopBar } from './components/TopBar'
 import { BottomNav, type Tab } from './components/BottomNav'
@@ -26,9 +25,7 @@ export default function App() {
   const lastUnlocks = useStore((s) => s.lastUnlocks)
   const clearUnlocks = useStore((s) => s.clearUnlocks)
   const darkMode = useStore((s) => s.darkMode)
-  const notifyListing = useStore((s) => s.notifyListing)
-  const subscriptions = useStore((s) => s.subscriptions)
-  const predictions = useStore((s) => s.predictions)
+  const haptics = useStore((s) => s.haptics)
   const [tab, setTab] = useState<Tab>('home')
   const tabRef = useRef(tab)
   tabRef.current = tab
@@ -61,11 +58,10 @@ export default function App() {
     applyStatusBar(darkMode)
   }, [darkMode])
 
-  // 상장일 로컬 알림: 참여(청약/예측) 종목의 상장일에 예약 (설정/참여 변경 시 재동기화)
+  // 진동(햅틱) 효과 on/off → juice 동기화
   useEffect(() => {
-    const betIds = Array.from(new Set([...Object.keys(subscriptions), ...Object.keys(predictions)]))
-    syncListingNotifications(getIpos(), notifyListing, betIds)
-  }, [notifyListing, subscriptions, predictions])
+    setHapticsEnabled(haptics)
+  }, [haptics])
 
   useEffect(() => {
     if (lastUnlocks.length) {

@@ -1,19 +1,24 @@
-import { useStore, type NotifyRarity } from '../store'
+import { useStore } from '../store'
 import { useBackClose } from '../lib/backStack'
+import { refreshIpos, useDataTimestamp } from '../data/loadIpos'
+import { toast } from '../lib/juice'
 
 const APP_VERSION = '0.0.1'
+const CONTACT_EMAIL = 'admin@medinfalls.com'
 
-const RARITY_THRESHOLDS: { v: NotifyRarity; label: string }[] = [
-  { v: 'all', label: '전체' },
-  { v: 'rare', label: '레어↑' },
-  { v: 'epic', label: '에픽↑' },
-  { v: 'legendary', label: '레전더리' },
-]
+function fmtTime(iso: string): string {
+  if (!iso) return '-'
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return '-'
+  const p = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`
+}
 
-// 시스템 설정 (별도 상세 화면) — 화면(다크모드) · 알림 · 정보
+// 시스템 설정 (별도 상세 화면) — 화면(다크/진동) · 데이터(새로고침) · 정보
 export function SystemSettings({ onClose }: { onClose: () => void }) {
   useBackClose(onClose)
   const s = useStore()
+  const updatedAt = useDataTimestamp()
 
   return (
     <div className="sheet-overlay" onClick={onClose}>
@@ -29,30 +34,26 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
         <div className="panel">
           <div className="block-title">🎨 화면</div>
           <Toggle label="다크 모드" checked={s.darkMode} onChange={(v) => s.setDark(v)} />
+          <Toggle label="진동 효과" checked={s.haptics} onChange={(v) => s.setHaptics(v)} />
         </div>
 
-        {/* 알림 */}
+        {/* 데이터 */}
         <div className="panel">
-          <div className="block-title">🔔 알림</div>
-          <Toggle label="새 공모주 알림" checked={s.notifyNewIpo} onChange={(v) => s.setNotify({ notifyNewIpo: v })} />
-          {s.notifyNewIpo && (
-            <div className="notify-rarity">
-              <span className="muted">알림 등급</span>
-              <div className="rarity-seg">
-                {RARITY_THRESHOLDS.map((opt) => (
-                  <button
-                    key={opt.v}
-                    className={s.notifyMinRarity === opt.v ? 'seg sel' : 'seg'}
-                    onClick={() => s.setNotify({ notifyMinRarity: opt.v })}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-          <Toggle label="상장일 알림" checked={s.notifyListing} onChange={(v) => s.setNotify({ notifyListing: v })} />
-          <div className="settings-note muted">실제 휴대폰 알림은 앱(안드로이드) 출시 후 동작해요.</div>
+          <div className="block-title">🔄 데이터</div>
+          <div className="info-row">
+            <span>마지막 갱신</span>
+            <span className="muted">{fmtTime(updatedAt)}</span>
+          </div>
+          <button
+            className="refresh-btn"
+            onClick={async () => {
+              await refreshIpos()
+              toast('최신 공모주 데이터로 갱신했어요', '🔄')
+            }}
+          >
+            데이터 새로고침
+          </button>
+          <div className="settings-note muted">공모주 데이터는 앱 실행 시 자동으로 최신화돼요.</div>
         </div>
 
         {/* 정보 */}
@@ -65,6 +66,14 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
           <div className="info-row">
             <span>버전</span>
             <span className="muted">v{APP_VERSION}</span>
+          </div>
+          <div className="info-row">
+            <span>개인정보</span>
+            <span className="muted">수집하지 않음</span>
+          </div>
+          <div className="info-row">
+            <span>문의</span>
+            <span className="muted">{CONTACT_EMAIL}</span>
           </div>
         </div>
       </div>

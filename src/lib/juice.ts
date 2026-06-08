@@ -1,6 +1,13 @@
 // 게임 "손맛" 유틸: 진동 · 콘페티 · 토스트. (사운드 없음 — 단순화)
 
+// 진동 on/off (시스템 설정에서 토글). App이 store 값으로 동기화.
+let hapticsEnabled = true
+export function setHapticsEnabled(v: boolean): void {
+  hapticsEnabled = v
+}
+
 export function haptic(ms: number | number[] = 12): void {
+  if (!hapticsEnabled) return
   try {
     navigator.vibrate?.(ms)
   } catch {

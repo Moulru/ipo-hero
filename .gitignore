@@ -4,6 +4,11 @@ dist-ssr
 *.local
 .DS_Store
 
+# 빌드 산출물 (커밋 금지 — 바탕화면/릴리스로만)
+*.apk
+*.aab
+docs/
+
 # 에디터/툴링 (로컬 전용)
 .claude
 .vscode

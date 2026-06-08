@@ -57,3 +57,8 @@ function subscribe(fn: () => void): () => void {
 export function useIpos(): Ipo[] {
   return useSyncExternalStore(subscribe, () => current, () => current)
 }
+
+// 데이터 기준 시각(generatedAt, ISO). refreshIpos 성공 시 자동 갱신.
+export function useDataTimestamp(): string {
+  return useSyncExternalStore(subscribe, () => generatedAt, () => generatedAt)
+}

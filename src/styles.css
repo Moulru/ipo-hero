@@ -1692,6 +1692,21 @@ button:active {
 .info-row + .info-row {
   border-top: 1px solid var(--border);
 }
+/* 데이터 새로고침 버튼 */
+.refresh-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+.refresh-btn:active {
+  background: var(--surface2);
+}
 /* 내비 타일 (라운지 컬렉션·기록) */
 .nav-list {
   display: flex;

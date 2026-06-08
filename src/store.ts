@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { ClassId, Ipo, PredictionChoice, Rarity } from './types'
+import type { ClassId, Ipo, PredictionChoice } from './types'
 import { SEED_MONEY, comboMult, outcomeFromReturn, rollAllocation, todayYmd } from './lib/calc'
 import { PITY_PULLS, RELIC_COST, RELIC_COST_10, aggregateEffects, dupRefund, pullCard } from './data/relics'
 import { type QuestState, type QuestType, questById, rollDailyQuests } from './data/quests'
@@ -9,7 +9,6 @@ import { ACHIEVEMENTS, type AchStats } from './data/achievements'
 const XP_PER_LEVEL = 100
 const levelOf = (xp: number) => Math.floor(xp / XP_PER_LEVEL) + 1
 // 순수 실력: 모든 클래스 동일 시드. 클래스는 XP에만, 카드는 게임 레이어(XP·골드)에만 영향.
-export type NotifyRarity = Rarity | 'all'
 
 export interface PlayResult {
   kind: 'real'
@@ -57,10 +56,8 @@ interface Store {
   lastResult: PlayResult | null
   relicReveal: { ids: string[]; refund: number } | null
   lastUnlocks: string[]
-  notifyNewIpo: boolean // 새 공모주 알림 on/off
-  notifyMinRarity: NotifyRarity // 새 공모주 알림 등급 임계값
-  notifyListing: boolean // 상장일 알림 on/off
   darkMode: boolean // 다크 모드 on/off (기본 라이트)
+  haptics: boolean // 진동(햅틱) 효과 on/off
 
   chooseClass: (c: ClassId) => void
   tick: () => void
@@ -76,7 +73,7 @@ interface Store {
   claimQuest: (id: string) => void
   equipTitle: (id: string | null) => void
   clearUnlocks: () => void
-  setNotify: (patch: Partial<Pick<Store, 'notifyNewIpo' | 'notifyMinRarity' | 'notifyListing'>>) => void
+  setHaptics: (v: boolean) => void
   setDark: (v: boolean) => void
   resetSeason: () => void
 }
@@ -140,10 +137,8 @@ export const useStore = create<Store>()(
       lastResult: null,
       relicReveal: null,
       lastUnlocks: [],
-      notifyNewIpo: true,
-      notifyMinRarity: 'all',
-      notifyListing: true,
       darkMode: false,
+      haptics: true,
 
       chooseClass: (c) => set({ chosenClass: c }),
 
@@ -337,7 +332,7 @@ export const useStore = create<Store>()(
 
       equipTitle: (id) => set({ equippedTitle: id }),
       clearUnlocks: () => set({ lastUnlocks: [] }),
-      setNotify: (patch) => set(patch),
+      setHaptics: (v) => set({ haptics: v }),
       setDark: (v) => set({ darkMode: v }),
 
       resetSeason: () => set({ seedMoney: SEED_MONEY, subscriptions: {}, predictions: {}, settledIds: [], escrow: {} }),
