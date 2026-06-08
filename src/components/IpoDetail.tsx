@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Ipo, PredictionChoice, Stage } from '../types'
 import { useStore } from '../store'
+import { useBackClose } from '../lib/backStack'
 import { DropRate } from './DropRate'
 import {
   OUTCOME_META,
@@ -19,6 +20,7 @@ import {
 const OUTCOMES: PredictionChoice[] = ['ttassang', 'up', 'flat', 'down']
 
 export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onClose: () => void }) {
+  useBackClose(onClose)
   const seedMoney = useStore((s) => s.seedMoney)
   const escrowHeld = useStore((s) => s.escrow[ipo.id] ?? 0)
   const prediction = useStore((s) => s.predictions[ipo.id])

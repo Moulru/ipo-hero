@@ -1,4 +1,5 @@
 import { useStore, type NotifyRarity } from '../store'
+import { useBackClose } from '../lib/backStack'
 
 const APP_VERSION = '0.0.1'
 
@@ -11,6 +12,7 @@ const RARITY_THRESHOLDS: { v: NotifyRarity; label: string }[] = [
 
 // 시스템 설정 (별도 상세 화면) — 화면(다크모드) · 알림 · 정보
 export function SystemSettings({ onClose }: { onClose: () => void }) {
+  useBackClose(onClose)
   const s = useStore()
 
   return (

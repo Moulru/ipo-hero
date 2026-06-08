@@ -1,7 +1,9 @@
 import { ACHIEVEMENTS } from '../data/achievements'
 import { useStore } from '../store'
+import { useBackClose } from '../lib/backStack'
 
 export function Achievements({ onClose }: { onClose: () => void }) {
+  useBackClose(onClose)
   const achievements = useStore((s) => s.achievements)
   const got = ACHIEVEMENTS.filter((a) => achievements.includes(a.id))
   const locked = ACHIEVEMENTS.filter((a) => !achievements.includes(a.id))

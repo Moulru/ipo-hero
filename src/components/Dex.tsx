@@ -1,11 +1,13 @@
 import { useIpos } from '../data/loadIpos'
 import { useStore } from '../store'
 import { OUTCOME_META, RARITY_META, outcomeFromReturn, signedPct } from '../lib/calc'
+import { useBackClose } from '../lib/backStack'
 import type { Rarity } from '../types'
 
 const ORDER: Rarity[] = ['legendary', 'epic', 'rare', 'common']
 
 export function Dex({ onClose }: { onClose: () => void }) {
+  useBackClose(onClose)
   const ALL = useIpos()
   const dex = useStore((s) => s.dex)
   const collected = ALL.filter((i) => dex.includes(i.id))

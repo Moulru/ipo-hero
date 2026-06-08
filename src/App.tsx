@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useStore } from './store'
-import { refreshIpos } from './data/loadIpos'
+import { refreshIpos, getIpos } from './data/loadIpos'
+import { setupNative, applyStatusBar } from './lib/native'
+import { syncListingNotifications } from './lib/notify'
 import { confetti, haptic, toast } from './lib/juice'
 import { achById } from './data/achievements'
 import { TopBar } from './components/TopBar'
@@ -24,7 +26,12 @@ export default function App() {
   const lastUnlocks = useStore((s) => s.lastUnlocks)
   const clearUnlocks = useStore((s) => s.clearUnlocks)
   const darkMode = useStore((s) => s.darkMode)
+  const notifyListing = useStore((s) => s.notifyListing)
+  const subscriptions = useStore((s) => s.subscriptions)
+  const predictions = useStore((s) => s.predictions)
   const [tab, setTab] = useState<Tab>('home')
+  const tabRef = useRef(tab)
+  tabRef.current = tab
   const [showClass, setShowClass] = useState(false)
   const [showDex, setShowDex] = useState(false)
   const [showRelicDex, setShowRelicDex] = useState(false)
@@ -35,15 +42,30 @@ export default function App() {
     tick()
   }, [tick])
 
-  // 앱 시작 시 최신 공모주 데이터(cron 갱신본) 가져오기 — 실패 시 번들 데이터 유지
+  // 앱 시작: 최신 데이터 가져오기 + 네이티브(스플래시·뒤로가기) 초기화
   useEffect(() => {
     refreshIpos()
+    // 뒤로가기: 오버레이 닫기 → (홈이 아니면)홈 탭 → 앱 종료
+    setupNative(() => {
+      if (tabRef.current !== 'home') {
+        setTab('home')
+        return true
+      }
+      return false
+    })
   }, [])
 
-  // 다크 모드: html에 .dark 토글 (기본 라이트)
+  // 다크 모드: html에 .dark 토글 (기본 라이트) + 상태바 색
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode)
+    applyStatusBar(darkMode)
   }, [darkMode])
+
+  // 상장일 로컬 알림: 참여(청약/예측) 종목의 상장일에 예약 (설정/참여 변경 시 재동기화)
+  useEffect(() => {
+    const betIds = Array.from(new Set([...Object.keys(subscriptions), ...Object.keys(predictions)]))
+    syncListingNotifications(getIpos(), notifyListing, betIds)
+  }, [notifyListing, subscriptions, predictions])
 
   useEffect(() => {
     if (lastUnlocks.length) {

@@ -13,7 +13,7 @@
 | 데이터 | 하이브리드(`npm run data`) → `ipos.json`. DART(opendart, 키=env `DART_API_KEY` 또는 `OpenAPIkey.txt`) + 거래소(KIND) + 보조 수요지표 |
 | 자동화 | GitHub Actions cron(30분, `public/ipos.json` 갱신). 앱이 런타임에 raw URL로 fetch. **웹 배포 제거**(모바일 전환) |
 | 저장소 | github.com/Moulru/ipo-hero · 라이브 데이터 = `raw.githubusercontent.com/Moulru/ipo-hero/main/public/ipos.json` |
-| 모바일 | **Capacitor 6**(JDK 17). `android/` 생성됨. 라이브 URL은 `.env.production`(VITE_DATA_URL)로 빌드 시 주입 |
+| 모바일 | **Capacitor 6**(JDK 17). 플러그인: app(뒤로가기)·status-bar·splash-screen·local-notifications. 커스텀 아이콘·스플래시. 라이브 URL=`.env.production`. 릴리스 서명=`android/keystore.properties`(gitignore) |
 
 ## 실행
 
@@ -67,7 +67,9 @@ assets/   앱 아이콘 소스(icon-{only,foreground,background}.svg+png) → `n
 - **증권사별 배정주수**는 실시간 증권사별 경쟁률(라이브)이 필요 → 데이터 자동화 확장 단계. 현재는 청약 가능 증권사 **목록**만 표시.
 - **CountUp**은 setInterval 기반(헤드리스 rAF throttle 회피).
 - **OneDrive 폴더라 Vite 워처가 변경을 누락**할 때가 있음 → 미반영 시 dev 서버 재시작(stop+start).
+- **네이티브(모바일)**: `lib/native.ts`(스플래시 hide·상태바·뒤로가기), `lib/backStack.ts`(오버레이는 `useBackClose(onClose)`로 등록 → 뒤로가기가 위에서부터 닫음), `lib/notify.ts`(상장일 로컬 알림). 모든 네이티브 호출은 `Capacitor.isNativePlatform()` + try/catch로 가드(웹에선 no-op). **기기 실측은 못 했으니** 첫 디바이스 테스트 시 상태바/스플래시/알림 확인 필요.
+- **릴리스 빌드**: `android\gradlew bundleRelease` → 서명된 AAB. 서명키=`android/app/release.keystore`+`android/keystore.properties`(gitignore, **백업 필수**). android/ 재생성 시 서명 설정 재적용 필요.
 
 ## 추후
 
-증권사별 경쟁률 수집→배정 비교 · 알림 실제 전달(Capacitor LocalNotifications=상장일/푸시=백엔드) · Pretendard 오프라인 번들 · 스플래시 화면 · 릴리스 서명·Play Store 출시 · 시즌 랭킹(백엔드)
+**증권사별 배정 비교**(증권사별 실시간 경쟁률 소스 미확보 → 보류) · **신규 공모주 푸시**(FCM+발송서버=Firebase 계정 필요) · **Play Store 출시**(AAB 서명 완료 → Console 등록·심사 수동, 개인정보처리방침=PRIVACY.md) · 시즌 랭킹(백엔드)

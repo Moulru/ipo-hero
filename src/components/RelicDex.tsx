@@ -1,5 +1,6 @@
 import { useStore } from '../store'
 import { RARITY_META } from '../lib/calc'
+import { useBackClose } from '../lib/backStack'
 import { RELICS } from '../data/relics'
 import type { Rarity } from '../types'
 
@@ -7,6 +8,7 @@ const ORDER: Rarity[] = ['legendary', 'epic', 'rare', 'common']
 
 // 투자 카드 도감 (공모주 도감처럼 별도 상세 화면) — 보유한 카드만 등급별로 표시
 export function RelicDex({ onClose }: { onClose: () => void }) {
+  useBackClose(onClose)
   const ownedRelics = useStore((s) => s.ownedRelics)
   const owned = new Set(ownedRelics)
   const uniqueOwned = owned.size

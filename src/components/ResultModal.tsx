@@ -3,10 +3,12 @@ import { useStore } from '../store'
 import { OUTCOME_META, RARITY_META, formatMan, signedPct } from '../lib/calc'
 import { rankInfo } from '../data/ranks'
 import { confetti, haptic } from '../lib/juice'
+import { useBackClose } from '../lib/backStack'
 
 export function ResultModal() {
   const r = useStore((s) => s.lastResult)!
   const clear = useStore((s) => s.clearResult)
+  useBackClose(clear)
   const [phase, setPhase] = useState(0) // 0 굴림 · 1 배정 · 2 결과 · 3 보상
 
   useEffect(() => {

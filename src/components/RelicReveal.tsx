@@ -4,10 +4,12 @@ import { type Relic } from '../types'
 import { relicById } from '../data/relics'
 import { RARITY_META } from '../lib/calc'
 import { confetti, haptic } from '../lib/juice'
+import { useBackClose } from '../lib/backStack'
 
 export function RelicReveal() {
   const reveal = useStore((s) => s.relicReveal)!
   const clear = useStore((s) => s.clearRelicReveal)
+  useBackClose(clear)
   const relics = reveal.ids.map((id) => relicById(id)).filter(Boolean) as Relic[]
   const hasLegend = relics.some((r) => r.rarity === 'legendary')
   const hasEpic = relics.some((r) => r.rarity === 'epic')

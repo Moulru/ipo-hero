@@ -1,7 +1,9 @@
 import { useStore } from '../store'
 import { CLASSES } from '../data/classes'
+import { useBackClose } from '../lib/backStack'
 
 export function ClassPicker({ onClose }: { onClose: () => void }) {
+  useBackClose(onClose)
   const chosenClass = useStore((s) => s.chosenClass)
   const chooseClass = useStore((s) => s.chooseClass)
 
