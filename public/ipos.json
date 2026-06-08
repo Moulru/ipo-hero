@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-07T23:11:14.408Z",
+  "generatedAt": "2026-06-08T01:41:07.487Z",
   "count": 32,
   "ipos": [
     {
@@ -215,7 +215,7 @@
       "institutionalRate": 1327.13,
       "lockupRatio": 0,
       "offerAmount": 130,
-      "listingReturn": null,
+      "listingReturn": -0.8,
       "expectedPer10": 0.26,
       "underwriter": "대신증권",
       "ticker": null,
