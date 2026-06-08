@@ -45,6 +45,7 @@ src/
               My·Dex·RelicDex·Achievements·ClassPicker·SystemSettings · ResultModal·RelicReveal·Toast·CountUp
 .github/workflows/  refresh-data.yml(cron 데이터 갱신)
 android/  Capacitor 안드로이드 프로젝트 (gitignore · `npx cap add android`로 재생성)
+assets/   앱 아이콘 소스(icon-{only,foreground,background}.svg+png) → `npx @capacitor/assets generate --android`로 android/ 아이콘 생성
 ```
 
 ## 핵심 도메인 규칙 (반드시 준수)
@@ -69,4 +70,4 @@ android/  Capacitor 안드로이드 프로젝트 (gitignore · `npx cap add andr
 
 ## 추후
 
-증권사별 경쟁률 수집→배정 비교 · 알림 실제 전달(Capacitor LocalNotifications=상장일/푸시=백엔드) · Pretendard 오프라인 번들 · 앱 아이콘·스플래시 · 릴리스 서명·Play Store 출시 · 시즌 랭킹(백엔드)
+증권사별 경쟁률 수집→배정 비교 · 알림 실제 전달(Capacitor LocalNotifications=상장일/푸시=백엔드) · Pretendard 오프라인 번들 · 스플래시 화면 · 릴리스 서명·Play Store 출시 · 시즌 랭킹(백엔드)
