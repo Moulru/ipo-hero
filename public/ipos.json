@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-12T21:23:04.162Z",
-  "count": 32,
+  "generatedAt": "2026-06-12T22:57:39.083Z",
+  "count": 30,
   "ipos": [
     {
       "id": "n2299",
@@ -267,7 +267,7 @@
       "isReal": true
     },
     {
-      "id": "k477850",
+      "id": "n2285",
       "name": "마키나락스",
       "sector": "기타",
       "offerPrice": 15000,
@@ -284,12 +284,12 @@
       "listingReturn": 300,
       "expectedPer10": 0.19,
       "underwriter": "미래에셋증권,현대차증권",
-      "ticker": "477850",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
     {
-      "id": "k487580",
+      "id": "n2286",
       "name": "폴레드",
       "sector": "기타",
       "offerPrice": 5000,
@@ -298,7 +298,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-05-04",
       "subscriptionEnd": "2026-05-06",
-      "listingDate": "2026-05-14",
+      "listingDate": "2026-03-25",
       "competitionRate": 3169.86,
       "institutionalRate": 1486.66,
       "lockupRatio": 67.24,
@@ -306,12 +306,12 @@
       "listingReturn": 300,
       "expectedPer10": 0.18,
       "underwriter": "NH투자증권",
-      "ticker": "487580",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
     {
-      "id": "k439960",
+      "id": "n2278",
       "name": "코스모로보틱스",
       "sector": "로봇",
       "offerPrice": 6000,
@@ -328,7 +328,7 @@
       "listingReturn": 300,
       "expectedPer10": 0.22,
       "underwriter": "유진투자증권,NH투자증권,유안타증권",
-      "ticker": "439960",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
@@ -443,7 +443,7 @@
       "isReal": true
     },
     {
-      "id": "k394420",
+      "id": "n2270",
       "name": "리센스메디컬",
       "sector": "바이오",
       "offerPrice": 11000,
@@ -460,7 +460,7 @@
       "listingReturn": 67.7,
       "expectedPer10": 0.22,
       "underwriter": "한국투자증권,KB증권",
-      "ticker": "394420",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
@@ -531,7 +531,7 @@
       "isReal": true
     },
     {
-      "id": "k408470",
+      "id": "n2276",
       "name": "한패스",
       "sector": "기타",
       "offerPrice": 19000,
@@ -548,12 +548,12 @@
       "listingReturn": 43.2,
       "expectedPer10": 0.24,
       "underwriter": "한국투자증권,대신증권",
-      "ticker": "408470",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
     {
-      "id": "k493280",
+      "id": "n2272",
       "name": "아이엠바이오로직스",
       "sector": "바이오",
       "offerPrice": 26000,
@@ -562,7 +562,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-03-11",
       "subscriptionEnd": "2026-03-12",
-      "listingDate": "2026-03-20",
+      "listingDate": null,
       "competitionRate": 1806,
       "institutionalRate": 839.23,
       "lockupRatio": 76.01,
@@ -570,7 +570,7 @@
       "listingReturn": null,
       "expectedPer10": 0.24,
       "underwriter": "한국투자증권,신한투자증권",
-      "ticker": "493280",
+      "ticker": null,
       "rarity": "epic",
       "isReal": true
     },
@@ -619,7 +619,7 @@
       "isReal": true
     },
     {
-      "id": "k458350",
+      "id": "n2273",
       "name": "에스팀",
       "sector": "기타",
       "offerPrice": 8500,
@@ -628,7 +628,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-02-23",
       "subscriptionEnd": "2026-02-24",
-      "listingDate": "2026-03-06",
+      "listingDate": null,
       "competitionRate": 1960.87,
       "institutionalRate": 1334.91,
       "lockupRatio": 42.45,
@@ -636,12 +636,12 @@
       "listingReturn": null,
       "expectedPer10": 0.23,
       "underwriter": "한국투자증권",
-      "ticker": "458350",
+      "ticker": null,
       "rarity": "legendary",
       "isReal": true
     },
     {
-      "id": "k279570",
+      "id": "n2271",
       "name": "케이뱅크",
       "sector": "기타",
       "offerPrice": 8300,
@@ -650,7 +650,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-02-20",
       "subscriptionEnd": "2026-02-23",
-      "listingDate": "2026-03-05",
+      "listingDate": null,
       "competitionRate": 134.59,
       "institutionalRate": 198.53,
       "lockupRatio": 12.39,
@@ -658,51 +658,7 @@
       "listingReturn": null,
       "expectedPer10": 0.86,
       "underwriter": "NH투자증권,삼성증권,신한투자증권",
-      "ticker": "279570",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "k288180",
-      "name": "케이피항공산업",
-      "sector": "플랫폼",
-      "offerPrice": 0,
-      "priceLow": null,
-      "priceHigh": null,
-      "priceConfirmed": false,
-      "subscriptionStart": "2026-03-24",
-      "subscriptionEnd": "2026-03-24",
-      "listingDate": "2026-05-19",
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": null,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": null,
-      "ticker": "288180",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "k493330",
-      "name": "지에프아이",
-      "sector": "기타",
-      "offerPrice": 0,
-      "priceLow": null,
-      "priceHigh": null,
-      "priceConfirmed": false,
-      "subscriptionStart": "2025-11-20",
-      "subscriptionEnd": "2025-11-20",
-      "listingDate": "2026-01-14",
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": null,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": null,
-      "ticker": "493330",
+      "ticker": null,
       "rarity": "common",
       "isReal": true
     }
