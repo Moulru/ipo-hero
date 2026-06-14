@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-13T23:11:18.906Z",
-  "count": 32,
+  "generatedAt": "2026-06-14T01:49:30.559Z",
+  "count": 31,
   "ipos": [
     {
       "id": "n2299",
@@ -681,28 +681,6 @@
       "expectedPer10": null,
       "underwriter": null,
       "ticker": "288180",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "k493330",
-      "name": "지에프아이",
-      "sector": "기타",
-      "offerPrice": 0,
-      "priceLow": null,
-      "priceHigh": null,
-      "priceConfirmed": false,
-      "subscriptionStart": "2025-11-20",
-      "subscriptionEnd": "2025-11-20",
-      "listingDate": "2026-01-14",
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": null,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": null,
-      "ticker": "493330",
       "rarity": "common",
       "isReal": true
     }
