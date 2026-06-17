@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T02:02:21.055Z",
+  "generatedAt": "2026-06-17T07:42:35.031Z",
   "count": 32,
   "ipos": [
     {
@@ -182,16 +182,16 @@
       "id": "n2289",
       "name": "스트라드비젼",
       "sector": "기타",
-      "offerPrice": 14000,
+      "offerPrice": 12000,
       "priceLow": 12000,
       "priceHigh": 14000,
-      "priceConfirmed": false,
+      "priceConfirmed": true,
       "subscriptionStart": "2026-06-18",
-      "subscriptionEnd": "2026-06-18",
+      "subscriptionEnd": "2026-06-19",
       "listingDate": "2026-06-30",
       "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
+      "institutionalRate": 381.3,
+      "lockupRatio": 2.77,
       "offerAmount": 840,
       "listingReturn": null,
       "expectedPer10": null,
