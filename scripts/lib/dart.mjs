@@ -36,7 +36,21 @@ export function unzip(buf) {
   }
   return files
 }
-const getBuf = async (url) => Buffer.from(await (await fetch(url)).arrayBuffer())
+// DART는 가끔 느려서 타임아웃 → 재시도(백오프) + 30s 타임아웃으로 보강
+const getBuf = async (url, retries = 3) => {
+  let lastErr
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(30000) })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      return Buffer.from(await res.arrayBuffer())
+    } catch (e) {
+      lastErr = e
+      if (i < retries - 1) await new Promise((r) => setTimeout(r, 1500 * (i + 1)))
+    }
+  }
+  throw lastErr
+}
 export const decode = (b) => {
   const u = b.toString('utf8')
   if (!u.includes('�')) return u
@@ -69,8 +83,12 @@ export async function corpMap() {
 // ───────── 공시 목록 ─────────
 export async function listFilings(corp, bgn = '20230101', end = '20261231') {
   const url = `https://opendart.fss.or.kr/api/list.json?crtfc_key=${KEY}&corp_code=${corp}&bgn_de=${bgn}&end_de=${end}&pblntf_ty=C&page_count=100`
-  const j = await (await fetch(url)).json()
-  return (j.list || []).filter((x) => /증권신고서|투자설명서|증권발행실적/.test(x.report_nm))
+  try {
+    const j = await (await fetch(url, { signal: AbortSignal.timeout(20000) })).json()
+    return (j.list || []).filter((x) => /증권신고서|투자설명서|증권발행실적/.test(x.report_nm))
+  } catch {
+    return [] // 일시적 실패 시 해당 종목은 DART 생략(38 폴백)
+  }
 }
 
 // 최신 우선: 발행조건확정 > 기재정정 신고서 > 원신고서 > 투자설명서 (첨부 제외)

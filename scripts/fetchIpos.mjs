@@ -66,7 +66,12 @@ async function main() {
   console.log(`   38 레코드 ${c38.size}건`)
 
   console.log('3) DART corpCode 로딩...')
-  const corps = await corpMap()
+  let corps = {}
+  try {
+    corps = await corpMap()
+  } catch (e) {
+    console.warn(`   ⚠ DART corpCode 로딩 실패 — 38+KIND로만 진행: ${e?.message || e}`)
+  }
   const corpsNorm = new Map(Object.entries(corps).map(([n, c]) => [norm(n), c]))
   console.log(`   기업 ${Object.keys(corps).length}개`)
 
@@ -87,14 +92,19 @@ async function main() {
   // DART 보강은 활성 집합(예정 + 최근상장)만: 38에 있거나 최근150일 상장
   const src = { dartPrice: 0, dartAmount: 0, dartSched: 0, kindListing: 0, kindTicker: 0, demand38: 0, return38: 0 }
   const dartCache = await pool(members, 5, async (m) => {
-    const corp = corps[m.name] || corpsNorm.get(norm(m.name))
-    if (!corp) return null
-    const filings = await listFilings(corp)
-    const reg = pickRegistration(filings)
-    if (!reg) return { corp }
-    const b = parseBackbone(await docText(reg.rcept_no), reg.rcept_dt)
-    return { corp, reg: { rcept_no: reg.rcept_no, rcept_dt: reg.rcept_dt, report_nm: reg.report_nm }, b }
+    try {
+      const corp = corps[m.name] || corpsNorm.get(norm(m.name))
+      if (!corp) return null
+      const filings = await listFilings(corp)
+      const reg = pickRegistration(filings)
+      if (!reg) return { corp }
+      const b = parseBackbone(await docText(reg.rcept_no), reg.rcept_dt)
+      return { corp, reg: { rcept_no: reg.rcept_no, rcept_dt: reg.rcept_dt, report_nm: reg.report_nm }, b }
+    } catch {
+      return null // 종목별 DART 실패는 무시(38 폴백)
+    }
   })
+
 
   const ipos = members.map((m, idx) => {
     const d = dartCache[idx]
