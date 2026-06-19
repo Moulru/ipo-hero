@@ -70,13 +70,13 @@ PRIVACY.md  개인정보처리방침(Play 등록용) · docs/  빌드 산출물(
 - **UI 용어**: 화면 표기는 '투자 성향'(코드 식별자는 `chosenClass`/`CLASSES`).
 - **알림 기능 제거됨**(새 공모주 푸시=Firebase 의존이라 제외). 진동 토글·데이터 새로고침으로 대체. `notify.ts` 없음.
 - **네이티브(모바일)**: `lib/native.ts`(스플래시·상태바·뒤로가기), `lib/backStack.ts`(오버레이는 `useBackClose(onClose)`로 등록 → 뒤로가기가 위에서부터 닫음). 모든 네이티브 호출은 `Capacitor.isNativePlatform()`+try/catch 가드(웹=no-op).
-- **릴리스 빌드**: `gradlew bundleRelease` → 서명 AAB. 키=`android/app/release.keystore`+`keystore.properties`(gitignore, **백업 필수**, pw=`개인 토큰 관리.md` 참고). android/ 재생성 시 서명·versionName 재적용.
+- **릴리스 빌드**: `gradlew bundleRelease` → 서명 AAB. 키=`android/app/release.keystore`+`keystore.properties`(gitignore, **백업 필수**, pw=`../_myToken_.md` 참고). android/ 재생성 시 서명·versionName 재적용.
 - 에뮬레이터 검증 완료(아이콘·뒤로가기·테마·데이터). **OneDrive 폴더라 Vite 워처 누락** 가능 → 미반영 시 dev 서버 재시작.
 
 ## 관련 (별도 폴더/세션)
 
 - **랜딩페이지**: `../eous-landing/` → **app.eous.cc**(Cloudflare Pages). 여러 앱 허브. 공모주 히어로 카드 포함. 자체 CLAUDE_CONTEXT.md 있음.
-- **CF/시크릿**: 개인 CF 토큰=`cloudflare-token.txt`(gitignore). 전체 토큰 금고=`../개인 토큰 관리.md`(=`_myToken_.md`).
+- **CF/시크릿**: 개인 CF 토큰=`cloudflare-token.txt`(gitignore). 전체 토큰 금고=`../_myToken_.md`.
 
 ## 추후
 
