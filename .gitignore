@@ -24,6 +24,8 @@ npm-debug.log*
 
 # 비밀키·캐시 (커밋 금지)
 OpenAPIkey.txt
+cloudflare-token.txt
+.cloudflare/
 *.key
 .env
 .env.*
