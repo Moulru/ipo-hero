@@ -4,7 +4,7 @@ import { refreshIpos, useDataTimestamp } from '../data/loadIpos'
 import { toast } from '../lib/juice'
 
 const APP_VERSION = '0.0.1'
-const CONTACT_EMAIL = 'admin@medinfalls.com'
+const CONTACT_EMAIL = 'admin@eous.cc'
 
 function fmtTime(iso: string): string {
   if (!iso) return '-'
