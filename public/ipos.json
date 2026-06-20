@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-20T12:57:34.874Z",
+  "generatedAt": "2026-06-20T15:03:41.713Z",
   "count": 32,
   "ipos": [
     {
@@ -116,9 +116,9 @@
       "id": "n2290",
       "name": "매드업",
       "sector": "플랫폼",
-      "offerPrice": 8000,
-      "priceLow": 7000,
-      "priceHigh": 8000,
+      "offerPrice": 7900,
+      "priceLow": 6900,
+      "priceHigh": 7900,
       "priceConfirmed": false,
       "subscriptionStart": "2026-06-23",
       "subscriptionEnd": "2026-06-24",
@@ -164,8 +164,8 @@
       "priceLow": 22000,
       "priceHigh": 27000,
       "priceConfirmed": false,
-      "subscriptionStart": "2026-06-19",
-      "subscriptionEnd": "2026-06-22",
+      "subscriptionStart": "2026-06-18",
+      "subscriptionEnd": "2026-06-19",
       "listingDate": null,
       "competitionRate": null,
       "institutionalRate": null,
