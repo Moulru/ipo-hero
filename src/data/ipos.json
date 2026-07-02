@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T04:40:14.740Z",
+  "generatedAt": "2026-07-02T08:11:46.833Z",
   "count": 34,
   "ipos": [
     {
@@ -166,7 +166,7 @@
       "priceConfirmed": false,
       "subscriptionStart": "2026-07-13",
       "subscriptionEnd": "2026-07-14",
-      "listingDate": "2026-06-08",
+      "listingDate": "2026-07-24",
       "competitionRate": null,
       "institutionalRate": null,
       "lockupRatio": null,
@@ -189,15 +189,15 @@
       "subscriptionStart": "2026-07-01",
       "subscriptionEnd": "2026-07-02",
       "listingDate": "2026-07-13",
-      "competitionRate": null,
+      "competitionRate": 1706.71,
       "institutionalRate": 1146.41,
       "lockupRatio": 17.93,
       "offerAmount": 248,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 0.24,
       "underwriter": "KB증권",
       "ticker": null,
-      "rarity": "rare",
+      "rarity": "epic",
       "isReal": true
     },
     {
