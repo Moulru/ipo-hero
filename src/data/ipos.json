@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-05T15:13:30.453Z",
+  "generatedAt": "2026-07-05T16:34:13.968Z",
   "count": 34,
   "ipos": [
     {
@@ -201,7 +201,7 @@
       "isReal": true
     },
     {
-      "id": "n2293",
+      "id": "k365660",
       "name": "레몬헬스케어",
       "sector": "바이오",
       "offerPrice": 10000,
@@ -218,7 +218,7 @@
       "listingReturn": null,
       "expectedPer10": 0.26,
       "underwriter": "KB증권",
-      "ticker": null,
+      "ticker": "365660",
       "rarity": "epic",
       "isReal": true
     },
