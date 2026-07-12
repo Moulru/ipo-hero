@@ -149,7 +149,7 @@ export function Dashboard() {
             </Section>
           )}
 
-          <Section title="🔥 청약 중" desc="지금 모의투자할 수 있어요">
+          <Section title="🔥 청약 중" desc="지금 모의청약할 수 있어요">
             {subscription.filter(notSpac).length > 0 ? (
               subscription.filter(notSpac).map((i) => <IpoCard key={i.id} ipo={i} stage="subscription" mine={bet(i)} onClick={() => setSelected(i)} />)
             ) : subscription.filter(isSpac).length === 0 ? (
@@ -159,7 +159,7 @@ export function Dashboard() {
           </Section>
 
           {upcoming.length > 0 && (
-            <Section title="📅 곧 시작" desc="청약 시작 후 모의투자할 수 있어요">
+            <Section title="📅 곧 시작" desc="청약 시작 후 모의청약할 수 있어요">
               {upcoming.filter(notSpac).map((i) => (
                 <IpoCard key={i.id} ipo={i} stage="upcoming" onClick={() => setSelected(i)} />
               ))}
@@ -168,7 +168,7 @@ export function Dashboard() {
           )}
 
           {pendingInfo.length > 0 && (
-            <Section title="🕒 상장 대기" desc="상장 전 · 모의투자 가능">
+            <Section title="🕒 상장 대기" desc="상장 전 · 모의청약 가능">
               {pendingInfo.filter(notSpac).map((i) => (
                 <IpoCard key={i.id} ipo={i} stage="pending" onClick={() => setSelected(i)} />
               ))}
@@ -227,7 +227,7 @@ export function Dashboard() {
         </div>
         <div className="foot-box">
           <div className="foot-title">ℹ️ 안내</div>
-          공모주 히어로는 <b>정보 제공 · 가상 모의투자</b> 앱으로, 투자 자문·권유가 아닙니다. 데이터는 DART·KIND 등 공개 자료
+          공모주 히어로는 <b>정보 제공 · 가상 모의청약</b> 앱으로, 투자 자문·권유가 아닙니다. 데이터는 DART·KIND 등 공개 자료
           기반으로 지연·오류가 있을 수 있으며, 투자 판단의 책임은 이용자에게 있습니다.
         </div>
       </footer>

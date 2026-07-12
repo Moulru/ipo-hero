@@ -44,6 +44,7 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
   // 이미 잠긴 증거금은 다시 청약 가능 한도에 포함(수정 시 상향 가능)
   const maxShares = maxAffordableShares(seedMoney + escrowHeld, ipo.offerPrice)
   const [shares, setShares] = useState<number>(savedShares ?? 10)
+  const [tab, setTab] = useState<'info' | 'sim'>('info') // 정보(기본) · 모의청약
   const rm = RARITY_META[ipo.rarity]
 
   const today = todayYmd()
@@ -116,82 +117,108 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
           </div>
         </div>
 
-        <div className="info-grid">
-          <Info label="공모가" value={priceText} />
-          <Info label="공모 규모" value={formatEok(ipo.offerAmount)} />
-          <Info label="기관 경쟁률" value={ipo.institutionalRate ? `${ipo.institutionalRate.toLocaleString()}:1` : '미정'} />
-          <Info label="의무확약" value={ipo.lockupRatio != null ? `${ipo.lockupRatio}%` : '미정'} />
-          <Info label="통합 경쟁률" value={ipo.competitionRate ? `${ipo.competitionRate.toLocaleString()}:1` : '청약 후'} />
-          <Info
-            label="청약일"
-            value={ipo.subscriptionStart && ipo.subscriptionEnd ? `${md(ipo.subscriptionStart)}–${md(ipo.subscriptionEnd)}` : '-'}
-          />
+        <div className="sheet-tabs" role="tablist">
+          <button className={tab === 'info' ? 'sheet-tab sel' : 'sheet-tab'} onClick={() => setTab('info')}>
+            공모주 정보
+          </button>
+          <button className={tab === 'sim' ? 'sheet-tab sel' : 'sheet-tab'} onClick={() => setTab('sim')}>
+            모의청약
+            {(mode === 'bet' || mode === 'settle') && <i className="sheet-tab-dot" />}
+          </button>
         </div>
 
-        <DemandGauge ipo={ipo} all={ALL} />
-
-        {(mode === 'bet' || mode === 'locked' || mode === 'info') && stage !== 'listed' && <RealCheck ipo={ipo} today={today} />}
-
-        {ipo.underwriter && (
-          <div className="uw-block">
-            <div className="uw-label">청약 가능 증권사</div>
-            <div className="uw-chips">
-              {ipo.underwriter.split(',').map((u) => (
-                <span key={u} className="uw-chip">
-                  {u.trim()}
-                </span>
-              ))}
-            </div>
-            {ipo.underwriter.includes(',') && (
-              <div className="uw-note muted">증권사마다 청약 경쟁률·배정이 다를 수 있어요.</div>
-            )}
-          </div>
-        )}
-
-        {mode === 'settled' && (
-          <div className="result-banner" style={{ color: OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].color }}>
-            상장 결과 {signedPct(ipo.listingReturn ?? 0)} · {OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].label} · 정산 완료
-          </div>
-        )}
-
-        {mode === 'bet' && (
+        {tab === 'info' && (
           <>
-            <DropRate ipo={ipo} shares={shares} />
-            <Predict value={prediction} onPick={(o) => setPrediction(ipo.id, o)} />
-            <Subscribe shares={shares} max={maxShares} offerPrice={ipo.offerPrice} onChange={setShares} />
-            <button className="cta" onClick={saveBet}>
-              {savedShares != null ? '모의투자 수정' : '모의투자 하기'}
-            </button>
-            <div className="wait-note">증거금이 시즌 자산에서 차감돼요 · 상장 전까지 수정 가능</div>
-          </>
-        )}
+            <div className="info-grid">
+              <Info label="공모가" value={priceText} />
+              <Info label="공모 규모" value={formatEok(ipo.offerAmount)} />
+              <Info label="기관 경쟁률" value={ipo.institutionalRate ? `${ipo.institutionalRate.toLocaleString()}:1` : '미정'} />
+              <Info label="의무확약" value={ipo.lockupRatio != null ? `${ipo.lockupRatio}%` : '미정'} />
+              <Info label="통합 경쟁률" value={ipo.competitionRate ? `${ipo.competitionRate.toLocaleString()}:1` : '청약 후'} />
+              <Info
+                label="청약일"
+                value={ipo.subscriptionStart && ipo.subscriptionEnd ? `${md(ipo.subscriptionStart)}–${md(ipo.subscriptionEnd)}` : '-'}
+              />
+            </div>
 
-        {mode === 'locked' && (
-          <div className="bet-summary">
-            🔒 상장 당일이에요 — 수정 불가, 내일 결과로 정산됩니다
-            {didBet && (
-              <div className="muted" style={{ marginTop: 6 }}>
-                {prediction ? `예측 ${OUTCOME_META[prediction].label}` : '예측 없음'} · 청약 {savedShares ?? 0}주 · 증거금 {formatMan(escrowHeld)}
+            {ipo.listingReturn != null && (
+              <div className="result-banner" style={{ color: OUTCOME_META[outcomeFromReturn(ipo.listingReturn)].color }}>
+                상장 첫날 {signedPct(ipo.listingReturn)} · {OUTCOME_META[outcomeFromReturn(ipo.listingReturn)].label}
               </div>
             )}
-          </div>
-        )}
 
-        {mode === 'settle' && (
-          <>
-            <div className="bet-summary">
-              내 모의투자 — {prediction ? `예측 ${OUTCOME_META[prediction].label}` : '예측 없음'} · 청약 {savedShares ?? 0}주
-            </div>
-            <button className="cta" onClick={doSettle}>
-              🎰 정산하기 (실제 상장 결과로)
-            </button>
+            <DemandGauge ipo={ipo} all={ALL} />
+
+            {stage !== 'listed' && <RealCheck ipo={ipo} today={today} />}
+
+            {ipo.underwriter && (
+              <div className="uw-block">
+                <div className="uw-label">청약 가능 증권사</div>
+                <div className="uw-chips">
+                  {ipo.underwriter.split(',').map((u) => (
+                    <span key={u} className="uw-chip">
+                      {u.trim()}
+                    </span>
+                  ))}
+                </div>
+                {ipo.underwriter.includes(',') && (
+                  <div className="uw-note muted">증권사마다 청약 경쟁률·배정이 다를 수 있어요.</div>
+                )}
+              </div>
+            )}
           </>
         )}
 
-        {mode === 'info' && (
+        {tab === 'sim' && (
           <>
-            <DropRate ipo={ipo} shares={10} />
-            <div className="info-note">{infoNote(ipo)}</div>
+            <div className="sim-intro muted">🎮 가상머니로 청약·예측하고 실제 상장 결과로 정산하는 연습이에요 (실거래 아님)</div>
+
+            {mode === 'settled' && (
+              <div className="result-banner" style={{ color: OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].color }}>
+                상장 결과 {signedPct(ipo.listingReturn ?? 0)} · {OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].label} · 정산 완료
+              </div>
+            )}
+
+            {mode === 'bet' && (
+              <>
+                <DropRate ipo={ipo} shares={shares} />
+                <Predict value={prediction} onPick={(o) => setPrediction(ipo.id, o)} />
+                <Subscribe shares={shares} max={maxShares} offerPrice={ipo.offerPrice} onChange={setShares} />
+                <button className="cta" onClick={saveBet}>
+                  {savedShares != null ? '모의청약 수정' : '모의청약 하기'}
+                </button>
+                <div className="wait-note">증거금이 시즌 자산에서 차감돼요 · 상장 전까지 수정 가능</div>
+              </>
+            )}
+
+            {mode === 'locked' && (
+              <div className="bet-summary">
+                🔒 상장 당일이에요 — 수정 불가, 내일 결과로 정산됩니다
+                {didBet && (
+                  <div className="muted" style={{ marginTop: 6 }}>
+                    {prediction ? `예측 ${OUTCOME_META[prediction].label}` : '예측 없음'} · 청약 {savedShares ?? 0}주 · 증거금 {formatMan(escrowHeld)}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {mode === 'settle' && (
+              <>
+                <div className="bet-summary">
+                  내 모의청약 — {prediction ? `예측 ${OUTCOME_META[prediction].label}` : '예측 없음'} · 청약 {savedShares ?? 0}주
+                </div>
+                <button className="cta" onClick={doSettle}>
+                  🎰 정산하기 (실제 상장 결과로)
+                </button>
+              </>
+            )}
+
+            {mode === 'info' && (
+              <>
+                <DropRate ipo={ipo} shares={10} />
+                <div className="info-note">{infoNote(ipo)}</div>
+              </>
+            )}
           </>
         )}
       </div>
@@ -202,7 +229,7 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
 function infoNote(ipo: Ipo): string {
   if (ipo.listingReturn != null || (ipo.listingDate && todayYmd() > ipo.listingDate)) return '이미 상장된 종목이에요.'
   const d = daysUntil(ipo.subscriptionStart)
-  return `아직 청약 전이에요. 청약 시작${d != null && d >= 0 ? `(D-${d})` : ''}부터 모의투자할 수 있어요.`
+  return `아직 청약 전이에요. 청약 시작${d != null && d >= 0 ? `(D-${d})` : ''}부터 모의청약할 수 있어요.`
 }
 
 function Info({ label, value }: { label: string; value: string }) {

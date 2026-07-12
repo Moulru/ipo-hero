@@ -91,7 +91,7 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
             <span className="muted">보기 ›</span>
           </a>
           <div className="settings-note muted">
-            공모주 히어로는 정보 제공·가상 모의투자 앱으로, 투자 자문·권유가 아니에요. 데이터는 DART·KIND 등 공개 자료
+            공모주 히어로는 정보 제공·가상 모의청약 앱으로, 투자 자문·권유가 아니에요. 데이터는 DART·KIND 등 공개 자료
             기반으로 지연·오류가 있을 수 있어요.
           </div>
         </div>
