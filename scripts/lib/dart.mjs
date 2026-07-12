@@ -4,7 +4,11 @@ import zlib from 'node:zlib'
 import { readFileSync, existsSync, mkdirSync, writeFileSync, statSync } from 'node:fs'
 
 const KEY = (process.env.DART_API_KEY || (existsSync('OpenAPIkey.txt') ? readFileSync('OpenAPIkey.txt', 'utf8') : '')).trim()
-if (!KEY) throw new Error('DART 인증키 필요: OpenAPIkey.txt 또는 DART_API_KEY')
+// 키 부재는 모듈 로드가 아닌 실제 API 호출 시점에 throw — fetchIpos의 '38+KIND로만 진행' 폴백이 동작하도록
+function requireKey() {
+  if (!KEY) throw new Error('DART 인증키 필요: OpenAPIkey.txt 또는 DART_API_KEY')
+  return KEY
+}
 
 // ───────── ZIP/디코드 ─────────
 export function unzip(buf) {
@@ -68,7 +72,7 @@ export async function corpMap() {
   if (existsSync(CORP_CACHE) && Date.now() - statSync(CORP_CACHE).mtimeMs < 7 * 86400000) {
     return JSON.parse(readFileSync(CORP_CACHE, 'utf8'))
   }
-  const cc = unzip(await getBuf(`https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key=${KEY}`))
+  const cc = unzip(await getBuf(`https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key=${requireKey()}`))
   const xml = decode(Object.values(cc)[0] || Buffer.alloc(0))
   const map = {}
   for (const m of xml.matchAll(/<corp_code>(\d+)<\/corp_code>\s*<corp_name>([^<]*)<\/corp_name>/g)) {
@@ -82,7 +86,7 @@ export async function corpMap() {
 
 // ───────── 공시 목록 ─────────
 export async function listFilings(corp, bgn = '20230101', end = '20261231') {
-  const url = `https://opendart.fss.or.kr/api/list.json?crtfc_key=${KEY}&corp_code=${corp}&bgn_de=${bgn}&end_de=${end}&pblntf_ty=C&page_count=100`
+  const url = `https://opendart.fss.or.kr/api/list.json?crtfc_key=${requireKey()}&corp_code=${corp}&bgn_de=${bgn}&end_de=${end}&pblntf_ty=C&page_count=100`
   try {
     const j = await (await fetch(url, { signal: AbortSignal.timeout(20000) })).json()
     return (j.list || []).filter((x) => /증권신고서|투자설명서|증권발행실적/.test(x.report_nm))
@@ -106,7 +110,7 @@ export function pickRegistration(filings) {
 
 // ───────── 문서 평문 ─────────
 export async function docText(rcept_no) {
-  const buf = await getBuf(`https://opendart.fss.or.kr/api/document.xml?crtfc_key=${KEY}&rcept_no=${rcept_no}`)
+  const buf = await getBuf(`https://opendart.fss.or.kr/api/document.xml?crtfc_key=${requireKey()}&rcept_no=${rcept_no}`)
   if (buf.subarray(0, 2).toString('hex') !== '504b') return '' // ZIP 아님
   const doc = unzip(buf)
   return Object.values(doc)

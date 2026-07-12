@@ -1,13 +1,34 @@
 // 하이브리드 공모주 수집기 (공식 백본 + 38 보조)
 //   DART(공모가·주식수·공모금액·일정 best-effort) + KIND(종목코드·상장일·업종) + 38(수요지표·수익률)
 //   node scripts/fetchIpos.mjs   (또는 npm run data)  ·  DART 키: OpenAPIkey.txt
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { collect38, norm } from './lib/source38.mjs'
 import { listedMap, recentListings } from './lib/kind.mjs'
 import { corpMap, listFilings, pickRegistration, docText, parseBackbone } from './lib/dart.mjs'
 
 const TODAY = new Date().toISOString().slice(0, 10)
+const ARCHIVE_DAYS = 400 // 유니버스에서 빠진 과거 종목 보존 기간 (통계·기록용)
+const MAX_ENTRIES = 300 // 번들 크기 상한
+
+// 이전 산출물 로드 — 아카이브 머지 + id 영속화용 (없거나 깨졌으면 빈 배열)
+function loadPrev() {
+  try {
+    const p = JSON.parse(readFileSync(join(process.cwd(), 'src', 'data', 'ipos.json'), 'utf-8'))
+    return Array.isArray(p?.ipos) ? p.ipos : []
+  } catch {
+    return []
+  }
+}
+
+// KIND market 표기 정규화
+function marketOf(m) {
+  if (!m) return null
+  if (/코스닥/.test(m)) return '코스닥'
+  if (/유가/.test(m)) return '코스피'
+  if (/코넥스/.test(m)) return '코넥스'
+  return m
+}
 
 function guessSector(name) {
   if (/스팩|기업인수/.test(name)) return '스팩'
@@ -55,6 +76,11 @@ async function pool(items, n, fn) {
 }
 
 async function main() {
+  const prev = loadPrev()
+  const prevByName = new Map(prev.map((p) => [norm(p.name), p]))
+  const prevByTicker = new Map(prev.filter((p) => p.ticker).map((p) => [p.ticker, p]))
+  console.log(`0) 이전 데이터 ${prev.length}건 로드 (id 영속화·아카이브 머지)`)
+
   console.log('1) KIND 상장사 로딩...')
   const kind = await listedMap()
   const kindNorm = new Map([...kind.values()].map((r) => [norm(r.name), r]))
@@ -112,43 +138,68 @@ async function main() {
     const k = m.kindRec
     const name = m.name
     const sector = guessSector(name)
+    // 이전 레코드: 소스가 일시적으로 값을 잃어도(38 목록 이탈, DART 실패) 이미 확보한 값은 보존.
+    // 이름 매칭 실패 시 티커로 보조 매칭(상장 전후 개명 케이스의 id 단절 방지)
+    const p = prevByName.get(norm(name)) ?? (k?.code ? prevByTicker.get(k.code) : null) ?? null
 
-    // 가격: DART 우선
-    const offerPrice = d?.b?.offerPrice ?? f?.offerPrice ?? 0
-    const priceLow = d?.b?.priceLow ?? f?.priceLow ?? null
-    const priceHigh = d?.b?.priceHigh ?? f?.priceHigh ?? null
-    const priceConfirmed = d?.b?.priceConfirmed || f?.priceConfirmed || false
+    // 가격: 확정가와 확정 플래그를 같은 소스에서 함께 선택 —
+    // '확정' 라벨이 미확정 밴드가에 붙는 래칫(소스 일시 후퇴) 방지
+    let offerPrice
+    let priceConfirmed
+    if (d?.b?.priceConfirmed && d?.b?.offerPrice) {
+      offerPrice = d.b.offerPrice
+      priceConfirmed = true
+    } else if (f?.priceConfirmed && f?.offerPrice) {
+      offerPrice = f.offerPrice
+      priceConfirmed = true
+    } else if (p?.priceConfirmed && p?.offerPrice) {
+      offerPrice = p.offerPrice
+      priceConfirmed = true
+    } else {
+      offerPrice = d?.b?.offerPrice ?? f?.offerPrice ?? (p?.offerPrice || null) ?? 0
+      priceConfirmed = false
+    }
+    const priceLow = d?.b?.priceLow ?? f?.priceLow ?? p?.priceLow ?? null
+    const priceHigh = d?.b?.priceHigh ?? f?.priceHigh ?? p?.priceHigh ?? null
     if (d?.b?.offerPrice != null) src.dartPrice++
 
     // 공모금액(억): 38 직접표기 우선(DART 계산값은 구주매출 누락 위험), DART는 폴백
-    const offerAmount = f?.offerAmount38 ?? d?.b?.offerAmount ?? null
+    const offerAmount = f?.offerAmount38 ?? d?.b?.offerAmount ?? p?.offerAmount ?? null
     if (f?.offerAmount38 == null && d?.b?.offerAmount != null) src.dartAmount++
 
-    // 일정: DART(시작·종료 모두 있을 때) 우선, 아니면 38
-    let subscriptionStart = f?.subscriptionStart ?? null
-    let subscriptionEnd = f?.subscriptionEnd ?? null
+    // 일정: DART(시작·종료 모두 있을 때) 우선, 아니면 38, 아니면 이전 값
+    let subscriptionStart = f?.subscriptionStart ?? p?.subscriptionStart ?? null
+    let subscriptionEnd = f?.subscriptionEnd ?? p?.subscriptionEnd ?? null
     if (d?.b?.subscriptionStart && d?.b?.subscriptionEnd) {
       subscriptionStart = d.b.subscriptionStart
       subscriptionEnd = d.b.subscriptionEnd
       src.dartSched++
     }
 
-    // 상장일: KIND(상장완료) 우선 → DART(예정) → 38
-    const listingDate = k?.listingDate ?? d?.b?.listingDate ?? f?.listingDate ?? null
+    // 상장일: KIND(상장완료) 우선 → DART(예정) → 38 → 이전 값
+    let listingDate = k?.listingDate ?? d?.b?.listingDate ?? f?.listingDate ?? p?.listingDate ?? null
+    // 정합성 가드: 청약 종료 이전의 '상장일'은 모순(DART 오파싱·동명 기존상장 매칭) —
+    // 청약 이후 날짜의 다른 후보로 대체, 없으면 미정(null)
+    const subBound = subscriptionEnd ?? subscriptionStart
+    if (listingDate && subBound && listingDate <= subBound) {
+      listingDate =
+        [k?.listingDate, d?.b?.listingDate, f?.listingDate, p?.listingDate].find((x) => x && x > subBound) ?? null
+    }
     if (k?.listingDate) src.kindListing++
-    const ticker = k?.code ?? null
+    const ticker = k?.code ?? p?.ticker ?? null
     if (ticker) src.kindTicker++
 
-    // 수요지표 3종 + 수익률: 38
-    const competitionRate = f?.competitionRate ?? null
-    const institutionalRate = f?.institutionalRate ?? null
-    const lockupRatio = f?.lockupRatio ?? null
-    const listingReturn = f?.listingReturn ?? null
+    // 수요지표 3종 + 수익률: 38 → 이전 값 (38 페이지에서 밀려나도 유실 방지)
+    const competitionRate = f?.competitionRate ?? p?.competitionRate ?? null
+    const institutionalRate = f?.institutionalRate ?? p?.institutionalRate ?? null
+    const lockupRatio = f?.lockupRatio ?? p?.lockupRatio ?? null
+    const listingReturn = f?.listingReturn ?? p?.listingReturn ?? null
     if (institutionalRate != null) src.demand38++
     if (listingReturn != null) src.return38++
 
     const ipo = {
-      id: ticker ? `k${ticker}` : f?.no ? `n${f.no}` : `x${norm(name).slice(0, 10)}`,
+      // id 영속화: 한번 부여된 id는 유지 (상장 시 n→k 전환으로 게임 기록이 끊기지 않게)
+      id: p?.id ?? (ticker ? `k${ticker}` : f?.no ? `n${f.no}` : `x${norm(name).slice(0, 10)}`),
       name,
       sector,
       offerPrice,
@@ -164,8 +215,10 @@ async function main() {
       offerAmount,
       listingReturn,
       expectedPer10: expectedPer10(competitionRate),
-      underwriter: f?.underwriter ?? null,
+      underwriter: f?.underwriter ?? p?.underwriter ?? null,
       ticker,
+      market: marketOf(k?.market) ?? p?.market ?? null,
+      demandForecastDate: d?.b?.demandForecastDate ?? p?.demandForecastDate ?? null,
       rarity: 'common',
       isReal: true,
     }
@@ -176,6 +229,34 @@ async function main() {
   if (!ipos.length) {
     console.error('수집 0건 — 종료')
     process.exit(1)
+  }
+
+  // 아카이브 머지: 이번 유니버스에서 빠진 종목 보존 규칙 —
+  //  ① 상장 완료(과거 listingDate, 400일 이내): KIND 확인(ticker) 시에만 (DART '예정일'로 철회 종목이 상장 완료로 박제되는 것 방지)
+  //  ② 상장 대기(미래 listingDate) 또는 최근 7일 내 청약 일정 보유: 소스 일시 실패 시 예정 종목 통째 소멸 방지 (철회 종목은 7일 후 자연 정리)
+  const seenNames = new Set(ipos.map((i) => norm(i.name)))
+  const seenIds = new Set(ipos.map((i) => i.id))
+  const cutoff = new Date(Date.now() - ARCHIVE_DAYS * 86400000).toISOString().slice(0, 10)
+  const staleCutoff = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10)
+  const keepArchived = (pi) => {
+    if (pi.listingDate && pi.listingDate <= TODAY) return pi.listingDate >= cutoff && !!pi.ticker
+    if (pi.listingDate && pi.listingDate > TODAY) return true
+    const sub = pi.subscriptionEnd ?? pi.subscriptionStart
+    return !!sub && sub >= staleCutoff
+  }
+  const archived = prev
+    .filter((pi) => !seenNames.has(norm(pi.name)) && !seenIds.has(pi.id))
+    .filter(keepArchived)
+    .sort((a, b) => (b.listingDate ?? '9999').localeCompare(a.listingDate ?? '9999'))
+    .slice(0, Math.max(0, MAX_ENTRIES - ipos.length))
+  if (archived.length) console.log(`   아카이브 보존 ${archived.length}건 (유니버스 밖 종목)`)
+  ipos.push(...archived)
+
+  // 내용이 이전과 동일하면 파일을 건드리지 않음 — cron의 '변경분만 커밋' 가드가 실제로 동작하도록
+  const pubPath = join(process.cwd(), 'public', 'ipos.json')
+  if (JSON.stringify(ipos) === JSON.stringify(prev) && existsSync(pubPath)) {
+    console.log(`\n✓ 데이터 변경 없음 (${ipos.length}건) — 파일 유지`)
+    return
   }
 
   const dist = ipos.reduce((m, i) => ((m[i.rarity] = (m[i.rarity] || 0) + 1), m), {})

@@ -40,5 +40,6 @@ jobs:
             echo "데이터 변경 없음 — 커밋 생략"
           else
             git commit -m "chore: 공모주 데이터 자동 갱신"
+            git pull --rebase origin main
             git push
           fi
