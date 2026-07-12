@@ -2151,8 +2151,21 @@ button:active {
 /* 종목 상세 — 헤더 액션(공유·닫기) */
 .sheet-actions {
   display: flex;
-  gap: 2px;
+  align-items: center;
+  gap: 8px;
   flex-shrink: 0;
+}
+.share-btn {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text2);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 11px;
+}
+.share-btn:active {
+  background: var(--surface2);
 }
 
 /* 수요 지표 게이지 */
@@ -2283,84 +2296,6 @@ button:active {
   margin-top: 8px;
   font-size: 10.5px;
   line-height: 1.55;
-}
-
-/* 첫 실행 웰컴 */
-.welcome-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 70;
-  background: var(--scrim);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 20px;
-  animation: overlayIn 0.25s ease;
-}
-.welcome {
-  width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 28px 22px 22px;
-  text-align: center;
-  box-shadow: var(--shadow);
-  animation: pop 0.35s cubic-bezier(0.2, 1.2, 0.4, 1);
-}
-.wl-logo {
-  font-size: 52px;
-  line-height: 1;
-}
-.welcome h1 {
-  font-size: 24px;
-  font-weight: 900;
-  margin-top: 10px;
-  letter-spacing: -0.5px;
-}
-.wl-tag {
-  margin: 6px 0 18px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--accent);
-}
-.wl-points {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-align: left;
-}
-.wl-point {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 11px 13px;
-}
-.wl-ico {
-  font-size: 24px;
-  flex-shrink: 0;
-}
-.wl-point b {
-  display: block;
-  font-size: 13.5px;
-}
-.wl-point div span {
-  display: block;
-  font-size: 11.5px;
-  color: var(--muted);
-  margin-top: 2px;
-  line-height: 1.4;
-}
-.wl-foot {
-  margin: 14px 0 0;
-  font-size: 10.5px;
-  color: var(--muted);
-  line-height: 1.6;
 }
 
 /* 대시보드 푸터 안내 박스 간격 */

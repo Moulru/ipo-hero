@@ -16,7 +16,6 @@ import { ClassPicker } from './components/ClassPicker'
 import { SystemSettings } from './components/SystemSettings'
 import { ResultModal } from './components/ResultModal'
 import { RelicReveal } from './components/RelicReveal'
-import { Welcome } from './components/Welcome'
 import { ToastHost } from './components/Toast'
 
 export default function App() {
@@ -27,7 +26,6 @@ export default function App() {
   const clearUnlocks = useStore((s) => s.clearUnlocks)
   const darkMode = useStore((s) => s.darkMode)
   const haptics = useStore((s) => s.haptics)
-  const welcomed = useStore((s) => s.welcomed)
   const [tab, setTab] = useState<Tab>('home')
   const tabRef = useRef(tab)
   tabRef.current = tab
@@ -114,7 +112,6 @@ export default function App() {
       {showAch && <Achievements onClose={() => setShowAch(false)} />}
       {relicReveal && <RelicReveal />}
       {lastResult && <ResultModal />}
-      {!welcomed && <Welcome />}
       <ToastHost />
     </div>
   )

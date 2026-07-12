@@ -31,7 +31,7 @@ android\gradlew.bat -p android bundleRelease      # 서명된 릴리스 AAB
 
 ## 탭 구조
 
-- **🏠 공모주**: **오늘 브리핑**(오늘 마감·시작·상장/다음 일정 칩) · **검색**(이름·업종·증권사) · **목록/캘린더 토글**(월간 일정 그리드) · 데이터 기준 칩(탭=새로고침) · 실제 IPO(정산대기/청약중/곧시작/상장대기 + 지난 7일) + **최근 상장 성과 통계** + 면책 푸터. 상세: 증권사 칩 + **수요지표 게이지**(수집종목 대비 백분위) + **실전 체크**(수요예측→청약→환불[+2영업일 추정]→상장 타임라인 + 10주 증거금) + **공유 버튼**(@capacitor/share).
+- **🏠 공모주**: 앱 실행 시 온보딩 없이 바로 진입. **오늘 브리핑**(오늘 마감·시작·상장/다음 일정 칩) · **검색**(이름·업종·증권사) · **목록/캘린더 토글**(월간 일정 그리드) · 데이터 기준 칩(탭=새로고침) · 실제 IPO(정산대기/청약중/곧시작/상장대기 + 지난 7일) + **최근 상장 성과 통계** + 면책 푸터. 상세: 증권사 칩 + **수요지표 게이지**(수집종목 대비 백분위) + **실전 체크**(수요예측→청약→환불[+2영업일 추정]→상장 타임라인 + 10주 증거금) + **공유 버튼**(텍스트형 일반 버튼, @capacitor/share).
 - **🛋️ 라운지**: 투자자 등급 여정(레벨·랭크 사다리·다음목표) · 출석 · 퀘스트 · 투자 카드 가챠+도감
 - **👤 MY**: 프로필(성향·등급·전적) · 공모주 도감 · 업적 · 칭호 · ⚙️ **시스템 설정**(다크모드 · 진동 효과 · 데이터 새로고침+갱신시각 · 정보[버전·개인정보·문의·**개인정보처리방침 링크**→`app.eous.cc/ipo-hero-privacy` 외부 브라우저])
 
@@ -43,9 +43,9 @@ src/
   data/   classes · ranks · relics(100종, UI명 '투자 카드') · quests · achievements
           ipos.json(+public/ 런타임 서빙) · loadIpos(번들 폴백 + useIpos/useDataTimestamp 런타임 fetch) · mockIpos
   lib/    calc(단계·가챠·포맷·영업일/환불추정) · juice(진동[on/off]·콘페티·토스트) · native(스플래시·상태바·뒤로가기·onResume) · backStack(오버레이 뒤로가기) · share(네이티브→WebShare→클립보드 폴백)
-  store.ts  zustand: setSubscription(증거금 에스크로)·settleReal(상장+1·순수손익)·setHaptics·setDark·setWelcomed·pullRelic·tick
+  store.ts  zustand: setSubscription(증거금 에스크로)·settleReal(상장+1·순수손익)·setHaptics·setDark·pullRelic·tick
   components/ TopBar·BottomNav · Dashboard(브리핑·검색·통계·데이터칩)·CalendarView·IpoDetail(게이지·실전체크·공유)·DropRate · Play·DailyCheckIn·Quests
-              My·Dex·RelicDex·Achievements·ClassPicker·SystemSettings · Welcome(첫실행 1회)·ResultModal·RelicReveal·Toast·CountUp
+              My·Dex·RelicDex·Achievements·ClassPicker·SystemSettings · ResultModal·RelicReveal·Toast·CountUp
 .github/workflows/  refresh-data.yml(cron 데이터 갱신)
 android/  Capacitor 안드로이드 (gitignore · `npx cap add android`로 재생성)
 assets/   앱 아이콘·스플래시 소스 → `npx @capacitor/assets generate --android`
@@ -70,7 +70,6 @@ PRIVACY.md  개인정보처리방침(Play 등록용·URL 안정 위해 루트 �
 - **UI 용어**: 화면 표기는 '투자 성향'(코드 식별자는 `chosenClass`/`CLASSES`).
 - **알림 기능 제거됨**(새 공모주 푸시=Firebase 의존이라 제외). 진동 토글·데이터 새로고침으로 대체. `notify.ts` 없음.
 - **데이터 파이프라인(2026-07 고도화)**: fetchIpos가 이전 ipos.json과 **머지** — ①id 영속화(이름 기준 기존 id 유지, n→k 전환 방지) ②필드 보존(38 이탈해도 수익률·지표 유지) ③아카이브(유니버스 밖: 상장완료+ticker 400일 · 상장예정/최근 7일 청약은 소스 일시실패 대비 보존, 최대300건) ④정합성 가드(상장일≤청약마감=모순→대체/null · 확정가는 확정플래그와 같은 소스에서 선택[래칫 방지]) ⑤신규 필드 ticker·market(코스피/코스닥)·demandForecastDate ⑥데이터 무변경이면 파일 미기록(cron 노이즈 커밋 방지) ⑦DART 키 부재=호출 시점 실패(38+KIND 폴백 동작). `npm run build`의 prebuild가 데이터 자동 갱신(실패해도 soft-fail). 2회 실행 멱등 검증됨.
-- **첫 실행 웰컴**: persist `welcomed` — 정체성 카피+가상머니 면책 1회 노출. 기존 세이브에 필드 없으면 1회 다시 보임(의도).
 - **백그라운드 복귀 갱신**: native resume + visibilitychange 양쪽에서 refreshIpos() (generatedAt 가드로 중복 무해).
 - **네이티브(모바일)**: `lib/native.ts`(스플래시·상태바·뒤로가기), `lib/backStack.ts`(오버레이는 `useBackClose(onClose)`로 등록 → 뒤로가기가 위에서부터 닫음). 모든 네이티브 호출은 `Capacitor.isNativePlatform()`+try/catch 가드(웹=no-op).
 - **릴리스 빌드**: `gradlew bundleRelease` → 서명 AAB(현재 versionCode 5·versionName 1.0.0·R8 minify on). 산출물=`GooglePlay 산출물/ipohero-v1.0.0-vc5.aab`(+mapping). (프로덕션 첫 제출까지 versionName 1.0.0 유지, vc만 증가.) 키=`android/app/release.keystore`+`keystore.properties`(gitignore, **백업 필수**, pw=`../_myToken_.md` 참고). **android/는 gitignore → 재생성 시** 서명·versionName + targetSdk/compileSdk 36(`variables.gradle`)·AGP 8.9.1(`build.gradle`)·Gradle 8.11.1(`wrapper`)·minifyEnabled true+`proguard-rules.pro`(Capacitor 보호 규칙) 재적용 필수. R8 mapping=`build/outputs/mapping/release/mapping.txt`(Play 업로드용).

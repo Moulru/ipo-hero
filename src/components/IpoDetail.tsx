@@ -107,8 +107,8 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
             <div className="muted under">{ipo.sector}</div>
           </div>
           <div className="sheet-actions">
-            <button className="x" onClick={doShare} aria-label="공유">
-              📤
+            <button className="share-btn" onClick={doShare}>
+              공유
             </button>
             <button className="x" onClick={onClose} aria-label="닫기">
               ✕
