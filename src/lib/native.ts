@@ -18,6 +18,12 @@ export function setupNative(onFallback: () => boolean): void {
   }).catch(() => {})
 }
 
+// 앱이 백그라운드에서 복귀할 때 콜백 (데이터 자동 갱신용). 웹=no-op.
+export function onResume(cb: () => void): void {
+  if (!isNative) return
+  CapApp.addListener('resume', cb).catch(() => {})
+}
+
 // 상태바 스타일/색을 테마에 맞춤 (라이트=어두운 아이콘, 다크=밝은 아이콘).
 export function applyStatusBar(darkMode: boolean): void {
   if (!isNative) return

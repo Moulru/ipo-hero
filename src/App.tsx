@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from './store'
 import { refreshIpos } from './data/loadIpos'
-import { setupNative, applyStatusBar } from './lib/native'
+import { setupNative, applyStatusBar, onResume } from './lib/native'
 import { confetti, haptic, toast, setHapticsEnabled } from './lib/juice'
 import { achById } from './data/achievements'
 import { TopBar } from './components/TopBar'
@@ -16,6 +16,7 @@ import { ClassPicker } from './components/ClassPicker'
 import { SystemSettings } from './components/SystemSettings'
 import { ResultModal } from './components/ResultModal'
 import { RelicReveal } from './components/RelicReveal'
+import { Welcome } from './components/Welcome'
 import { ToastHost } from './components/Toast'
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
   const clearUnlocks = useStore((s) => s.clearUnlocks)
   const darkMode = useStore((s) => s.darkMode)
   const haptics = useStore((s) => s.haptics)
+  const welcomed = useStore((s) => s.welcomed)
   const [tab, setTab] = useState<Tab>('home')
   const tabRef = useRef(tab)
   tabRef.current = tab
@@ -50,6 +52,19 @@ export default function App() {
       }
       return false
     })
+    // 백그라운드 복귀 시 데이터 자동 갱신 + 날짜 롤오버(출석·퀘스트) 반영
+    onResume(() => {
+      refreshIpos()
+      tick()
+    })
+    const onVis = () => {
+      if (document.visibilityState === 'visible') {
+        refreshIpos()
+        tick()
+      }
+    }
+    document.addEventListener('visibilitychange', onVis)
+    return () => document.removeEventListener('visibilitychange', onVis)
   }, [])
 
   // 다크 모드: html에 .dark 토글 (기본 라이트) + 상태바 색
@@ -99,6 +114,7 @@ export default function App() {
       {showAch && <Achievements onClose={() => setShowAch(false)} />}
       {relicReveal && <RelicReveal />}
       {lastResult && <ResultModal />}
+      {!welcomed && <Welcome />}
       <ToastHost />
     </div>
   )

@@ -28,3 +28,13 @@ export function useBackClose(onClose: () => void): void {
   ref.current = onClose
   useEffect(() => register(() => ref.current()), [])
 }
+
+// 조건부 등록 — 오버레이가 아닌 화면 내 상태(검색어·캘린더 뷰 등)를 뒤로가기로 해제할 때.
+export function useBackCloseWhen(active: boolean, onClose: () => void): void {
+  const ref = useRef(onClose)
+  ref.current = onClose
+  useEffect(() => {
+    if (!active) return
+    return register(() => ref.current())
+  }, [active])
+}

@@ -26,6 +26,28 @@ export function daysUntil(dateYmd: string | null, today = todayYmd()): number | 
   return Math.round((b - a) / 86_400_000)
 }
 
+// 주말(토·일)을 건너뛴 n영업일 뒤 날짜 (공휴일 미반영 — 추정 전용)
+export function addBusinessDays(ymd: string, n: number): string {
+  const d = new Date(ymd + 'T00:00:00')
+  let left = n
+  while (left > 0) {
+    d.setDate(d.getDate() + 1)
+    const day = d.getDay()
+    if (day !== 0 && day !== 6) left--
+  }
+  return todayYmd(d)
+}
+
+// 통상 환불일 추정: 청약 마감 +2영업일 (증권사·공휴일에 따라 달라질 수 있음)
+export function estRefundDate(subscriptionEnd: string | null): string | null {
+  return subscriptionEnd ? addBusinessDays(subscriptionEnd, 2) : null
+}
+
+// 'YYYY-MM-DD' → 'M/D'
+export function mdShort(s: string | null): string {
+  return s ? `${+s.slice(5, 7)}/${+s.slice(8, 10)}` : ''
+}
+
 export const STAGE_META: Record<Stage, { label: string; cls: string }> = {
   subscription: { label: '청약 중', cls: 'stage-subscription' },
   pending: { label: '상장 대기', cls: 'stage-pending' },

@@ -26,6 +26,9 @@ export interface Ipo {
   underwriter: string | null
   rarity: Rarity
   isReal: boolean
+  ticker?: string | null // KIND 종목코드 (상장 후 부여)
+  market?: string | null // 코스피/코스닥 (상장 후 확인)
+  demandForecastDate?: string | null // 수요예측일 (DART)
 }
 
 export type ClassId = 'farmer' | 'hunter' | 'value'

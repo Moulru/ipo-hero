@@ -58,6 +58,7 @@ interface Store {
   lastUnlocks: string[]
   darkMode: boolean // 다크 모드 on/off (기본 라이트)
   haptics: boolean // 진동(햅틱) 효과 on/off
+  welcomed: boolean // 첫 실행 웰컴(정체성·면책) 확인 여부
 
   chooseClass: (c: ClassId) => void
   tick: () => void
@@ -75,6 +76,7 @@ interface Store {
   clearUnlocks: () => void
   setHaptics: (v: boolean) => void
   setDark: (v: boolean) => void
+  setWelcomed: () => void
   resetSeason: () => void
 }
 
@@ -139,6 +141,7 @@ export const useStore = create<Store>()(
       lastUnlocks: [],
       darkMode: false,
       haptics: true,
+      welcomed: false,
 
       chooseClass: (c) => set({ chosenClass: c }),
 
@@ -334,6 +337,7 @@ export const useStore = create<Store>()(
       clearUnlocks: () => set({ lastUnlocks: [] }),
       setHaptics: (v) => set({ haptics: v }),
       setDark: (v) => set({ darkMode: v }),
+      setWelcomed: () => set({ welcomed: true }),
 
       resetSeason: () => set({ seedMoney: SEED_MONEY, subscriptions: {}, predictions: {}, settledIds: [], escrow: {} }),
     }),

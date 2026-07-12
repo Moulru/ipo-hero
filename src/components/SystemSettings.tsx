@@ -1,10 +1,12 @@
+import { Capacitor } from '@capacitor/core'
 import { useStore } from '../store'
 import { useBackClose } from '../lib/backStack'
 import { refreshIpos, useDataTimestamp } from '../data/loadIpos'
 import { toast } from '../lib/juice'
 
-const APP_VERSION = '0.0.1'
+const APP_VERSION = '1.0.0'
 const CONTACT_EMAIL = 'contact@eous.cc'
+const PRIVACY_URL = 'https://app.eous.cc/ipo-hero-privacy'
 
 function fmtTime(iso: string): string {
   if (!iso) return '-'
@@ -47,8 +49,10 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
           <button
             className="refresh-btn"
             onClick={async () => {
-              await refreshIpos()
-              toast('최신 공모주 데이터로 갱신했어요', '🔄')
+              const r = await refreshIpos()
+              if (r === 'updated') toast('최신 공모주 데이터로 갱신했어요', '🔄')
+              else if (r === 'same') toast('이미 최신 데이터예요', '✅')
+              else toast('네트워크 연결을 확인해 주세요', '⚠️')
             }}
           >
             데이터 새로고침
@@ -74,6 +78,21 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
           <div className="info-row">
             <span>문의</span>
             <span className="muted">{CONTACT_EMAIL}</span>
+          </div>
+          {/* 네이티브(WebView)에선 target=_blank가 무반응일 수 있어 메인 프레임 내비게이션으로 —
+              외부 호스트는 Capacitor가 시스템 브라우저로 넘김 */}
+          <a
+            className="info-row info-link"
+            href={PRIVACY_URL}
+            target={Capacitor.isNativePlatform() ? undefined : '_blank'}
+            rel="noopener noreferrer"
+          >
+            <span>개인정보처리방침</span>
+            <span className="muted">보기 ›</span>
+          </a>
+          <div className="settings-note muted">
+            공모주 히어로는 정보 제공·가상 모의투자 앱으로, 투자 자문·권유가 아니에요. 데이터는 DART·KIND 등 공개 자료
+            기반으로 지연·오류가 있을 수 있어요.
           </div>
         </div>
       </div>

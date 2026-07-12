@@ -1,9 +1,12 @@
-import { useState, type ReactNode } from 'react'
-import { useIpos } from '../data/loadIpos'
+import { useEffect, useState, type ReactNode } from 'react'
+import { refreshIpos, useDataTimestamp, useIpos } from '../data/loadIpos'
 import type { Ipo, Stage } from '../types'
 import { useStore } from '../store'
-import { OUTCOME_META, RARITY_META, STAGE_META, computeStage, daysUntil, outcomeFromReturn, signedPct, todayYmd } from '../lib/calc'
+import { useBackCloseWhen } from '../lib/backStack'
+import { OUTCOME_META, RARITY_META, STAGE_META, computeStage, daysUntil, mdShort, outcomeFromReturn, signedPct, todayYmd } from '../lib/calc'
+import { toast } from '../lib/juice'
 import { IpoDetail } from './IpoDetail'
+import { CalendarView } from './CalendarView'
 
 const isSpac = (i: Ipo) => i.sector === '스팩'
 const notSpac = (i: Ipo) => i.sector !== '스팩'
@@ -11,10 +14,32 @@ const notSpac = (i: Ipo) => i.sector !== '스팩'
 export function Dashboard() {
   const ALL = useIpos()
   const [selected, setSelected] = useState<Ipo | null>(null)
+  const [query, setQuery] = useState('')
+  const [view, setView] = useState<'list' | 'cal'>('list')
   const predictions = useStore((s) => s.predictions)
   const subscriptions = useStore((s) => s.subscriptions)
   const settledIds = useStore((s) => s.settledIds)
-  const today = todayYmd()
+
+  // '오늘'은 state — 자정 넘김·백그라운드 복귀 시에도 브리핑/D-day/단계가 실제 날짜를 따르도록
+  const [today, setToday] = useState(todayYmd())
+  useEffect(() => {
+    const update = () => setToday(todayYmd())
+    const onVis = () => {
+      if (document.visibilityState === 'visible') update()
+    }
+    document.addEventListener('visibilitychange', onVis)
+    const t = setInterval(update, 60_000) // 같은 값이면 리렌더 없음(React bail-out)
+    return () => {
+      document.removeEventListener('visibilitychange', onVis)
+      clearInterval(t)
+    }
+  }, [])
+
+  // 검색·캘린더 상태에서 하드웨어 뒤로가기 → 앱 종료 대신 목록 복귀
+  useBackCloseWhen(query !== '' || view === 'cal', () => {
+    setQuery('')
+    setView('list')
+  })
 
   const bet = (i: Ipo) => predictions[i.id] != null || subscriptions[i.id] != null
   const staged = ALL.map((ipo) => ({ ipo, stage: computeStage(ipo, today) }))
@@ -37,69 +62,162 @@ export function Dashboard() {
     })
     .sort((a, b) => (b.listingDate ?? '').localeCompare(a.listingDate ?? ''))
 
+  // 최근 상장 성과 통계 (수집된 상장 완료 종목 전체 기준, 스팩 제외)
+  const returns = ALL.filter((i) => notSpac(i) && i.listingReturn != null).map((i) => i.listingReturn as number)
+  const stats =
+    returns.length >= 3
+      ? {
+          n: returns.length,
+          avg: returns.reduce((a, b) => a + b, 0) / returns.length,
+          posPct: Math.round((returns.filter((r) => r > 0).length / returns.length) * 100),
+          tta: returns.filter((r) => r >= 100).length,
+        }
+      : null
+
+  // 상세 시트는 항상 최신 데이터 객체로 — 자동 갱신 후에도 스냅샷(구 값)이 남지 않게
+  const liveSelected = selected ? (ALL.find((i) => i.id === selected.id) ?? selected) : null
+
+  // 검색: 이름·섹터·증권사 (스팩 포함)
+  const q = query.trim().toLowerCase()
+  const results = q
+    ? staged.filter(
+        ({ ipo }) =>
+          ipo.name.toLowerCase().includes(q) ||
+          ipo.sector.toLowerCase().includes(q) ||
+          (ipo.underwriter ?? '').toLowerCase().includes(q),
+      )
+    : []
+
   return (
     <div className="dashboard">
       <div className="dash-head">
-        <h1>공모주</h1>
+        <div className="dash-title-row">
+          <h1>공모주</h1>
+          <DataChip />
+        </div>
         <p className="dash-sub">다가오는 청약부터 지난 결과까지</p>
       </div>
 
-      {mySettle.length > 0 && (
-        <Section title="⏳ 내 정산 대기" desc="상장일 다음날 결과로 정산해요">
-          {mySettle.map((i) => (
-            <IpoCard key={i.id} ipo={i} stage={computeStage(i, today)} mine onClick={() => setSelected(i)} />
-          ))}
-        </Section>
-      )}
+      <TodayBrief staged={staged} today={today} onPick={setSelected} />
 
-      <Section title="🔥 청약 중" desc="지금 모의투자할 수 있어요">
-        {subscription.filter(notSpac).length > 0 ? (
-          subscription.filter(notSpac).map((i) => <IpoCard key={i.id} ipo={i} stage="subscription" mine={bet(i)} onClick={() => setSelected(i)} />)
-        ) : subscription.filter(isSpac).length === 0 ? (
-          <div className="empty-mini">지금 청약 중인 공모주가 없어요.</div>
-        ) : null}
-        <SpacFold ipos={subscription.filter(isSpac)} stage="subscription" onSelect={setSelected} />
-      </Section>
+      <div className="dash-tools">
+        <div className="searchbar">
+          <span className="search-ico">🔍</span>
+          <input
+            className="search-input"
+            type="search"
+            placeholder="종목·업종·증권사 검색"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="공모주 검색"
+          />
+          {query && (
+            <button className="search-clear" onClick={() => setQuery('')} aria-label="검색어 지우기">
+              ✕
+            </button>
+          )}
+        </div>
+        <div className="view-toggle" role="tablist">
+          <button className={view === 'list' ? 'vt-btn sel' : 'vt-btn'} onClick={() => setView('list')}>
+            목록
+          </button>
+          <button className={view === 'cal' ? 'vt-btn sel' : 'vt-btn'} onClick={() => setView('cal')}>
+            캘린더
+          </button>
+        </div>
+      </div>
 
-      {upcoming.length > 0 && (
-        <Section title="📅 곧 시작" desc="청약 시작 후 모의투자할 수 있어요">
-          {upcoming.filter(notSpac).map((i) => (
-            <IpoCard key={i.id} ipo={i} stage="upcoming" onClick={() => setSelected(i)} />
-          ))}
-          <SpacFold ipos={upcoming.filter(isSpac)} stage="upcoming" onSelect={setSelected} />
+      {q ? (
+        <Section title={`🔍 검색 결과`} desc={`${results.length}건`}>
+          {results.length ? (
+            results.map(({ ipo, stage }) => (
+              <IpoCard key={ipo.id} ipo={ipo} stage={stage} mine={bet(ipo)} onClick={() => setSelected(ipo)} />
+            ))
+          ) : (
+            <div className="empty-mini">‘{query.trim()}’ 검색 결과가 없어요.</div>
+          )}
         </Section>
-      )}
+      ) : view === 'cal' ? (
+        <CalendarView ipos={ALL} today={today} onSelect={setSelected} />
+      ) : (
+        <>
+          {mySettle.length > 0 && (
+            <Section title="⏳ 내 정산 대기" desc="상장일 다음날 결과로 정산해요">
+              {mySettle.map((i) => (
+                <IpoCard key={i.id} ipo={i} stage={computeStage(i, today)} mine onClick={() => setSelected(i)} />
+              ))}
+            </Section>
+          )}
 
-      {pendingInfo.length > 0 && (
-        <Section title="🕒 상장 대기" desc="상장 전 · 모의투자 가능">
-          {pendingInfo.filter(notSpac).map((i) => (
-            <IpoCard key={i.id} ipo={i} stage="pending" onClick={() => setSelected(i)} />
-          ))}
-          <SpacFold ipos={pendingInfo.filter(isSpac)} stage="pending" onSelect={setSelected} />
-        </Section>
-      )}
+          <Section title="🔥 청약 중" desc="지금 모의투자할 수 있어요">
+            {subscription.filter(notSpac).length > 0 ? (
+              subscription.filter(notSpac).map((i) => <IpoCard key={i.id} ipo={i} stage="subscription" mine={bet(i)} onClick={() => setSelected(i)} />)
+            ) : subscription.filter(isSpac).length === 0 ? (
+              <div className="empty-mini">지금 청약 중인 공모주가 없어요.</div>
+            ) : null}
+            <SpacFold ipos={subscription.filter(isSpac)} stage="subscription" onSelect={setSelected} />
+          </Section>
 
-      {past.length > 0 && (
-        <Section title="📜 지난 공모주" desc="최근 7일 상장 결과">
-          <div className="past-list">
-            {past.map((i) => {
-              const om = OUTCOME_META[outcomeFromReturn(i.listingReturn ?? 0)]
-              return (
-                <button key={i.id} className="past-item" onClick={() => setSelected(i)}>
-                  <div className="past-main">
-                    <span className="past-name">{i.name}</span>
-                    <span className="past-meta muted">
-                      {i.sector} · {md(i.listingDate)} 상장
-                    </span>
-                  </div>
-                  <span className="past-return" style={{ color: om.color }}>
-                    {signedPct(i.listingReturn ?? 0)}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </Section>
+          {upcoming.length > 0 && (
+            <Section title="📅 곧 시작" desc="청약 시작 후 모의투자할 수 있어요">
+              {upcoming.filter(notSpac).map((i) => (
+                <IpoCard key={i.id} ipo={i} stage="upcoming" onClick={() => setSelected(i)} />
+              ))}
+              <SpacFold ipos={upcoming.filter(isSpac)} stage="upcoming" onSelect={setSelected} />
+            </Section>
+          )}
+
+          {pendingInfo.length > 0 && (
+            <Section title="🕒 상장 대기" desc="상장 전 · 모의투자 가능">
+              {pendingInfo.filter(notSpac).map((i) => (
+                <IpoCard key={i.id} ipo={i} stage="pending" onClick={() => setSelected(i)} />
+              ))}
+              <SpacFold ipos={pendingInfo.filter(isSpac)} stage="pending" onSelect={setSelected} />
+            </Section>
+          )}
+
+          {past.length > 0 && (
+            <Section title="📜 지난 공모주" desc="최근 7일 상장 결과">
+              <div className="past-list">
+                {past.map((i) => {
+                  const om = OUTCOME_META[outcomeFromReturn(i.listingReturn ?? 0)]
+                  return (
+                    <button key={i.id} className="past-item" onClick={() => setSelected(i)}>
+                      <div className="past-main">
+                        <span className="past-name">{i.name}</span>
+                        <span className="past-meta muted">
+                          {i.sector} · {md(i.listingDate)} 상장
+                        </span>
+                      </div>
+                      <span className="past-return" style={{ color: om.color }}>
+                        {signedPct(i.listingReturn ?? 0)}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </Section>
+          )}
+
+          {stats && (
+            <div className="stats-strip">
+              <div className="stats-title">
+                📊 최근 상장 성과 <span className="muted">수집된 {stats.n}건 기준 · 첫날 종가</span>
+              </div>
+              <div className="stats-chips">
+                <span className="stat-chip">
+                  평균 <b style={{ color: stats.avg >= 0 ? 'var(--pos)' : 'var(--neg)' }}>{signedPct(Math.round(stats.avg * 10) / 10)}</b>
+                </span>
+                <span className="stat-chip">
+                  상승 마감 <b>{stats.posPct}%</b>
+                </span>
+                <span className="stat-chip">
+                  따상 <b>{stats.tta}건</b>
+                </span>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       <footer className="dash-foot">
@@ -107,10 +225,114 @@ export function Dashboard() {
           <div className="foot-title">📊 등급 산정 기준</div>
           <b>기관 수요예측 경쟁률 · 통합 청약경쟁률 · 의무보유확약</b>(수요·품귀)을 핵심으로, 공모 규모를 함께 반영해 매겨집니다. (스팩 제외)
         </div>
+        <div className="foot-box">
+          <div className="foot-title">ℹ️ 안내</div>
+          공모주 히어로는 <b>정보 제공 · 가상 모의투자</b> 앱으로, 투자 자문·권유가 아닙니다. 데이터는 DART·KIND 등 공개 자료
+          기반으로 지연·오류가 있을 수 있으며, 투자 판단의 책임은 이용자에게 있습니다.
+        </div>
       </footer>
 
-      {selected && (
-        <IpoDetail key={selected.id} ipo={selected} stage={computeStage(selected, today)} onClose={() => setSelected(null)} />
+      {liveSelected && (
+        <IpoDetail
+          key={liveSelected.id}
+          ipo={liveSelected}
+          stage={computeStage(liveSelected, today)}
+          onClose={() => setSelected(null)}
+        />
+      )}
+    </div>
+  )
+}
+
+// 데이터 기준 시각 칩 — 탭하면 즉시 새로고침 (표시는 기기 로컬 시간대 기준)
+function DataChip() {
+  const updatedAt = useDataTimestamp()
+  const [busy, setBusy] = useState(false)
+  const d = new Date(updatedAt)
+  const p = (n: number) => String(n).padStart(2, '0')
+  const label = updatedAt && !isNaN(d.getTime()) ? `${d.getMonth() + 1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}` : '-'
+  return (
+    <button
+      className="data-chip"
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true)
+        const r = await refreshIpos()
+        setBusy(false)
+        if (r === 'updated') toast('최신 공모주 데이터로 갱신했어요', '🔄')
+        else if (r === 'same') toast('이미 최신 데이터예요', '✅')
+        else toast('네트워크 연결을 확인해 주세요', '⚠️')
+      }}
+      aria-label="데이터 새로고침"
+    >
+      🕒 {label} <span className="data-chip-re">{busy ? '…' : '↻'}</span>
+    </button>
+  )
+}
+
+// 오늘의 브리핑 — 앱을 열자마자 '오늘 할 일'을 3초 안에 (스팩 제외)
+function TodayBrief({ staged, today, onPick }: { staged: { ipo: Ipo; stage: Stage }[]; today: string; onPick: (i: Ipo) => void }) {
+  const pool = staged.filter(({ ipo }) => notSpac(ipo))
+  const closes = pool.filter((x) => x.stage === 'subscription' && x.ipo.subscriptionEnd === today).map((x) => x.ipo)
+  const starts = pool.filter((x) => x.stage === 'subscription' && x.ipo.subscriptionStart === today).map((x) => x.ipo)
+  const lists = pool.filter((x) => x.ipo.listingDate === today).map((x) => x.ipo)
+
+  const rows: { icon: string; label: string; ipos: Ipo[] }[] = []
+  if (closes.length) rows.push({ icon: '⏰', label: '오늘 청약 마감', ipos: closes })
+  if (starts.length) rows.push({ icon: '🟢', label: '오늘 청약 시작', ipos: starts })
+  if (lists.length) rows.push({ icon: '🔔', label: '오늘 상장', ipos: lists })
+
+  // 오늘 일정이 없으면 가장 가까운 다음 일정 안내
+  let next: { d: number; label: string; ipo: Ipo } | null = null
+  if (!rows.length) {
+    for (const { ipo, stage } of pool) {
+      const cand =
+        stage === 'upcoming'
+          ? { date: ipo.subscriptionStart, label: '청약 시작' }
+          : stage === 'subscription'
+            ? { date: ipo.subscriptionEnd, label: '청약 마감' }
+            : stage === 'pending'
+              ? { date: ipo.listingDate, label: '상장' }
+              : null
+      if (!cand) continue
+      const d = daysUntil(cand.date, today)
+      if (d != null && d > 0 && (next == null || d < next.d)) next = { d, label: cand.label, ipo }
+    }
+  }
+
+  return (
+    <div className="brief">
+      <div className="brief-title">
+        📌 오늘 <span className="muted">{mdShort(today)}</span>
+      </div>
+      {rows.length ? (
+        rows.map((r) => (
+          <div key={r.label} className="brief-row">
+            <span className="brief-lbl">
+              {r.icon} {r.label}
+            </span>
+            <span className="brief-chips">
+              {r.ipos.map((i) => (
+                <button key={i.id} className="brief-chip" onClick={() => onPick(i)}>
+                  {i.name}
+                </button>
+              ))}
+            </span>
+          </div>
+        ))
+      ) : next ? (
+        <div className="brief-row">
+          <span className="brief-lbl muted">오늘 일정 없음 · 다음</span>
+          <span className="brief-chips">
+            <button className="brief-chip" onClick={() => onPick(next.ipo)}>
+              {next.ipo.name} {next.label} D-{next.d}
+            </button>
+          </span>
+        </div>
+      ) : (
+        <div className="brief-row">
+          <span className="brief-lbl muted">예정된 공모주 일정이 없어요</span>
+        </div>
       )}
     </div>
   )
@@ -167,8 +389,12 @@ function schedText(ipo: Ipo, stage: Stage): string {
 }
 
 // 우측 카운트다운(D-day)
-function footLabel(ipo: Ipo, stage: Stage): string {
-  if (stage === 'listed') return '✅ 정산하기'
+function footLabel(ipo: Ipo, stage: Stage, mine = false): string {
+  if (stage === 'listed') {
+    if (!mine) return '상장 완료'
+    const d = daysUntil(ipo.listingDate)
+    return d != null && d >= 0 ? '🔒 내일 정산' : '✅ 정산하기' // 상장 당일은 잠금(상장+1일 정산)
+  }
   if (stage === 'subscription') {
     const d = daysUntil(ipo.subscriptionEnd)
     return d != null && d >= 0 ? `마감 D-${d}` : `~${md(ipo.subscriptionEnd)}`
@@ -217,7 +443,7 @@ function IpoCard({ ipo, stage, mine, onClick }: { ipo: Ipo; stage: Stage; mine?:
       </div>
       <div className="ipo-card-foot">
         <span>{priceText}</span>
-        <span className="muted">{footLabel(ipo, stage)}</span>
+        <span className="muted">{footLabel(ipo, stage, mine)}</span>
       </div>
     </button>
   )

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/fetchIpos.mjs || echo skip-data-refresh",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "data": "node scripts/fetchIpos.mjs"
@@ -13,6 +14,7 @@
     "@capacitor/android": "^6.2.1",
     "@capacitor/app": "^6.0.3",
     "@capacitor/core": "^6.2.1",
+    "@capacitor/share": "^6.0.4",
     "@capacitor/splash-screen": "^6.0.4",
     "@capacitor/status-bar": "^6.0.3",
     "pretendard": "^1.3.9",
