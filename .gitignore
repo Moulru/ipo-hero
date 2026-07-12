@@ -8,6 +8,7 @@ dist-ssr
 *.apk
 *.aab
 docs/
+GooglePlay 산출물/
 
 # 에디터/툴링 (로컬 전용)
 .claude

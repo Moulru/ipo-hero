@@ -83,7 +83,7 @@ export function My({
       {/* 시스템 설정 */}
       <button className="sys-btn" onClick={onOpenSystem}>
         <span>⚙️ 시스템 설정</span>
-        <span className="muted">알림 · 다크 모드 · 정보 ›</span>
+        <span className="muted">다크 모드 · 진동 · 정보 ›</span>
       </button>
     </div>
   )
