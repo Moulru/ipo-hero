@@ -227,34 +227,7 @@ button {
   filter: none;
 }
 
-/* ===== Onboarding ===== */
-.onboarding {
-  max-width: 440px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  padding: 40px 22px 32px;
-  display: flex;
-  flex-direction: column;
-  background: radial-gradient(120% 50% at 50% 0%, var(--app-top) 0%, var(--bg) 60%);
-}
-.ob-head {
-  text-align: center;
-  margin-bottom: 28px;
-}
-.ob-logo {
-  font-size: 54px;
-}
-.ob-head h1 {
-  font-size: 28px;
-  margin: 6px 0 10px;
-  letter-spacing: -0.5px;
-}
-.ob-head p {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 0;
-}
+/* ===== 투자 성향 선택 (ClassPicker) ===== */
 .class-list {
   display: flex;
   flex-direction: column;
@@ -285,14 +258,6 @@ button {
 .class-passive {
   font-size: 12px;
   color: var(--text2);
-}
-.ob-foot {
-  margin-top: auto;
-  padding-top: 24px;
-  text-align: center;
-  font-size: 11.5px;
-  color: var(--muted);
-  line-height: 1.6;
 }
 
 /* ===== Dashboard ===== */
@@ -683,9 +648,10 @@ input[type='range'] {
   z-index: 60;
   background: rgba(4, 5, 9, 0.9);
   display: flex;
-  align-items: center;
+  align-items: safe center; /* 내용이 길면(10연차·레벨업) 위에서부터, 짧으면 가운데 */
   justify-content: center;
-  padding: 24px;
+  overflow-y: auto; /* 넘칠 때 스크롤 → 확인 버튼 항상 도달 가능 */
+  padding: calc(24px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom));
   animation: overlayIn 0.25s ease;
 }
 .settle {
@@ -1271,7 +1237,7 @@ button:active {
 /* Toast */
 .toast-host {
   position: absolute;
-  top: 12px;
+  top: calc(12px + env(safe-area-inset-top));
   left: 0;
   right: 0;
   z-index: 1500;
