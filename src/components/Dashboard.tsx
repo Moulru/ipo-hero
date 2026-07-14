@@ -95,7 +95,6 @@ export function Dashboard() {
           <h1>공모주</h1>
           <DataChip />
         </div>
-        <p className="dash-sub">다가오는 청약부터 지난 결과까지</p>
       </div>
 
       <TodayBrief staged={staged} today={today} onPick={setSelected} />
@@ -149,7 +148,7 @@ export function Dashboard() {
             </Section>
           )}
 
-          <Section title="🔥 청약 중" desc="지금 모의청약할 수 있어요">
+          <Section title="🔥 청약 중">
             {subscription.filter(notSpac).length > 0 ? (
               subscription.filter(notSpac).map((i) => <IpoCard key={i.id} ipo={i} stage="subscription" mine={bet(i)} onClick={() => setSelected(i)} />)
             ) : subscription.filter(isSpac).length === 0 ? (
@@ -159,7 +158,7 @@ export function Dashboard() {
           </Section>
 
           {upcoming.length > 0 && (
-            <Section title="📅 곧 시작" desc="청약 시작 후 모의청약할 수 있어요">
+            <Section title="📅 곧 시작">
               {upcoming.filter(notSpac).map((i) => (
                 <IpoCard key={i.id} ipo={i} stage="upcoming" onClick={() => setSelected(i)} />
               ))}
@@ -168,7 +167,7 @@ export function Dashboard() {
           )}
 
           {pendingInfo.length > 0 && (
-            <Section title="🕒 상장 대기" desc="상장 전 · 모의청약 가능">
+            <Section title="🕒 상장 대기">
               {pendingInfo.filter(notSpac).map((i) => (
                 <IpoCard key={i.id} ipo={i} stage="pending" onClick={() => setSelected(i)} />
               ))}

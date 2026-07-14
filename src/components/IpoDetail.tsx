@@ -171,8 +171,6 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
 
         {tab === 'sim' && (
           <>
-            <div className="sim-intro muted">🎮 가상머니로 청약·예측하고 실제 상장 결과로 정산하는 연습이에요 (실거래 아님)</div>
-
             {mode === 'settled' && (
               <div className="result-banner" style={{ color: OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].color }}>
                 상장 결과 {signedPct(ipo.listingReturn ?? 0)} · {OUTCOME_META[outcomeFromReturn(ipo.listingReturn ?? 0)].label} · 정산 완료
@@ -187,7 +185,6 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
                 <button className="cta" onClick={saveBet}>
                   {savedShares != null ? '모의청약 수정' : '모의청약 하기'}
                 </button>
-                <div className="wait-note">증거금이 시즌 자산에서 차감돼요 · 상장 전까지 수정 가능</div>
               </>
             )}
 
@@ -216,7 +213,7 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
             {mode === 'info' && (
               <>
                 <DropRate ipo={ipo} shares={10} />
-                <div className="info-note">{infoNote(ipo)}</div>
+                {infoNote(ipo) && <div className="info-note">{infoNote(ipo)}</div>}
               </>
             )}
           </>
@@ -228,8 +225,7 @@ export function IpoDetail({ ipo, stage, onClose }: { ipo: Ipo; stage: Stage; onC
 
 function infoNote(ipo: Ipo): string {
   if (ipo.listingReturn != null || (ipo.listingDate && todayYmd() > ipo.listingDate)) return '이미 상장된 종목이에요.'
-  const d = daysUntil(ipo.subscriptionStart)
-  return `아직 청약 전이에요. 청약 시작${d != null && d >= 0 ? `(D-${d})` : ''}부터 모의청약할 수 있어요.`
+  return ''
 }
 
 function Info({ label, value }: { label: string; value: string }) {
@@ -347,7 +343,7 @@ function RealCheck({ ipo, today }: { ipo: Ipo; today: string }) {
   return (
     <div className="block">
       <div className="block-title">
-        💼 실전 체크 <span className="muted gauge-note">정보용 · 실제 청약은 증권사 앱에서</span>
+        💼 실전 체크
       </div>
       {steps.length > 0 && (
         <div className="tl">
@@ -374,7 +370,7 @@ function RealCheck({ ipo, today }: { ipo: Ipo; today: string }) {
         </div>
       )}
       <div className="rc-note muted">
-        환불일은 통상(마감+2영업일) 기준 추정으로 공휴일·증권사에 따라 다를 수 있어요. 수수료 별도 · 투자 권유 아님.
+        환불일은 통상(마감+2영업일) 기준 추정
       </div>
     </div>
   )

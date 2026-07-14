@@ -57,7 +57,6 @@ export function SystemSettings({ onClose }: { onClose: () => void }) {
           >
             데이터 새로고침
           </button>
-          <div className="settings-note muted">공모주 데이터는 앱 실행 시 자동으로 최신화돼요.</div>
         </div>
 
         {/* 정보 */}
