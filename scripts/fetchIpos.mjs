@@ -21,6 +21,23 @@ function loadPrev() {
   }
 }
 
+// 청약 일정은 반드시 '한 소스'에서 시작·종료를 쌍으로 선택 —
+// 시작/종료를 독립 폴백하면 (이전값 시작 + 새 소스 종료) 짬뽕으로 06/19~08/05 같은 비정상 범위가 생김.
+// 소스 순서(신뢰도): 38(구조화된 청약일 컬럼) → DART(키워드 근접 파싱) → 이전 값.
+function pickSchedule(...sources) {
+  // 1순위: 시작·종료 모두 있고 범위가 정상(종료≥시작, 5일 이내)인 소스
+  for (const s of sources) {
+    const a = s?.subscriptionStart
+    const b = s?.subscriptionEnd
+    if (a && b && b >= a && (Date.parse(b) - Date.parse(a)) / 86400000 <= 5) return { start: a, end: b }
+  }
+  // 2순위: 시작만 있는 소스 (종료 미상 → 시작=종료, 1일 처리)
+  for (const s of sources) {
+    if (s?.subscriptionStart) return { start: s.subscriptionStart, end: s.subscriptionStart }
+  }
+  return { start: null, end: null }
+}
+
 // KIND market 표기 정규화
 function marketOf(m) {
   if (!m) return null
@@ -167,14 +184,11 @@ async function main() {
     const offerAmount = f?.offerAmount38 ?? d?.b?.offerAmount ?? p?.offerAmount ?? null
     if (f?.offerAmount38 == null && d?.b?.offerAmount != null) src.dartAmount++
 
-    // 일정: DART(시작·종료 모두 있을 때) 우선, 아니면 38, 아니면 이전 값
-    let subscriptionStart = f?.subscriptionStart ?? p?.subscriptionStart ?? null
-    let subscriptionEnd = f?.subscriptionEnd ?? p?.subscriptionEnd ?? null
-    if (d?.b?.subscriptionStart && d?.b?.subscriptionEnd) {
-      subscriptionStart = d.b.subscriptionStart
-      subscriptionEnd = d.b.subscriptionEnd
-      src.dartSched++
-    }
+    // 일정: 한 소스에서 시작·종료를 쌍으로 (38 → DART → 이전 값), 비정상 범위는 폐기
+    const sched = pickSchedule(f, d?.b, p)
+    const subscriptionStart = sched.start
+    const subscriptionEnd = sched.end
+    if (sched.start && sched.start === d?.b?.subscriptionStart) src.dartSched++
 
     // 상장일: KIND(상장완료) 우선 → DART(예정) → 38 → 이전 값
     let listingDate = k?.listingDate ?? d?.b?.listingDate ?? f?.listingDate ?? p?.listingDate ?? null
