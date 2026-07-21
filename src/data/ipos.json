@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-21T10:01:45.770Z",
+  "generatedAt": "2026-07-21T12:08:15.737Z",
   "count": 35,
   "ipos": [
     {
@@ -142,7 +142,7 @@
       "underwriter": "유진투자증권,미래에셋증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": "2026-06-11",
+      "demandForecastDate": "2026-07-27",
       "rarity": "common",
       "isReal": true
     },
