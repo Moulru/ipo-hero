@@ -2078,43 +2078,6 @@ button:active {
   flex-shrink: 0;
 }
 
-/* 최근 상장 성과 통계 */
-.stats-strip {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 13px 14px;
-  margin-bottom: 22px;
-  box-shadow: var(--shadow);
-}
-.stats-title {
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 9px;
-}
-.stats-title .muted {
-  font-size: 10.5px;
-  font-weight: 600;
-  margin-left: 4px;
-}
-.stats-chips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.stat-chip {
-  font-size: 12px;
-  color: var(--text2);
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 99px;
-  padding: 5px 11px;
-}
-.stat-chip b {
-  font-weight: 800;
-  color: var(--text);
-}
-
 /* 종목 상세 — 헤더 액션(공유·닫기) */
 .sheet-actions {
   display: flex;

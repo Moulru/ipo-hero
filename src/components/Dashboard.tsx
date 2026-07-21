@@ -53,26 +53,11 @@ export function Dashboard() {
   const mySettle = [...pendingAll, ...listed].filter((i) => bet(i) && !settledIds.includes(i.id))
   const pendingInfo = pendingAll.filter((i) => !bet(i) && i.listingDate) // 상장일 미정 숨김
 
-  // 지난 7일 내 상장한 공모주 기록 (최신순)
+  // 최근 상장 결과 5건 (최신순) — 평균은 따상 몇 건에 끌려가 왜곡되므로 개별 수익률을 그대로 보여줌
   const past = listed
     .filter((i) => notSpac(i) && i.listingDate && i.listingReturn != null)
-    .filter((i) => {
-      const d = daysUntil(i.listingDate, today)
-      return d != null && d <= 0 && d >= -7
-    })
     .sort((a, b) => (b.listingDate ?? '').localeCompare(a.listingDate ?? ''))
-
-  // 최근 상장 성과 통계 (수집된 상장 완료 종목 전체 기준, 스팩 제외)
-  const returns = ALL.filter((i) => notSpac(i) && i.listingReturn != null).map((i) => i.listingReturn as number)
-  const stats =
-    returns.length >= 3
-      ? {
-          n: returns.length,
-          avg: returns.reduce((a, b) => a + b, 0) / returns.length,
-          posPct: Math.round((returns.filter((r) => r > 0).length / returns.length) * 100),
-          tta: returns.filter((r) => r >= 100).length,
-        }
-      : null
+    .slice(0, 5)
 
   // 상세 시트는 항상 최신 데이터 객체로 — 자동 갱신 후에도 스냅샷(구 값)이 남지 않게
   const liveSelected = selected ? (ALL.find((i) => i.id === selected.id) ?? selected) : null
@@ -176,7 +161,7 @@ export function Dashboard() {
           )}
 
           {past.length > 0 && (
-            <Section title="📜 지난 공모주" desc="최근 7일 상장 결과">
+            <Section title="📜 최근 상장" desc="최신순 · 첫날 종가">
               <div className="past-list">
                 {past.map((i) => {
                   const om = OUTCOME_META[outcomeFromReturn(i.listingReturn ?? 0)]
@@ -196,25 +181,6 @@ export function Dashboard() {
                 })}
               </div>
             </Section>
-          )}
-
-          {stats && (
-            <div className="stats-strip">
-              <div className="stats-title">
-                📊 최근 상장 성과 <span className="muted">수집된 {stats.n}건 기준 · 첫날 종가</span>
-              </div>
-              <div className="stats-chips">
-                <span className="stat-chip">
-                  평균 <b style={{ color: stats.avg >= 0 ? 'var(--pos)' : 'var(--neg)' }}>{signedPct(Math.round(stats.avg * 10) / 10)}</b>
-                </span>
-                <span className="stat-chip">
-                  상승 마감 <b>{stats.posPct}%</b>
-                </span>
-                <span className="stat-chip">
-                  따상 <b>{stats.tta}건</b>
-                </span>
-              </div>
-            </div>
           )}
         </>
       )}
