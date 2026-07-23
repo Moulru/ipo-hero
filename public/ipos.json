@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-23T20:37:07.358Z",
+  "generatedAt": "2026-07-23T22:03:47.919Z",
   "count": 35,
   "ipos": [
     {
@@ -150,9 +150,9 @@
       "id": "n2299",
       "name": "케이앤에스아이앤씨",
       "sector": "기타",
-      "offerPrice": 9000,
+      "offerPrice": 11000,
       "priceLow": 9000,
-      "priceHigh": 9000,
+      "priceHigh": 11000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-08-04",
       "subscriptionEnd": "2026-08-05",
