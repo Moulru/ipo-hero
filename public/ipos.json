@@ -1,7 +1,31 @@
 {
-  "generatedAt": "2026-07-24T04:21:40.699Z",
-  "count": 35,
+  "generatedAt": "2026-07-24T07:07:35.415Z",
+  "count": 36,
   "ipos": [
+    {
+      "id": "n2309",
+      "name": "덕산넵코어스",
+      "sector": "기타",
+      "offerPrice": 14600,
+      "priceLow": 12400,
+      "priceHigh": 14600,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-09-16",
+      "subscriptionEnd": "2026-09-17",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 372,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "대신증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-09-08",
+      "rarity": "common",
+      "isReal": true
+    },
     {
       "id": "n2308",
       "name": "네오사피엔스",
