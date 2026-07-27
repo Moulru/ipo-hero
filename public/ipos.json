@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-27T07:31:50.932Z",
-  "count": 35,
+  "generatedAt": "2026-07-27T16:21:25.659Z",
+  "count": 36,
   "ipos": [
     {
       "id": "n2309",
@@ -720,6 +720,30 @@
       "market": "코스닥",
       "demandForecastDate": null,
       "rarity": "legendary",
+      "isReal": true
+    },
+    {
+      "id": "k238540",
+      "name": "나노솔루션",
+      "sector": "기타",
+      "offerPrice": 0,
+      "priceLow": null,
+      "priceHigh": null,
+      "priceConfirmed": false,
+      "subscriptionStart": null,
+      "subscriptionEnd": null,
+      "listingDate": "2026-07-28",
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": null,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": null,
+      "ticker": "238540",
+      "market": "코넥스",
+      "demandForecastDate": null,
+      "rarity": "common",
       "isReal": true
     },
     {
