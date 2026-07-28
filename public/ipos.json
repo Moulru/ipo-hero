@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T16:21:25.659Z",
+  "generatedAt": "2026-07-28T10:06:10.454Z",
   "count": 36,
   "ipos": [
     {
@@ -246,16 +246,16 @@
       "id": "n2298",
       "name": "인제니아테라퓨틱스",
       "sector": "기타",
-      "offerPrice": 14500,
+      "offerPrice": 12000,
       "priceLow": 12000,
       "priceHigh": 14500,
-      "priceConfirmed": false,
+      "priceConfirmed": true,
       "subscriptionStart": "2026-07-30",
       "subscriptionEnd": "2026-07-31",
       "listingDate": "2026-08-18",
       "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
+      "institutionalRate": 50.4,
+      "lockupRatio": 2.23,
       "offerAmount": 600,
       "listingReturn": null,
       "expectedPer10": null,
