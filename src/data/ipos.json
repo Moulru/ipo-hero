@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T09:38:44.894Z",
+  "generatedAt": "2026-07-29T12:01:16.097Z",
   "count": 37,
   "ipos": [
     {
@@ -70,7 +70,7 @@
       "underwriter": "대신증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-09-04",
       "rarity": "common",
       "isReal": true
     },
