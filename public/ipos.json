@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T03:50:54.244Z",
+  "generatedAt": "2026-07-29T06:31:18.197Z",
   "count": 37,
   "ipos": [
     {
@@ -46,7 +46,7 @@
       "underwriter": "한국투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-09-07",
       "rarity": "common",
       "isReal": true
     },
