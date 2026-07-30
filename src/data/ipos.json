@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-29T12:01:16.097Z",
+  "generatedAt": "2026-07-30T03:17:45.909Z",
   "count": 37,
   "ipos": [
     {
@@ -123,6 +123,30 @@
       "isReal": true
     },
     {
+      "id": "n2306",
+      "name": "스카이랩스",
+      "sector": "기타",
+      "offerPrice": 16000,
+      "priceLow": 13000,
+      "priceHigh": 16000,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-08-26",
+      "subscriptionEnd": "2026-08-27",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 260,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "한국투자증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-08-03",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
       "id": "n2307",
       "name": "브릴스",
       "sector": "기타",
@@ -167,30 +191,6 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-07-27",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "n2306",
-      "name": "스카이랩스",
-      "sector": "기타",
-      "offerPrice": 16000,
-      "priceLow": 13000,
-      "priceHigh": 16000,
-      "priceConfirmed": false,
-      "subscriptionStart": "2026-08-13",
-      "subscriptionEnd": "2026-08-14",
-      "listingDate": null,
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 260,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": "한국투자증권",
-      "ticker": null,
-      "market": null,
-      "demandForecastDate": "2026-08-03",
       "rarity": "common",
       "isReal": true
     },
