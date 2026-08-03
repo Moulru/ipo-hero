@@ -4,8 +4,10 @@ const SCHEDULE_URL = 'http://www.38.co.kr/html/fund/index.htm?o=k'
 const LISTING_URL = 'http://www.38.co.kr/html/fund/index.htm?o=nw'
 const DETAIL_URL = (no) => `http://www.38.co.kr/html/fund/?o=v&no=${no}`
 
+// 자체 식별 UA('ttasangroad/…')는 38.co.kr 측 차단 대상이 되기 쉬워 실제 브라우저 UA로 통일(kind.mjs와 동일)
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36'
 async function fetchHtml(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; ttasangroad/1.0)' } })
+  const res = await fetch(url, { headers: { 'User-Agent': UA } })
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`)
   return new TextDecoder('euc-kr').decode(new Uint8Array(await res.arrayBuffer()))
 }
@@ -147,5 +149,11 @@ export async function collect38() {
     r.lockupRatio = d?.lockup ?? null
     r.offerAmount38 = d?.offerAmount ?? null
   })
+  // o=nw·o=k 둘 다 0건은 "오늘 하필 없음"보다 차단/구조변경 실패일 가능성이 훨씬 높음 —
+  // 조용히 이전 값만 계속 우려먹으며 "변경 없음"으로 며칠씩 굳는 사태 방지 위해 명시적으로 실패시킴
+  // (fetchIpos.mjs가 잡지 않아 워크플로가 실패로 표시되고, 부분 실패는 기존처럼 graceful 유지)
+  if (nwMap.size === 0 && map.size === 0) {
+    throw new Error('38 수집 완전 실패(o=nw·o=k 모두 0건) — 차단/구조변경 의심')
+  }
   return map
 }
