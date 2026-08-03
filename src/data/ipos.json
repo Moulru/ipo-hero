@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-03T01:43:21.770Z",
+  "generatedAt": "2026-08-03T07:58:15.309Z",
   "count": 37,
   "ipos": [
     {
@@ -273,14 +273,14 @@
       "offerPrice": 11000,
       "priceLow": 9000,
       "priceHigh": 11000,
-      "priceConfirmed": false,
+      "priceConfirmed": true,
       "subscriptionStart": "2026-08-04",
       "subscriptionEnd": "2026-08-05",
       "listingDate": "2026-08-14",
       "competitionRate": null,
       "institutionalRate": null,
       "lockupRatio": null,
-      "offerAmount": 216,
+      "offerAmount": 264,
       "listingReturn": null,
       "expectedPer10": null,
       "underwriter": "IBK투자증권",
