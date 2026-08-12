@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-12T07:24:29.369Z",
+  "generatedAt": "2026-08-12T08:49:06.275Z",
   "count": 37,
   "ipos": [
     {
@@ -253,12 +253,12 @@
       "subscriptionStart": "2026-08-11",
       "subscriptionEnd": "2026-08-12",
       "listingDate": "2026-08-21",
-      "competitionRate": null,
+      "competitionRate": 5.53,
       "institutionalRate": 213.31,
       "lockupRatio": 0,
       "offerAmount": 483,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 4.25,
       "underwriter": "미래에셋증권,삼성증권",
       "ticker": null,
       "market": null,
