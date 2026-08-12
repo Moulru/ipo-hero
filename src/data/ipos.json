@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-11T16:02:09.247Z",
+  "generatedAt": "2026-08-12T07:24:29.369Z",
   "count": 37,
   "ipos": [
     {
@@ -305,7 +305,7 @@
       "institutionalRate": 184.06,
       "lockupRatio": 0.1,
       "offerAmount": 154,
-      "listingReturn": null,
+      "listingReturn": -26.6,
       "expectedPer10": 3.12,
       "underwriter": "한국투자증권",
       "ticker": "483350",
