@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T09:13:14.905Z",
+  "generatedAt": "2026-08-14T08:45:19.095Z",
   "count": 37,
   "ipos": [
     {
@@ -99,6 +99,30 @@
       "isReal": true
     },
     {
+      "id": "n2308",
+      "name": "네오사피엔스",
+      "sector": "기타",
+      "offerPrice": 15800,
+      "priceLow": 13800,
+      "priceHigh": 15800,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-09-10",
+      "subscriptionEnd": "2026-09-11",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 276,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "대신증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-08-31",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
       "id": "n2313",
       "name": "KB스팩34호",
       "sector": "스팩",
@@ -143,30 +167,6 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-08-14",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "n2308",
-      "name": "네오사피엔스",
-      "sector": "기타",
-      "offerPrice": 15800,
-      "priceLow": 13800,
-      "priceHigh": 15800,
-      "priceConfirmed": false,
-      "subscriptionStart": "2026-09-08",
-      "subscriptionEnd": "2026-09-09",
-      "listingDate": null,
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 276,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": "대신증권",
-      "ticker": null,
-      "market": null,
-      "demandForecastDate": "2026-08-31",
       "rarity": "common",
       "isReal": true
     },
