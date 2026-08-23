@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T08:39:57.136Z",
+  "generatedAt": "2026-08-23T15:23:35.981Z",
   "count": 38,
   "ipos": [
     {
@@ -284,8 +284,8 @@
       "listingReturn": null,
       "expectedPer10": 0.44,
       "underwriter": "삼성증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "417030",
+      "market": "코스닥",
       "demandForecastDate": "2026-08-03",
       "rarity": "rare",
       "isReal": true
