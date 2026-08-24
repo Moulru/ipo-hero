@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-23T15:23:35.981Z",
-  "count": 38,
+  "generatedAt": "2026-08-24T02:45:56.021Z",
+  "count": 39,
   "ipos": [
     {
       "id": "n2315",
@@ -23,6 +23,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-09-16",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "n2316",
+      "name": "엘리스그룹",
+      "sector": "기타",
+      "offerPrice": 90500,
+      "priceLow": 70400,
+      "priceHigh": 90500,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-09-18",
+      "subscriptionEnd": "2026-09-21",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 1564,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "미래에셋증권,삼성증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-09-09",
       "rarity": "common",
       "isReal": true
     },
