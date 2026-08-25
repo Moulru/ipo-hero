@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T07:44:22.459Z",
+  "generatedAt": "2026-08-25T08:41:45.145Z",
   "count": 39,
   "ipos": [
     {
@@ -22,7 +22,7 @@
       "underwriter": "NH투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-09-28",
       "rarity": "common",
       "isReal": true
     },
@@ -294,17 +294,17 @@
       "id": "n2306",
       "name": "스카이랩스",
       "sector": "기타",
-      "offerPrice": 16000,
+      "offerPrice": 10000,
       "priceLow": 13000,
       "priceHigh": 16000,
-      "priceConfirmed": false,
+      "priceConfirmed": true,
       "subscriptionStart": "2026-08-26",
       "subscriptionEnd": "2026-08-27",
       "listingDate": "2026-09-04",
       "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 260,
+      "institutionalRate": 63.41,
+      "lockupRatio": 0.17,
+      "offerAmount": 200,
       "listingReturn": null,
       "expectedPer10": null,
       "underwriter": "한국투자증권",
