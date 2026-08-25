@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T08:41:45.145Z",
+  "generatedAt": "2026-08-25T10:32:34.772Z",
   "count": 39,
   "ipos": [
     {
@@ -94,7 +94,7 @@
       "underwriter": "IBK투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": "2026-08-14",
+      "demandForecastDate": "2026-09-09",
       "rarity": "common",
       "isReal": true
     },
@@ -310,7 +310,7 @@
       "underwriter": "한국투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": "2026-08-03",
+      "demandForecastDate": "2026-08-14",
       "rarity": "common",
       "isReal": true
     },
