@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T02:45:56.021Z",
+  "generatedAt": "2026-08-25T02:40:37.552Z",
   "count": 39,
   "ipos": [
     {
@@ -305,7 +305,7 @@
       "institutionalRate": 743.49,
       "lockupRatio": 1.26,
       "offerAmount": 375,
-      "listingReturn": null,
+      "listingReturn": -30.5,
       "expectedPer10": 0.44,
       "underwriter": "삼성증권",
       "ticker": "417030",
@@ -353,7 +353,7 @@
       "institutionalRate": 213.31,
       "lockupRatio": 0,
       "offerAmount": 483,
-      "listingReturn": null,
+      "listingReturn": -34.6,
       "expectedPer10": 4.25,
       "underwriter": "미래에셋증권,삼성증권",
       "ticker": "282620",
