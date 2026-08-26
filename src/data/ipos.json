@@ -1,7 +1,31 @@
 {
-  "generatedAt": "2026-08-25T10:32:34.772Z",
-  "count": 39,
+  "generatedAt": "2026-08-26T07:46:01.665Z",
+  "count": 40,
   "ipos": [
+    {
+      "id": "n2319",
+      "name": "SK증권스팩14호",
+      "sector": "스팩",
+      "offerPrice": 2000,
+      "priceLow": 2000,
+      "priceHigh": 2000,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-15",
+      "subscriptionEnd": "2026-10-16",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 130,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "SK증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": null,
+      "rarity": "common",
+      "isReal": true
+    },
     {
       "id": "n2318",
       "name": "래블업",
