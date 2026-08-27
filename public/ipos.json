@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-26T07:46:01.665Z",
+  "generatedAt": "2026-08-27T14:32:40.615Z",
   "count": 40,
   "ipos": [
     {
@@ -325,12 +325,12 @@
       "subscriptionStart": "2026-08-26",
       "subscriptionEnd": "2026-08-27",
       "listingDate": "2026-09-04",
-      "competitionRate": null,
+      "competitionRate": 2.85,
       "institutionalRate": 63.41,
       "lockupRatio": 0.17,
       "offerAmount": 200,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 5.92,
       "underwriter": "한국투자증권",
       "ticker": null,
       "market": null,
