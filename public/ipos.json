@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-29T03:32:20.404Z",
-  "count": 41,
+  "generatedAt": "2026-08-31T04:03:33.488Z",
+  "count": 42,
   "ipos": [
     {
       "id": "n2319",
@@ -47,6 +47,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-09-28",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "n2321",
+      "name": "엠비디",
+      "sector": "기타",
+      "offerPrice": 11500,
+      "priceLow": 9400,
+      "priceHigh": 11500,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-06",
+      "subscriptionEnd": "2026-10-07",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 188,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "하나증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-09-21",
       "rarity": "common",
       "isReal": true
     },
