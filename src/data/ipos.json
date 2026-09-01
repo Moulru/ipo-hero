@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-31T04:03:33.488Z",
+  "generatedAt": "2026-09-01T07:21:51.876Z",
   "count": 42,
   "ipos": [
     {
@@ -348,7 +348,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-09-01",
       "subscriptionEnd": "2026-09-02",
-      "listingDate": "2026-09-11",
+      "listingDate": "2026-09-10",
       "competitionRate": null,
       "institutionalRate": 1160.7,
       "lockupRatio": 0,
