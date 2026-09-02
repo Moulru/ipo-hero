@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T07:21:51.876Z",
+  "generatedAt": "2026-09-02T09:52:54.855Z",
   "count": 42,
   "ipos": [
     {
@@ -349,12 +349,12 @@
       "subscriptionStart": "2026-09-01",
       "subscriptionEnd": "2026-09-02",
       "listingDate": "2026-09-10",
-      "competitionRate": null,
+      "competitionRate": 356.99,
       "institutionalRate": 1160.7,
       "lockupRatio": 0,
       "offerAmount": 170,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 0.53,
       "underwriter": "NH투자증권",
       "ticker": null,
       "market": null,
