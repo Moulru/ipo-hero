@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T11:32:21.252Z",
+  "generatedAt": "2026-09-03T15:53:40.242Z",
   "count": 43,
   "ipos": [
     {
@@ -404,8 +404,8 @@
       "listingReturn": null,
       "expectedPer10": 5.92,
       "underwriter": "한국투자증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "386380",
+      "market": "코스닥",
       "demandForecastDate": "2026-08-14",
       "rarity": "common",
       "isReal": true
