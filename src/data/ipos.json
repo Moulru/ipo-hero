@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T08:16:32.299Z",
+  "generatedAt": "2026-09-04T12:51:24.202Z",
   "count": 44,
   "ipos": [
     {
@@ -46,7 +46,7 @@
       "underwriter": "삼성증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-10-12",
       "rarity": "common",
       "isReal": true
     },
@@ -270,9 +270,9 @@
       "id": "n2294",
       "name": "빅웨이브로보틱스",
       "sector": "로봇",
-      "offerPrice": 24000,
-      "priceLow": 20000,
-      "priceHigh": 24000,
+      "offerPrice": 18000,
+      "priceLow": 15000,
+      "priceHigh": 18000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-09-15",
       "subscriptionEnd": "2026-09-16",
