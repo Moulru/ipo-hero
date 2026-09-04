@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-03T21:50:43.340Z",
-  "count": 43,
+  "generatedAt": "2026-09-04T08:16:32.299Z",
+  "count": 44,
   "ipos": [
     {
       "id": "n2322",
@@ -23,6 +23,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-10-07",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "n2323",
+      "name": "크리에이츠",
+      "sector": "기타",
+      "offerPrice": 18000,
+      "priceLow": 15000,
+      "priceHigh": 18000,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-20",
+      "subscriptionEnd": "2026-10-21",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 210,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "삼성증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": null,
       "rarity": "common",
       "isReal": true
     },
