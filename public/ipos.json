@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-05T03:15:27.929Z",
+  "generatedAt": "2026-09-05T14:42:01.165Z",
   "count": 44,
   "ipos": [
     {
@@ -270,9 +270,9 @@
       "id": "n2294",
       "name": "빅웨이브로보틱스",
       "sector": "로봇",
-      "offerPrice": 24000,
-      "priceLow": 20000,
-      "priceHigh": 24000,
+      "offerPrice": 18000,
+      "priceLow": 15000,
+      "priceHigh": 18000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-09-15",
       "subscriptionEnd": "2026-09-16",
