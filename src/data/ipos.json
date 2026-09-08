@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-07T05:45:20.297Z",
-  "count": 44,
+  "generatedAt": "2026-09-08T06:19:12.872Z",
+  "count": 45,
   "ipos": [
     {
       "id": "n2322",
@@ -95,6 +95,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-09-28",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "n2324",
+      "name": "엠에스바이오",
+      "sector": "바이오",
+      "offerPrice": 7800,
+      "priceLow": 6800,
+      "priceHigh": 7800,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-12",
+      "subscriptionEnd": "2026-10-13",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 272,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "KB증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": null,
       "rarity": "common",
       "isReal": true
     },
