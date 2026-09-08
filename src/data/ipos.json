@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T11:36:44.512Z",
+  "generatedAt": "2026-09-08T16:06:04.998Z",
   "count": 45,
   "ipos": [
     {
@@ -118,7 +118,7 @@
       "underwriter": "KB증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-09-28",
       "rarity": "common",
       "isReal": true
     },
