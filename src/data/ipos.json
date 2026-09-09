@@ -1,7 +1,31 @@
 {
-  "generatedAt": "2026-09-08T16:06:04.998Z",
-  "count": 45,
+  "generatedAt": "2026-09-09T05:00:12.906Z",
+  "count": 46,
   "ipos": [
+    {
+      "id": "n2325",
+      "name": "바로팜",
+      "sector": "바이오",
+      "offerPrice": 20200,
+      "priceLow": 16400,
+      "priceHigh": 20200,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-11-02",
+      "subscriptionEnd": "2026-11-03",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 292,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "미래에셋증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-10-22",
+      "rarity": "common",
+      "isReal": true
+    },
     {
       "id": "n2322",
       "name": "티앤이코리아",
