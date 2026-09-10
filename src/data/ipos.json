@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09T09:37:14.124Z",
+  "generatedAt": "2026-09-10T10:45:15.930Z",
   "count": 44,
   "ipos": [
     {
@@ -449,7 +449,7 @@
       "institutionalRate": 1160.7,
       "lockupRatio": 0,
       "offerAmount": 170,
-      "listingReturn": null,
+      "listingReturn": 3.8,
       "expectedPer10": 0.53,
       "underwriter": "NH투자증권",
       "ticker": null,
