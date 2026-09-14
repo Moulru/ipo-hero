@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T11:42:10.388Z",
+  "generatedAt": "2026-09-14T13:42:37.743Z",
   "count": 44,
   "ipos": [
     {
@@ -345,21 +345,21 @@
       "offerPrice": 18000,
       "priceLow": 15000,
       "priceHigh": 18000,
-      "priceConfirmed": false,
+      "priceConfirmed": true,
       "subscriptionStart": "2026-09-15",
       "subscriptionEnd": "2026-09-16",
       "listingDate": "2026-09-29",
       "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 240,
+      "institutionalRate": 1109.37,
+      "lockupRatio": 18.14,
+      "offerAmount": 288,
       "listingReturn": null,
       "expectedPer10": null,
       "underwriter": "유진투자증권,미래에셋증권",
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-09-07",
-      "rarity": "common",
+      "rarity": "epic",
       "isReal": true
     },
     {
