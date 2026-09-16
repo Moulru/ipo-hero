@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T12:01:35.321Z",
+  "generatedAt": "2026-09-16T01:34:17.509Z",
   "count": 44,
   "ipos": [
     {
@@ -303,7 +303,7 @@
       "listingDate": "2026-09-30",
       "competitionRate": null,
       "institutionalRate": 868.64,
-      "lockupRatio": 0,
+      "lockupRatio": 4.05,
       "offerAmount": 438,
       "listingReturn": null,
       "expectedPer10": null,
