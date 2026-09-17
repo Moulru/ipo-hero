@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-16T07:18:46.114Z",
-  "count": 44,
+  "generatedAt": "2026-09-17T01:37:04.449Z",
+  "count": 45,
   "ipos": [
     {
       "id": "n2325",
@@ -23,6 +23,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-10-22",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "n2328",
+      "name": "인텔리빅스",
+      "sector": "기타",
+      "offerPrice": 9000,
+      "priceLow": 7600,
+      "priceHigh": 9000,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-21",
+      "subscriptionEnd": "2026-10-22",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 190,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "미래에셋증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-10-12",
       "rarity": "common",
       "isReal": true
     },
