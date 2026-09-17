@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T07:14:12.031Z",
+  "generatedAt": "2026-09-17T12:44:18.099Z",
   "count": 46,
   "ipos": [
     {
@@ -373,17 +373,17 @@
       "subscriptionStart": "2026-09-16",
       "subscriptionEnd": "2026-09-17",
       "listingDate": "2026-09-30",
-      "competitionRate": null,
+      "competitionRate": 332.82,
       "institutionalRate": 868.64,
       "lockupRatio": 4.05,
       "offerAmount": 438,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 0.55,
       "underwriter": "대신증권",
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-09-08",
-      "rarity": "rare",
+      "rarity": "common",
       "isReal": true
     },
     {
