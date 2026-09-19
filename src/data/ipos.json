@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-19T06:31:36.627Z",
+  "generatedAt": "2026-09-19T18:12:29.818Z",
   "count": 47,
   "ipos": [
     {
@@ -30,9 +30,9 @@
       "id": "n2321",
       "name": "엠비디",
       "sector": "기타",
-      "offerPrice": 11500,
-      "priceLow": 9400,
-      "priceHigh": 11500,
+      "offerPrice": 11700,
+      "priceLow": 9600,
+      "priceHigh": 11700,
       "priceConfirmed": false,
       "subscriptionStart": "2026-10-28",
       "subscriptionEnd": "2026-10-29",
