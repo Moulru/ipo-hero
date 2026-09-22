@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T06:41:06.107Z",
+  "generatedAt": "2026-09-22T12:23:50.119Z",
   "count": 51,
   "ipos": [
     {
@@ -593,7 +593,7 @@
       "institutionalRate": 1232.51,
       "lockupRatio": 0,
       "offerAmount": 140,
-      "listingReturn": null,
+      "listingReturn": -4.3,
       "expectedPer10": 0.5,
       "underwriter": "KB증권",
       "ticker": null,
@@ -617,7 +617,7 @@
       "institutionalRate": 1270.51,
       "lockupRatio": 0,
       "offerAmount": 140,
-      "listingReturn": null,
+      "listingReturn": 7.8,
       "expectedPer10": 0.45,
       "underwriter": "한국투자증권",
       "ticker": null,
