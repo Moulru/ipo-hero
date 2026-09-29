@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-28T22:26:43.999Z",
-  "count": 52,
+  "generatedAt": "2026-09-29T02:12:35.088Z",
+  "count": 53,
   "ipos": [
     {
       "id": "n2334",
@@ -339,6 +339,30 @@
       "isReal": true
     },
     {
+      "id": "n2337",
+      "name": "유캐스트",
+      "sector": "기타",
+      "offerPrice": 26000,
+      "priceLow": 21000,
+      "priceHigh": 26000,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-10-19",
+      "subscriptionEnd": "2026-10-20",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 168,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "유진투자증권,신영증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": null,
+      "rarity": "common",
+      "isReal": true
+    },
+    {
       "id": "n2319",
       "name": "SK증권스팩14호",
       "sector": "스팩",
@@ -446,16 +470,16 @@
       "subscriptionEnd": "2026-10-06",
       "listingDate": null,
       "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 166,
+      "institutionalRate": 1097.62,
+      "lockupRatio": 0,
+      "offerAmount": 200,
       "listingReturn": null,
       "expectedPer10": null,
       "underwriter": "하나증권",
       "ticker": "250030",
       "market": "코넥스",
       "demandForecastDate": "2026-09-16",
-      "rarity": "common",
+      "rarity": "rare",
       "isReal": true
     },
     {
