@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T10:40:39.796Z",
+  "generatedAt": "2026-09-30T16:42:27.649Z",
   "count": 53,
   "ipos": [
     {
@@ -548,8 +548,8 @@
       "listingReturn": null,
       "expectedPer10": 0.24,
       "underwriter": "IBK투자증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "468670",
+      "market": "코스닥",
       "demandForecastDate": "2026-09-09",
       "rarity": "legendary",
       "isReal": true
