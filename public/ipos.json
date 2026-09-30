@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T04:17:59.807Z",
+  "generatedAt": "2026-09-30T10:40:39.796Z",
   "count": 53,
   "ipos": [
     {
@@ -569,7 +569,7 @@
       "institutionalRate": 868.64,
       "lockupRatio": 4.05,
       "offerAmount": 438,
-      "listingReturn": null,
+      "listingReturn": 28.2,
       "expectedPer10": 0.55,
       "underwriter": "대신증권",
       "ticker": "266690",
