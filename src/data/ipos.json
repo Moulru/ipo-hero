@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T00:43:18.187Z",
+  "generatedAt": "2026-10-01T14:16:27.020Z",
   "count": 53,
   "ipos": [
     {
@@ -545,7 +545,7 @@
       "institutionalRate": 1187.74,
       "lockupRatio": 21.75,
       "offerAmount": 234,
-      "listingReturn": null,
+      "listingReturn": 60.8,
       "expectedPer10": 0.24,
       "underwriter": "IBK투자증권",
       "ticker": "468670",
