@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T13:55:12.249Z",
+  "generatedAt": "2026-10-09T00:09:28.538Z",
   "count": 55,
   "ipos": [
     {
@@ -1131,30 +1131,6 @@
       "isReal": true
     },
     {
-      "id": "k439960",
-      "name": "코스모로보틱스",
-      "sector": "로봇",
-      "offerPrice": 6000,
-      "priceLow": 5300,
-      "priceHigh": 6000,
-      "priceConfirmed": true,
-      "subscriptionStart": "2026-04-27",
-      "subscriptionEnd": "2026-04-28",
-      "listingDate": "2026-05-11",
-      "competitionRate": 2013,
-      "institutionalRate": 1140.11,
-      "lockupRatio": 73.03,
-      "offerAmount": 250,
-      "listingReturn": 300,
-      "expectedPer10": 0.22,
-      "underwriter": "유진투자증권,NH투자증권,유안타증권",
-      "ticker": "439960",
-      "market": "코스닥",
-      "demandForecastDate": null,
-      "rarity": "legendary",
-      "isReal": true
-    },
-    {
       "id": "n2327",
       "name": "다비오",
       "sector": "기타",
@@ -1200,6 +1176,30 @@
       "market": null,
       "demandForecastDate": "2026-10-07",
       "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "k439960",
+      "name": "코스모로보틱스",
+      "sector": "로봇",
+      "offerPrice": 6000,
+      "priceLow": 5300,
+      "priceHigh": 6000,
+      "priceConfirmed": true,
+      "subscriptionStart": "2026-04-27",
+      "subscriptionEnd": "2026-04-28",
+      "listingDate": "2026-05-11",
+      "competitionRate": 2013,
+      "institutionalRate": 1140.11,
+      "lockupRatio": 73.03,
+      "offerAmount": 250,
+      "listingReturn": 300,
+      "expectedPer10": 0.22,
+      "underwriter": "유진투자증권,NH투자증권,유안타증권",
+      "ticker": "439960",
+      "market": "코스닥",
+      "demandForecastDate": null,
+      "rarity": "legendary",
       "isReal": true
     },
     {
