@@ -18,7 +18,7 @@
 | `android/variables.gradle` | minSdk 22 · compileSdk 36 · targetSdk 36 |
 | `android/build.gradle` | AGP `com.android.tools.build:gradle:8.9.1` |
 | `android/gradle/wrapper/gradle-wrapper.properties` | `gradle-8.11.1-all.zip` |
-| `android/app/build.gradle` defaultConfig | applicationId `cc.eous.ipohero` · versionName `1.0.0`(프로덕션 첫 제출까지 고정) · **versionCode는 빌드마다 +1(현재 12)** |
+| `android/app/build.gradle` defaultConfig | applicationId `cc.eous.ipohero` · versionName `1.0.0`(출시 완료 — 다음 업데이트부터 변경 가능) · **versionCode는 빌드마다 +1(현재 12)** |
 | `android/app/build.gradle` buildTypes.release | `minifyEnabled true` + `proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'` |
 | JDK | 17 |
 
