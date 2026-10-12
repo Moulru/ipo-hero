@@ -58,7 +58,8 @@ function setupWebBack(onFallback: () => boolean): void {
     history.pushState({ ipoHeroGuard: true }, '')
     window.addEventListener('popstate', () => {
       if (closeTopOverlay() || onFallback()) history.pushState({ ipoHeroGuard: true }, '')
-      else history.back()
+      else if (history.length > 2) history.back() // 앱 이전 페이지로 이탈
+      else history.pushState({ ipoHeroGuard: true }, '') // 첫 페이지면 나갈 곳이 없으니 가드 유지
     })
   } catch {
     /* ignore */

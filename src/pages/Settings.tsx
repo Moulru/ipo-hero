@@ -8,6 +8,7 @@ import { manualRefresh } from '../lib/refresh'
 import { haptic, toast } from '../lib/juice'
 import { nav } from '../nav'
 import { Page } from '../ui/Page'
+import { clearDrafts } from './IpoDetail'
 import { Confirm } from '../ui/Sheet'
 import { Card, MenuRow, Segmented, Switch } from '../ui/kit'
 import { ExternalLink, FileText, Info, Mail, Moon, RefreshCw, RotateCcw, Sun } from '../ui/icons'
@@ -143,6 +144,7 @@ export function SettingsPage() {
           danger
           onConfirm={() => {
             resetSeason()
+            clearDrafts()
             haptic([10, 40, 10])
             toast('새 시즌을 시작했어요', '🌱')
           }}

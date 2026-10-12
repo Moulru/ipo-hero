@@ -3,7 +3,6 @@ import { useStore } from '../store'
 import { questById } from '../data/quests'
 import { PITY_PULLS, RELIC_COST, RELIC_COST_10, RELICS } from '../data/relics'
 import { nextRank, rankInfo } from '../data/ranks'
-import { todayYmd } from '../lib/calc'
 import { confetti, haptic, toast } from '../lib/juice'
 import { nav } from '../nav'
 import { TabScreen } from '../ui/TabScreen'
@@ -14,7 +13,7 @@ import { OddsSheet, RankSheet } from '../sheets/InfoSheets'
 
 const reward = (streak: number) => 50 + Math.min(streak, 7) * 20
 
-export function Lounge() {
+export function Lounge({ today }: { today: string }) {
   const gold = useStore((s) => s.gold)
   return (
     <TabScreen
@@ -33,7 +32,7 @@ export function Lounge() {
     >
       <p className="tab-lead">출석하고 공모주를 살펴보며 등급을 올려 보세요</p>
       <RankCard />
-      <CheckIn />
+      <CheckIn today={today} />
       <Quests />
       <CardDraw />
     </TabScreen>
@@ -75,11 +74,11 @@ function RankCard() {
 }
 
 // ───────── 출석 체크 ─────────
-function CheckIn() {
+function CheckIn({ today }: { today: string }) {
   const lastRewardClaim = useStore((s) => s.lastRewardClaim)
   const streak = useStore((s) => s.streak)
   const claim = useStore((s) => s.claimDailyReward)
-  const claimed = lastRewardClaim === todayYmd()
+  const claimed = lastRewardClaim === today
   const r = reward(streak)
   // 7일 주기 진행 표시 (스트릭 1~7 → 해당 칸, 8일째부터 다시 1칸부터 최대 보상 유지)
   const pos = ((streak - 1) % 7) + 1
@@ -258,10 +257,10 @@ function CardDraw() {
 }
 
 // 라운지 탭 배지: 받을 출석 보상이나 완료된 퀘스트가 있으면 표시
-export function useLoungeBadge(): boolean {
+export function useLoungeBadge(today: string): boolean {
   const lastRewardClaim = useStore((s) => s.lastRewardClaim)
   const quests = useStore((s) => s.quests)
-  if (lastRewardClaim !== todayYmd()) return true
+  if (lastRewardClaim !== today) return true
   return quests.items.some((q) => {
     const def = questById(q.id)
     return def && !q.claimed && q.progress >= def.target

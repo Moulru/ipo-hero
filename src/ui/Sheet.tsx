@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { useBackClose } from '../lib/backStack'
+import { useBackCloseWhen } from '../lib/backStack'
 import { X } from './icons'
 
 const EXIT_MS = 220
@@ -31,7 +31,7 @@ export function Sheet({
     setClosing(true)
     setTimeout(onClose, EXIT_MS)
   }
-  useBackClose(close)
+  useBackCloseWhen(!closing, close)
 
   // 열려 있는 동안 배경 스크롤 잠금은 오버레이가 전체를 덮으므로 불필요 — 포커스만 시트로
   const ref = useRef<HTMLDivElement>(null)
@@ -117,7 +117,7 @@ export function Confirm({
       after?.()
     }, 160)
   }
-  useBackClose(() => close())
+  useBackCloseWhen(!closing, () => close())
   return createPortal(
     <div className={'dialog-root' + (closing ? ' closing' : '')}>
       <div className="scrim" onClick={() => close()} />

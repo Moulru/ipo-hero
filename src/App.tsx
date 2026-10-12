@@ -30,7 +30,7 @@ export default function App() {
   const theme = useStore((s) => s.theme)
   const haptics = useStore((s) => s.haptics)
   const today = useToday()
-  const loungeBadge = useLoungeBadge()
+  const loungeBadge = useLoungeBadge(today)
   const stack = useNavStack()
 
   const [tab, setTab] = useState<Tab>('home')
@@ -41,9 +41,10 @@ export default function App() {
 
   useApplyTheme(theme)
 
+  // 앱 진입·자정 넘김(포그라운드 유지 중 포함) 시 출석·퀘스트 갱신
   useEffect(() => {
     tick()
-  }, [tick])
+  }, [tick, today])
 
   // 앱 시작: 최신 데이터 + 네이티브(스플래시·뒤로가기) 초기화
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function App() {
           <section key={t} className="tab-view" hidden={tab !== t} aria-hidden={tab !== t || stack.length > 0}>
             {t === 'home' && <Home today={today} />}
             {t === 'calendar' && <CalendarTab today={today} />}
-            {t === 'lounge' && <Lounge />}
+            {t === 'lounge' && <Lounge today={today} />}
             {t === 'my' && <MyTab />}
           </section>
         ) : null

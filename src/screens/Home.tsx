@@ -246,7 +246,7 @@ function MyBets({ staged, today }: { staged: { ipo: Ipo; stage: Stage }[]; today
   const settledIds = useStore((s) => s.settledIds)
   const mine = staged.filter(({ ipo }) => (subscriptions[ipo.id] != null || predictions[ipo.id] != null) && !settledIds.includes(ipo.id))
   if (!mine.length) return null
-  const ready = mine.filter(({ ipo }) => ipo.listingReturn != null && !!ipo.listingDate && today > ipo.listingDate).length
+  const ready = mine.filter(({ ipo }) => ipo.listingReturn != null && (!ipo.listingDate || today > ipo.listingDate)).length
 
   return (
     <Card>
@@ -275,13 +275,13 @@ function MyBets({ staged, today }: { staged: { ipo: Ipo; stage: Stage }[]; today
 }
 
 function betRank(ipo: Ipo, today: string): number {
-  if (ipo.listingReturn != null && ipo.listingDate && today > ipo.listingDate) return 0
+  if (ipo.listingReturn != null && (!ipo.listingDate || today > ipo.listingDate)) return 0
   if (ipo.listingDate === today) return 1
   return 2
 }
 
 export function betRight(ipo: Ipo, today: string, shares: number | undefined): { top: ReactNode; bottom?: ReactNode } {
-  const canSettle = ipo.listingReturn != null && !!ipo.listingDate && today > ipo.listingDate
+  const canSettle = ipo.listingReturn != null && (!ipo.listingDate || today > ipo.listingDate)
   if (canSettle) return { top: <span className="pill tone-brand">정산하기</span> }
   if (ipo.listingDate === today) return { top: `${shares ?? 0}주`, bottom: <span className="t-green">내일 정산</span> }
   if (ipo.listingDate && today > ipo.listingDate) return { top: `${shares ?? 0}주`, bottom: '결과 집계 중' }

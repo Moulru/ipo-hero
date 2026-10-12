@@ -145,8 +145,17 @@ export function SettleResult() {
 export function CardReveal() {
   const reveal = useStore((s) => s.relicReveal)!
   const clear = useStore((s) => s.clearRelicReveal)
-  const [leaving, setLeaving] = useState(false)
   const relics = reveal.ids.map((id) => relicById(id)).filter(Boolean) as Relic[]
+  // 데이터 변경 등으로 카드를 하나도 찾지 못하면 연출 없이 닫음
+  useEffect(() => {
+    if (!relics.length) clear()
+  }, [relics.length, clear])
+  if (!relics.length) return null
+  return <CardRevealView relics={relics} fresh={reveal.fresh} refund={reveal.refund} clear={clear} />
+}
+
+function CardRevealView({ relics, fresh, refund, clear }: { relics: Relic[]; fresh?: boolean[]; refund: number; clear: () => void }) {
+  const [leaving, setLeaving] = useState(false)
   const multi = relics.length > 1
   const best = relics.reduce((b, r) => (rank(r) > rank(b) ? r : b), relics[0])
   const close = () => {
@@ -168,7 +177,7 @@ export function CardReveal() {
     return () => clearTimeout(t)
   }, [best, multi])
 
-  const isNew = (i: number) => reveal.fresh?.[i] ?? false
+  const isNew = (i: number) => fresh?.[i] ?? false
 
   return createPortal(
     <div className={'reveal-root r-' + best.rarity + (leaving ? ' leaving' : '')} role="dialog" aria-modal="true" aria-label="카드 획득">
@@ -200,10 +209,10 @@ export function CardReveal() {
             ))}
           </div>
         )}
-        {reveal.refund > 0 && (
+        {refund > 0 && (
           <div className="reveal-refund">
             <Emoji e="🪙" size={20} />
-            이미 가진 카드는 {reveal.refund.toLocaleString()}골드로 돌려드렸어요
+            이미 가진 카드는 {refund.toLocaleString()}골드로 돌려드렸어요
           </div>
         )}
       </div>

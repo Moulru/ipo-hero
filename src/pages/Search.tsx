@@ -5,7 +5,7 @@ import type { Ipo, Stage } from '../types'
 import { computeStage } from '../lib/calc'
 import { underwriters } from '../lib/format'
 import { useToday } from '../lib/useToday'
-import { useBackClose } from '../lib/backStack'
+import { useBackCloseWhen } from '../lib/backStack'
 import { usePageClose, usePageClosing } from '../ui/Page'
 import { ChevronLeft, CircleX, X } from '../ui/icons'
 import { Empty } from '../ui/kit'
@@ -38,7 +38,7 @@ export function SearchPage() {
   const clearRecent = useStore((s) => s.clearRecentSearches)
 
   // 검색 페이지는 자체 헤더(입력창)를 쓰므로 뒤로가기 등록을 직접
-  useBackClose(close)
+  useBackCloseWhen(!closing, close)
 
   useEffect(() => {
     // 페이지 진입 애니메이션 후 포커스(키보드가 전환 중 올라와 덜컹이는 것 방지)

@@ -1,5 +1,5 @@
 import { createContext, useContext, useRef, useState, type ReactNode, type UIEvent } from 'react'
-import { useBackClose } from '../lib/backStack'
+import { useBackCloseWhen } from '../lib/backStack'
 import { nav } from '../nav'
 import { ChevronLeft } from './icons'
 
@@ -32,7 +32,7 @@ interface Props {
 export function Page({ title, titleMode = 'always', revealAt = 56, right, footer, children, className, bodyClassName, onScroll }: Props) {
   const { closing } = useContext(PageCtx)
   const close = usePageClose()
-  useBackClose(close)
+  useBackCloseWhen(!closing, close) // 닫힘 애니메이션 중엔 스택에서 빠져 다음 뒤로가기가 아래 화면으로 감
   const [scrolled, setScrolled] = useState(false)
   const [reveal, setReveal] = useState(titleMode === 'always')
   const raf = useRef(0)

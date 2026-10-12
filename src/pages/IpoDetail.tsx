@@ -75,16 +75,20 @@ function Detail({ ipo, all, today, initialTab }: { ipo: Ipo; all: Ipo[]; today: 
   const savedShares = useStore((s) => s.subscriptions[ipo.id])
   const settled = useStore((s) => s.settledIds.includes(ipo.id))
   const isDday = !!ipo.listingDate && today === ipo.listingDate
-  const afterListing = !!ipo.listingDate && today > ipo.listingDate
   const didBet = prediction != null || savedShares != null
+  // 정산 가능: 결과가 있고 상장일이 지났거나(상장일 미정 데이터 포함) — store.settleReal 조건과 동일
+  const canSettle = ipo.listingReturn != null && (!ipo.listingDate || today > ipo.listingDate)
+  // 참여한 종목은 절대 'info'로 빠지지 않게: 상장 후 결과 미집계 = 'locked'(대기)
   const mode: Mode = settled
     ? 'settled'
-    : afterListing && didBet && ipo.listingReturn != null
+    : didBet && canSettle
     ? 'settle'
     : isDday
     ? 'locked'
-    : stage === 'subscription' || stage === 'pending'
+    : stage === 'subscription' || stage === 'pending' || (didBet && stage === 'upcoming')
     ? 'bet'
+    : didBet
+    ? 'locked'
     : 'info'
 
   async function doShare() {
@@ -154,7 +158,7 @@ function Detail({ ipo, all, today, initialTab }: { ipo: Ipo; all: Ipo[]; today: 
       {tab === 'info' ? (
         <InfoTab ipo={ipo} all={all} stage={stage} today={today} onHelp={setHelp} />
       ) : (
-        <SimTab ipo={ipo} stage={stage} mode={mode} onHelp={setHelp} />
+        <SimTab ipo={ipo} stage={stage} mode={mode} today={today} onHelp={setHelp} />
       )}
 
       {help && <GlossarySheet keys={help} onClose={() => setHelp(null)} />}
@@ -455,7 +459,8 @@ function Timeline({ ipo, today }: { ipo: Ipo; today: string }) {
 }
 
 // ───────── 모의청약 탭 ─────────
-function SimTab({ ipo, stage, mode, onHelp }: { ipo: Ipo; stage: Stage; mode: Mode; onHelp: (k: string[]) => void }) {
+function SimTab({ ipo, stage, mode, today, onHelp }: { ipo: Ipo; stage: Stage; mode: Mode; today: string; onHelp: (k: string[]) => void }) {
+  const isDday = ipo.listingDate === today
   const seedMoney = useStore((s) => s.seedMoney)
   const escrowHeld = useStore((s) => s.escrow[ipo.id] ?? 0)
   const prediction = useStore((s) => s.predictions[ipo.id])
@@ -492,13 +497,21 @@ function SimTab({ ipo, stage, mode, onHelp }: { ipo: Ipo; stage: Stage; mode: Mo
         <div className="sim-state">
           <Emoji e={mode === 'settled' ? '🧾' : mode === 'locked' ? '🔔' : '🎁'} size={72} />
           <div className="sim-state-title">
-            {mode === 'settled' ? '정산이 끝났어요' : mode === 'locked' ? '오늘 상장했어요' : '정산할 수 있어요'}
+            {mode === 'settled'
+              ? '정산이 끝났어요'
+              : mode === 'locked'
+              ? isDday
+                ? '오늘 상장했어요'
+                : '상장 결과를 기다리고 있어요'
+              : '정산할 수 있어요'}
           </div>
           <div className="sim-state-desc">
             {mode === 'settled'
               ? '실제 상장 결과로 시즌 자산에 반영됐어요.'
               : mode === 'locked'
-              ? '상장일에는 수정할 수 없어요. 내일 실제 종가로 정산돼요.'
+              ? isDday
+                ? '상장일에는 수정할 수 없어요. 내일 실제 종가로 정산돼요.'
+                : '상장 결과가 집계되면 바로 정산할 수 있어요.'
               : '실제 상장 결과로 배정과 수익을 확인해 보세요.'}
           </div>
         </div>
@@ -667,6 +680,7 @@ function SimIntro() {
 
 // 청약 수량 초안 — 탭 전환·푸터 버튼과 공유하기 위해 모듈 범위에 보관 (종목별)
 const drafts = new Map<string, number>()
+export const clearDrafts = () => drafts.clear()
 const draftListeners = new Set<() => void>()
 function useDraft(id: string, initial: number) {
   const [, force] = useState(0)
