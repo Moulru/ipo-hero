@@ -48,6 +48,7 @@ src/
               My·Dex·RelicDex·Achievements·ClassPicker·SystemSettings · ResultModal·RelicReveal·Toast·CountUp
 .github/workflows/  refresh-data.yml(cron 데이터 갱신)
 android/  Capacitor 안드로이드 (gitignore · `npx cap add android`로 재생성)
+native-patches/  android/ 커스텀 사본·복원 가이드 (추적됨 — 클라우드/새 PC용)
 assets/   앱 아이콘·스플래시 소스 → `npx @capacitor/assets generate --android`
 PRIVACY.md  개인정보처리방침(Play 등록용·URL 안정 위해 루트 유지) · GooglePlay 산출물/  출시 산출물·가이드(STORE_LISTING.md) · docs/  빌드 임시(gitignore)
 ```
@@ -69,12 +70,19 @@ PRIVACY.md  개인정보처리방침(Play 등록용·URL 안정 위해 루트 �
 - **투자 카드 가챠**(100종): 천장=미보유 확정, 등급별 확률 고정. 중복=스택 없이 골드 환불(최대 100G). 100종 완성 시 뽑기 잠금.
 - **UI 용어**: 화면 표기는 '투자 성향'(코드 식별자는 `chosenClass`/`CLASSES`).
 - **알림 기능 제거됨**(새 공모주 푸시=Firebase 의존이라 제외). 진동 토글·데이터 새로고침으로 대체. `notify.ts` 없음.
-- **데이터 파이프라인(2026-07 고도화)**: fetchIpos가 이전 ipos.json과 **머지** — ①id 영속화(이름 기준 기존 id 유지, n→k 전환 방지) ②필드 보존(38 이탈해도 수익률·지표 유지) ③아카이브(유니버스 밖: 상장완료+ticker 400일 · 상장예정/최근 7일 청약은 소스 일시실패 대비 보존, 최대300건) ④정합성 가드(상장일≤청약마감=모순→대체/null · 확정가는 확정플래그와 같은 소스에서 선택[래칫 방지] · 청약 시작·종료는 `pickSchedule`로 한 소스에서 쌍 선택+범위 5일 초과/역전 폐기[독립 폴백發 06/19~08/05 짬뽕 방지]) ⑤신규 필드 ticker·market(코스피/코스닥)·demandForecastDate ⑥데이터 무변경이면 파일 미기록(cron 노이즈 커밋 방지) ⑦DART 키 부재=호출 시점 실패(38+KIND 폴백 동작) ⑧38(source38.mjs) UA를 실브라우저 UA로 통일(구 자체식별 UA `ttasangroad/…`가 38.co.kr 차단 유발 의심 — GH Actions에서만 며칠간 조용히 실패, "머지로 이전값 보존"과 맞물려 결과가 매번 동일해 "변경없음"으로 굳어버림. KIND는 애초 정상 UA라 안 걸림) ⑨38 o=nw·o=k 둘 다 0건이면 명시적 throw(부분실패는 기존처럼 graceful, 완전실패만 CI를 실패로 표시해 조용한 장기 정체 방지). `npm run build`의 prebuild가 데이터 자동 갱신(실패해도 soft-fail). 2회 실행 멱등 검증됨.
+- **데이터 파이프라인(2026-07 고도화)**: fetchIpos가 이전 ipos.json과 **머지** — ①id 영속화(이름 기준 기존 id 유지, n→k 전환 방지) ②필드 보존(38 이탈해도 수익률·지표 유지) ③아카이브(유니버스 밖: 상장완료+ticker 400일 · 상장예정/최근 7일 청약은 소스 일시실패 대비 보존, 최대300건) ④정합성 가드(상장일≤청약마감=모순→대체/null · 확정가는 확정플래그와 같은 소스에서 선택[래칫 방지] · 청약 시작·종료는 `pickSchedule`로 한 소스에서 쌍 선택+범위 5일 초과/역전 폐기[독립 폴백發 06/19~08/05 짬뽕 방지]) ⑤신규 필드 ticker·market(코스피/코스닥)·demandForecastDate ⑥데이터 무변경이면 파일 미기록(cron 노이즈 커밋 방지) ⑦DART 키 부재=호출 시점 실패(38+KIND 폴백 동작) ⑧38(source38.mjs) UA를 실브라우저 UA로 통일(구 자체식별 UA `ttasangroad/…`가 38.co.kr 차단 유발 의심 — GH Actions에서만 며칠간 조용히 실패, "머지로 이전값 보존"과 맞물려 결과가 매번 동일해 "변경없음"으로 굳어버림. KIND는 애초 정상 UA라 안 걸림) ⑨38 o=nw·o=k 둘 다 0건이면 명시적 throw(부분실패는 기존처럼 graceful, 완전실패만 CI를 실패로 표시해 조용한 장기 정체 방지). `npm run build`의 prebuild가 데이터 자동 갱신(실패해도 soft-fail). 2회 실행 멱등 검증됨. **2026-10-13 확인: UA 수정 후 cron 정상 복구**(최신 데이터 10/12·57건, 149커밋 연속).
 - **백그라운드 복귀 갱신**: native resume + visibilitychange 양쪽에서 refreshIpos() (generatedAt 가드로 중복 무해).
 - **네이티브(모바일)**: `lib/native.ts`(스플래시·상태바·뒤로가기), `lib/backStack.ts`(오버레이는 `useBackClose(onClose)`로 등록 → 뒤로가기가 위에서부터 닫음). 모든 네이티브 호출은 `Capacitor.isNativePlatform()`+try/catch 가드(웹=no-op).
-- **릴리스 빌드**: `gradlew bundleRelease` → 서명 AAB(현재 versionCode 12·versionName 1.0.0·R8 minify on). 산출물=`GooglePlay 산출물/ipohero-v1.0.0-vc12.aab`(+mapping). (프로덕션 첫 제출까지 versionName 1.0.0 유지, vc만 증가.) 키=`android/app/release.keystore`+`keystore.properties`(gitignore, **백업 필수**, pw=`../_myToken_.md` 참고). **android/는 gitignore → 재생성 시** 서명·versionName + targetSdk/compileSdk 36(`variables.gradle`)·AGP 8.9.1(`build.gradle`)·Gradle 8.11.1(`wrapper`)·minifyEnabled true+`proguard-rules.pro`(Capacitor 보호 규칙) + **`NavigationBarAppearancePlugin.java`(하단 네비게이션바 아이콘 색 제어, 커스텀 네이티브 플러그인) 재생성 + `MainActivity.java`에 `registerPlugin(NavigationBarAppearancePlugin.class)` 등록**(super.onCreate 이전 호출) 재적용 필수. R8 mapping=`build/outputs/mapping/release/mapping.txt`(Play 업로드용).
+- **릴리스 빌드**: `gradlew bundleRelease` → 서명 AAB(현재 versionCode 12·versionName 1.0.0·R8 minify on, 프로덕션 첫 제출까지 versionName 고정·vc만 +1). 산출물=`GooglePlay 산출물/ipohero-v1.0.0-vc12.aab`(+mapping, gitignore). 키=`android/app/release.keystore`+`keystore.properties`(gitignore, **백업 필수**, pw=`../_myToken_.md`). **android/는 gitignore → 재생성·클라우드용 커스텀 사본·설정값·복원 순서는 [`native-patches/README.md`](native-patches/README.md)** (커스텀 `NavigationBarAppearancePlugin`·`MainActivity`·proguard 포함).
 - 에뮬레이터 검증 완료(아이콘·뒤로가기·테마·데이터).
 - **경로**: 2026-06 OneDrive→로컬 이전 `~/Desktop/JH/Eous/IPO-hero`(`JH/Eous/` 구조째 이동 → `../eous-landing`·`../_myToken_.md` 유효). 기존 OneDrive 동기화발 Vite 워처 누락 문제는 해소됨.
+
+## 클라우드 세션 메모 (2026-10-13 이전 준비)
+
+- 클라우드는 GitHub 클론만 보임 → **로컬 전용**: `android/`(키스토어·SDK), `OpenAPIkey.txt`·`cloudflare-token.txt`, `GooglePlay 산출물/`, `../_myToken_.md`, `../eous-landing/`(git repo 아님).
+- 클라우드에서 가능: 웹 UI·데이터 스크립트(`DART_API_KEY`=GitHub Secret)·tsc/build·문서. **AAB 서명 빌드·실기기 검증은 로컬 PC에서만**.
+- 데이터 파일(`public/ipos.json`·`src/data/ipos.json`)은 cron이 계속 커밋 → 작업 전 `git pull --rebase`, 충돌 시 원격본 채택 후 `npm run data`로 재생성.
+- 커밋 메시지는 한국어, 푸시는 묶어서(글로벌 규칙).
 
 ## 관련 (별도 폴더/세션)
 
