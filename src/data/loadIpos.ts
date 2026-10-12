@@ -23,7 +23,10 @@ export function getIpos(): Ipo[] {
 // ── 런타임 라이브 데이터: cron이 갱신한 ipos.json을 fetch해서 교체 ──
 let current: Ipo[] = getIpos()
 let generatedAt: string = bundled.generatedAt ?? ''
+let status: 'idle' | 'ok' | 'error' = 'idle' // 마지막 새로고침 결과(오프라인 안내용)
+let inflight: Promise<RefreshResult> | null = null
 const listeners = new Set<() => void>()
+const emit = () => listeners.forEach((fn) => fn())
 
 // 최신 데이터 URL: 빌드 env(VITE_DATA_URL)로 절대경로 지정(모바일/외부 호스팅), 없으면 같은 출처의 /ipos.json
 const DATA_URL = import.meta.env.VITE_DATA_URL || `${import.meta.env.BASE_URL}ipos.json`
@@ -32,7 +35,23 @@ const DATA_URL = import.meta.env.VITE_DATA_URL || `${import.meta.env.BASE_URL}ip
 export type RefreshResult = 'updated' | 'same' | 'error'
 
 // 앱 시작·복귀·수동 새로고침 시 호출 — 실패(오프라인 등) 시 번들 데이터 유지
-export async function refreshIpos(): Promise<RefreshResult> {
+export function refreshIpos(): Promise<RefreshResult> {
+  // 동시 호출(시작·복귀·당겨서 새로고침 겹침)은 하나로 합침
+  if (!inflight) {
+    inflight = doRefresh().then((r) => {
+      inflight = null
+      const next = r === 'error' ? 'error' : 'ok'
+      if (next !== status) {
+        status = next
+        emit()
+      }
+      return r
+    })
+  }
+  return inflight
+}
+
+async function doRefresh(): Promise<RefreshResult> {
   try {
     const res = await fetch(DATA_URL, { cache: 'no-store' })
     if (!res.ok) return 'error'
@@ -43,7 +62,7 @@ export async function refreshIpos(): Promise<RefreshResult> {
     if (json.generatedAt && generatedAt && json.generatedAt <= generatedAt) return 'same'
     current = list
     generatedAt = json.generatedAt ?? generatedAt
-    for (const fn of listeners) fn()
+    emit()
     return 'updated'
   } catch {
     return 'error' // 네트워크 실패 → 번들 데이터 유지
@@ -59,10 +78,27 @@ function subscribe(fn: () => void): () => void {
 
 // 컴포넌트용: 번들 데이터로 시작, refreshIpos 성공 시 자동 리렌더
 export function useIpos(): Ipo[] {
-  return useSyncExternalStore(subscribe, () => current, () => current)
+  return useSyncExternalStore(
+    subscribe,
+    () => current,
+    () => current
+  )
 }
 
 // 데이터 기준 시각(generatedAt, ISO). refreshIpos 성공 시 자동 갱신.
 export function useDataTimestamp(): string {
-  return useSyncExternalStore(subscribe, () => generatedAt, () => generatedAt)
+  return useSyncExternalStore(
+    subscribe,
+    () => generatedAt,
+    () => generatedAt
+  )
+}
+
+// 마지막 새로고침 상태 — 'error'면 오프라인/서버 실패로 번들(마지막 저장) 데이터를 보여주는 중
+export function useDataStatus(): 'idle' | 'ok' | 'error' {
+  return useSyncExternalStore(
+    subscribe,
+    () => status,
+    () => status
+  )
 }

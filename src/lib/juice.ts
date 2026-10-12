@@ -15,7 +15,8 @@ export function haptic(ms: number | number[] = 12): void {
   }
 }
 
-export function confetti(colors: string[] = ['#ffb01f', '#5b8cff', '#b06bff', '#2fd180', '#ff5c8a']): void {
+export function confetti(colors: string[] = ['#5b4cf0', '#8a5cf6', '#ffb31a', '#ff5468', '#2bc983', '#4a8dff']): void {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
   try {
     const c = document.createElement('canvas')
     c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2000'
@@ -50,7 +51,7 @@ export function confetti(colors: string[] = ['#ffb01f', '#5b8cff', '#b06bff', '#
         ctx.rotate(p.rot)
         ctx.globalAlpha = Math.max(0, 1 - frame / 110)
         ctx.fillStyle = p.color
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size)
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2)
         ctx.restore()
       }
       if (frame < 110) requestAnimationFrame(tick)

@@ -14,10 +14,16 @@ const NavigationBarAppearance = registerPlugin<NavigationBarAppearancePlugin>('N
 
 const isNative = Capacitor.isNativePlatform()
 
+// 앱 배경색(styles/tokens.css의 --bg와 동일) — 상태바·브라우저 테마색 동기화용
+export const THEME_BG = { light: '#f2f3f6', dark: '#0e0f12' } as const
+
 // 앱 시작 시 1회: 스플래시 숨김 + 하드웨어 뒤로가기 처리.
 // onFallback(): 열린 오버레이가 없을 때 호출 — 처리하면 true(앱 종료 안 함), 아니면 false(종료).
 export function setupNative(onFallback: () => boolean): void {
-  if (!isNative) return
+  if (!isNative) {
+    setupWebBack(onFallback)
+    return
+  }
   SplashScreen.hide().catch(() => {})
   CapApp.addListener('backButton', () => {
     if (closeTopOverlay()) return // 1) 열린 모달/시트부터 닫기
@@ -37,6 +43,24 @@ export function onResume(cb: () => void): void {
 export function applyStatusBar(darkMode: boolean): void {
   if (!isNative) return
   StatusBar.setStyle({ style: darkMode ? Style.Dark : Style.Light }).catch(() => {})
-  StatusBar.setBackgroundColor({ color: darkMode ? '#0c0e14' : '#f6f4ef' }).catch(() => {})
+  StatusBar.setBackgroundColor({ color: darkMode ? THEME_BG.dark : THEME_BG.light }).catch(() => {})
   NavigationBarAppearance.setLight({ light: !darkMode }).catch(() => {})
+}
+
+// 웹(브라우저): 뒤로가기 버튼을 앱 뒤로가기처럼 처리 — 가드 히스토리 항목을 하나 쌓아 두고,
+// popstate 때 닫을 오버레이/탭이 있으면 처리 후 가드를 다시 쌓는다. 없으면 그대로 이탈.
+let webBackReady = false
+function setupWebBack(onFallback: () => boolean): void {
+  if (webBackReady) return // StrictMode(개발)에서 이펙트가 두 번 돌아도 한 번만 등록
+  webBackReady = true
+  try {
+    history.replaceState({ ipoHeroRoot: true }, '')
+    history.pushState({ ipoHeroGuard: true }, '')
+    window.addEventListener('popstate', () => {
+      if (closeTopOverlay() || onFallback()) history.pushState({ ipoHeroGuard: true }, '')
+      else history.back()
+    })
+  } catch {
+    /* ignore */
+  }
 }

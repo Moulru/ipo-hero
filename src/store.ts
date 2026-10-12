@@ -10,6 +10,8 @@ const XP_PER_LEVEL = 100
 const levelOf = (xp: number) => Math.floor(xp / XP_PER_LEVEL) + 1
 // 순수 실력: 모든 클래스 동일 시드. 클래스는 XP에만, 카드는 게임 레이어(XP·골드)에만 영향.
 
+export type ThemeMode = 'system' | 'light' | 'dark'
+
 export interface PlayResult {
   kind: 'real'
   ipo: Ipo
@@ -54,10 +56,12 @@ interface Store {
   achievements: string[]
   equippedTitle: string | null
   lastResult: PlayResult | null
-  relicReveal: { ids: string[]; refund: number } | null
+  relicReveal: { ids: string[]; refund: number; fresh?: boolean[] } | null // fresh[i]: i번째 카드가 이번에 새로 얻은 카드인지
   lastUnlocks: string[]
-  darkMode: boolean // 다크 모드 on/off (기본 라이트)
+  theme: ThemeMode // 화면 테마: 시스템 설정 따름(기본) · 라이트 · 다크
   haptics: boolean // 진동(햅틱) 효과 on/off
+  watchlist: string[] // 관심 종목(ipo id)
+  recentSearches: string[] // 최근 검색어(최신순, 최대 10)
 
   chooseClass: (c: ClassId) => void
   tick: () => void
@@ -74,7 +78,12 @@ interface Store {
   equipTitle: (id: string | null) => void
   clearUnlocks: () => void
   setHaptics: (v: boolean) => void
-  setDark: (v: boolean) => void
+  setTheme: (v: ThemeMode) => void
+  toggleWatch: (ipoId: string) => boolean
+  cancelSubscription: (ipoId: string) => void
+  addRecentSearch: (q: string) => void
+  removeRecentSearch: (q: string) => void
+  clearRecentSearches: () => void
   resetSeason: () => void
 }
 
@@ -110,7 +119,7 @@ function withAchievements(cand: Store): Partial<Store> {
 
 export const useStore = create<Store>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       chosenClass: 'farmer',
       level: 1,
       xp: 0,
@@ -137,8 +146,10 @@ export const useStore = create<Store>()(
       lastResult: null,
       relicReveal: null,
       lastUnlocks: [],
-      darkMode: false,
+      theme: 'system',
       haptics: true,
+      watchlist: [],
+      recentSearches: [],
 
       chooseClass: (c) => set({ chosenClass: c }),
 
@@ -283,7 +294,7 @@ export const useStore = create<Store>()(
             pulls: s.pulls + 1,
             pullsSinceEpic: pity,
             quests: { ...s.quests, items: bump(s.quests.items, 'pull') },
-            relicReveal: { ids: [card.id], refund },
+            relicReveal: { ids: [card.id], refund, fresh: [isNew] },
           }
           return { ...patch, ...withAchievements({ ...s, ...patch }) }
         }),
@@ -294,10 +305,12 @@ export const useStore = create<Store>()(
           let pity = s.pullsSinceEpic
           const owned = [...s.ownedRelics]
           const ids: string[] = []
+          const fresh: boolean[] = []
           let refund = 0
           for (let i = 0; i < 10; i++) {
             pity++
             const card = pullCard(owned, pity >= PITY_PULLS)
+            fresh.push(!owned.includes(card.id))
             if (owned.includes(card.id)) {
               refund += dupRefund(card.rarity) // 중복: 환불만, 스택 안 쌓음
             } else {
@@ -312,7 +325,7 @@ export const useStore = create<Store>()(
             pulls: s.pulls + 10,
             pullsSinceEpic: pity,
             quests: { ...s.quests, items: bump(s.quests.items, 'pull') },
-            relicReveal: { ids, refund },
+            relicReveal: { ids, refund, fresh },
           }
           return { ...patch, ...withAchievements({ ...s, ...patch }) }
         }),
@@ -333,14 +346,53 @@ export const useStore = create<Store>()(
       equipTitle: (id) => set({ equippedTitle: id }),
       clearUnlocks: () => set({ lastUnlocks: [] }),
       setHaptics: (v) => set({ haptics: v }),
-      setDark: (v) => set({ darkMode: v }),
+      setTheme: (v) => set({ theme: v }),
+
+      // 관심 종목 토글 — 반환값: 추가됐으면 true
+      toggleWatch: (ipoId) => {
+        const has = get().watchlist.includes(ipoId)
+        set((s) => ({ watchlist: has ? s.watchlist.filter((x) => x !== ipoId) : [ipoId, ...s.watchlist] }))
+        return !has
+      },
+
+      // 모의청약 취소: 보관 중인 증거금을 시즌 자산으로 반환하고 청약·예측 기록 삭제 (상장 당일 이후·정산 후 불가)
+      cancelSubscription: (ipoId) =>
+        set((s) => {
+          if (s.settledIds.includes(ipoId)) return s
+          const deposit = s.escrow[ipoId] ?? 0
+          const subscriptions = { ...s.subscriptions }
+          const predictions = { ...s.predictions }
+          const escrow = { ...s.escrow }
+          delete subscriptions[ipoId]
+          delete predictions[ipoId]
+          delete escrow[ipoId]
+          return { subscriptions, predictions, escrow, seedMoney: s.seedMoney + deposit }
+        }),
+
+      addRecentSearch: (q) =>
+        set((s) => {
+          const t = q.trim()
+          if (!t) return s
+          return { recentSearches: [t, ...s.recentSearches.filter((x) => x !== t)].slice(0, 10) }
+        }),
+      removeRecentSearch: (q) => set((s) => ({ recentSearches: s.recentSearches.filter((x) => x !== q) })),
+      clearRecentSearches: () => set({ recentSearches: [] }),
 
       resetSeason: () => set({ seedMoney: SEED_MONEY, subscriptions: {}, predictions: {}, settledIds: [], escrow: {} }),
     }),
     {
       name: 'ct-save-v6',
-      version: 2,
+      version: 3,
       partialize: (s) => ({ ...s, lastResult: null, relicReveal: null, lastUnlocks: [] }),
-    },
-  ),
+      // v2 → v3: darkMode(boolean) → theme. 기존 사용자는 쓰던 테마를 그대로 유지(신규 사용자만 시스템 따름).
+      migrate: (persisted, version) => {
+        const p = (persisted ?? {}) as Record<string, unknown>
+        if (version < 3) {
+          p.theme = p.darkMode ? 'dark' : 'light'
+          delete p.darkMode
+        }
+        return p as unknown as Store
+      },
+    }
+  )
 )

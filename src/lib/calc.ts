@@ -48,11 +48,19 @@ export function mdShort(s: string | null): string {
   return s ? `${+s.slice(5, 7)}/${+s.slice(8, 10)}` : ''
 }
 
-export const STAGE_META: Record<Stage, { label: string; cls: string }> = {
-  subscription: { label: '청약 중', cls: 'stage-subscription' },
-  pending: { label: '상장 대기', cls: 'stage-pending' },
-  upcoming: { label: '곧 시작', cls: 'stage-upcoming' },
-  listed: { label: '상장 완료', cls: 'stage-listed' },
+export const STAGE_META: Record<Stage, { label: string; tone: 'brand' | 'neutral' | 'green' | 'muted' }> = {
+  subscription: { label: '청약 중', tone: 'brand' },
+  upcoming: { label: '청약 예정', tone: 'neutral' },
+  pending: { label: '상장 예정', tone: 'green' },
+  listed: { label: '상장 완료', tone: 'muted' },
+}
+
+// 공모주 '수요 등급' 표기 — rarity(수요 중심 산정, 도메인 규칙 3)를 정보 앱 언어로. 스팩은 등급 대신 '스팩'.
+export const GRADE_META: Record<Rarity, { grade: string; label: string; desc: string }> = {
+  legendary: { grade: 'S', label: '매우 높음', desc: '기관·청약 수요와 확약이 모두 최상위권' },
+  epic: { grade: 'A', label: '높음', desc: '수요 지표 대부분이 평균을 크게 웃돎' },
+  rare: { grade: 'B', label: '보통', desc: '수요 지표가 평균 수준' },
+  common: { grade: 'C', label: '낮음', desc: '수요 지표가 평균 이하이거나 아직 미확정' },
 }
 
 // 가챠: 기대 배정(경쟁률 기반)에 운(±)을 곱해 실제 배정 결정 — 카드/클래스 영향 없음(순수)
@@ -80,18 +88,25 @@ export function outcomeFromReturn(r: number): PredictionChoice {
   return 'down'
 }
 
-export const OUTCOME_META: Record<PredictionChoice, { label: string; range: string; color: string }> = {
-  ttassang: { label: '따상', range: '+100% 이상', color: '#ff5c8a' },
-  up: { label: '상승', range: '+10–100%', color: '#ff9f43' },
-  flat: { label: '공모가 근처', range: '-10–+10%', color: '#7d8aa0' },
-  down: { label: '하락', range: '-10% 이하', color: '#4aa3ff' },
+// 색은 CSS 변수(테마 대응) — 국내 관례: 상승=빨강, 하락=파랑
+export const OUTCOME_META: Record<PredictionChoice, { label: string; range: string; color: string; emoji: string }> = {
+  ttassang: { label: '따상', range: '+100% 이상', color: 'var(--up)', emoji: '🚀' },
+  up: { label: '상승', range: '+10% ~ +100%', color: 'var(--up)', emoji: '📈' },
+  flat: { label: '공모가 근처', range: '-10% ~ +10%', color: 'var(--text-2)', emoji: '⚖️' },
+  down: { label: '하락', range: '-10% 이하', color: 'var(--down)', emoji: '📉' },
 }
 
+// 투자 카드(게임 레이어) 희귀도
 export const RARITY_META: Record<Rarity, { label: string; color: string }> = {
-  common: { label: '커먼', color: '#8a93a6' },
-  rare: { label: '레어', color: '#4aa3ff' },
-  epic: { label: '에픽', color: '#b06bff' },
-  legendary: { label: '레전더리', color: '#ffb01f' },
+  common: { label: '커먼', color: 'var(--r-common)' },
+  rare: { label: '레어', color: 'var(--r-rare)' },
+  epic: { label: '에픽', color: 'var(--r-epic)' },
+  legendary: { label: '레전더리', color: 'var(--r-legendary)' },
+}
+
+// 수익률 → 색 (0은 중립)
+export function returnColor(r: number): string {
+  return r > 0 ? 'var(--up)' : r < 0 ? 'var(--down)' : 'var(--text-2)'
 }
 
 export function formatMan(won: number): string {
@@ -103,7 +118,8 @@ export function formatWon(won: number): string {
 }
 
 export function signedPct(r: number): string {
-  return `${r >= 0 ? '+' : ''}${r}%`
+  const v = Math.round(r * 100) / 100
+  return `${v > 0 ? '+' : ''}${v.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}%`
 }
 
 export function formatEok(eok: number | null): string {

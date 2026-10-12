@@ -1,0 +1,122 @@
+/* ─────────────────────────────────────────────────────────────
+   공모주 히어로 디자인 토큰
+   - 브랜드: 히어로 바이올렛(앱 아이콘 그라데이션 #4a5ff2→#8a5cf6의 중간톤)
+   - 국내 증시 관례: 상승=빨강(--up), 하락=파랑(--down)
+   - 모든 색은 변수로만 사용 (하드코딩 금지) — 라이트 기본, html.dark 다크
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* brand */
+  --brand: #5b4cf0;
+  --brand-press: #4a3bdc;
+  --brand-weak: #efedff;
+  --brand-weak-2: #e3dfff;
+  --brand-text: #4c3de0;
+  --on-brand: #ffffff;
+
+  /* semantic */
+  --up: #de2f45;
+  --up-weak: #ffeef0;
+  --down: #2d6cf0;
+  --down-weak: #ebf1ff;
+  --green: #08875a;
+  --green-weak: #e4f6ee;
+  --orange: #f08c00; /* 그래픽(별·진행바) */
+  --orange-text: #a85a00; /* 텍스트용(대비 확보) */
+  --orange-weak: #fff3e0;
+  --danger: #e5383b;
+
+  /* neutrals */
+  --bg: #f2f3f6;
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --surface-3: #ebedf0;
+  --line: #eceef1;
+  --line-strong: #dfe2e6;
+  --text-1: #17191d;
+  --text-2: #4b515a;
+  --text-3: #6b717c; /* 흰 배경 대비 4.9:1 (WCAG AA) */
+  --text-4: #a9aeb7;
+  --press: rgba(23, 25, 29, 0.05);
+
+  /* game rarity (투자 카드 전용) */
+  --r-common: #8a92a0;
+  --r-rare: #2f86f5;
+  --r-epic: #8f55f5;
+  --r-legendary: #f0a000;
+
+  /* surfaces */
+  --scrim: rgba(12, 13, 16, 0.5);
+  --appbar-bg: rgba(242, 243, 246, 0.82);
+  --tabbar-bg: rgba(255, 255, 255, 0.9);
+  --toast-bg: rgba(40, 42, 48, 0.94);
+  --toast-text: #ffffff;
+  --shadow-1: 0 1px 2px rgba(15, 18, 30, 0.04);
+  --shadow-2: 0 6px 24px rgba(15, 18, 30, 0.08);
+  --shadow-sheet: 0 -10px 40px rgba(15, 18, 30, 0.14);
+  --shadow-page: -12px 0 32px rgba(15, 18, 30, 0.12);
+
+  /* shape & rhythm */
+  --r-card: 22px;
+  --r-md: 14px;
+  --r-sm: 10px;
+  --gutter: 20px;
+  --tabbar-h: 58px;
+  --appbar-h: 56px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* type */
+  --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', Roboto,
+    sans-serif;
+}
+
+:root.dark {
+  --brand: #6a5bf2;
+  --brand-press: #5b4ce4;
+  --brand-weak: rgba(123, 109, 255, 0.16);
+  --brand-weak-2: rgba(123, 109, 255, 0.26);
+  --brand-text: #a99fff;
+  --on-brand: #ffffff;
+
+  --up: #ff5468;
+  --up-weak: rgba(255, 84, 104, 0.14);
+  --down: #5b8dff;
+  --down-weak: rgba(91, 141, 255, 0.15);
+  --green: #2bc983;
+  --green-weak: rgba(43, 201, 131, 0.14);
+  --orange: #ffaa33;
+  --orange-text: #ffb54d;
+  --orange-weak: rgba(255, 170, 51, 0.14);
+  --danger: #ff5c5f;
+
+  --bg: #0e0f12;
+  --surface: #18191e;
+  --surface-2: #202227;
+  --surface-3: #2a2c32;
+  --line: #24262c;
+  --line-strong: #32353c;
+  --text-1: #f1f2f4;
+  --text-2: #c0c4cb;
+  --text-3: #878d97;
+  --text-4: #575c65;
+  --press: rgba(255, 255, 255, 0.06);
+
+  --r-common: #9aa2af;
+  --r-rare: #5aa0ff;
+  --r-epic: #ad80ff;
+  --r-legendary: #ffbb33;
+
+  --scrim: rgba(0, 0, 0, 0.62);
+  --appbar-bg: rgba(14, 15, 18, 0.82);
+  --tabbar-bg: rgba(24, 25, 30, 0.9);
+  --toast-bg: rgba(58, 61, 70, 0.96);
+  --shadow-1: none;
+  --shadow-2: 0 6px 24px rgba(0, 0, 0, 0.4);
+  --shadow-sheet: 0 -10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-page: -12px 0 32px rgba(0, 0, 0, 0.45);
+}

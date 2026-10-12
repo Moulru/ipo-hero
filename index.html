@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f2f3f6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0f12" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="공모주 청약 일정·공모가·수요예측 결과를 한눈에. 가상 머니 모의청약까지." />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>공모주 히어로</title>
+    <style>
+      /* 첫 페인트 전 배경 — 테마 깜빡임 방지 */
+      html { background: #f2f3f6; }
+      @media (prefers-color-scheme: dark) { html { background: #0e0f12; } }
+    </style>
   </head>
   <body>
     <div id="root"></div>

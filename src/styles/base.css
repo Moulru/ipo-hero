@@ -1,0 +1,361 @@
+/* ───────── reset & base ───────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 테마 전환 순간에는 모든 트랜지션 비활성 (색이 천천히 바뀌는 깜빡임 방지) */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: inherit;
+  touch-action: manipulation;
+}
+button:disabled {
+  cursor: default;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input {
+  -webkit-user-select: text;
+  user-select: text;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+img {
+  display: block;
+}
+
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+::selection {
+  background: var(--brand-weak-2);
+}
+
+/* 숫자는 전부 고정폭(표·금액 정렬) */
+.num,
+.ipo-row-right,
+.kv-val,
+.big-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.t1 {
+  color: var(--text-1);
+}
+.t2 {
+  color: var(--text-2);
+}
+.t3 {
+  color: var(--text-3);
+}
+.t4 {
+  color: var(--text-4);
+}
+.t-up {
+  color: var(--up);
+}
+.t-down {
+  color: var(--down);
+}
+.t-brand {
+  color: var(--brand-text);
+}
+.t-green {
+  color: var(--green);
+}
+.t-orange {
+  color: var(--orange-text);
+}
+.fw6 {
+  font-weight: 600;
+}
+.fw7 {
+  font-weight: 700;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.emoji {
+  flex: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.emoji-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  line-height: 1;
+}
+
+/* ───────── app shell ───────── */
+.app {
+  position: relative;
+  max-width: 440px;
+  height: 100%;
+  height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--bg);
+  isolation: isolate;
+}
+
+/* 넓은 화면(태블릿·데스크톱 웹)에선 앱 영역 바깥을 살짝 어둡게 */
+@media (min-width: 480px) {
+  body {
+    background: var(--surface-3);
+  }
+  .app {
+    box-shadow: 0 0 0 1px var(--line), var(--shadow-2);
+  }
+}
+
+.tab-view {
+  position: absolute;
+  inset: 0;
+}
+.tab-view[hidden] {
+  display: none;
+}
+
+.tab-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 28px);
+  scrollbar-width: none;
+}
+.tab-scroll::-webkit-scrollbar,
+.page-body::-webkit-scrollbar,
+.sheet-body::-webkit-scrollbar,
+.chip-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* 탭 상단 헤더(스크롤 시 블러 + 헤어라인) */
+.tab-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: calc(var(--appbar-h) + var(--safe-top));
+  padding: var(--safe-top) 8px 0 var(--gutter);
+  background: var(--appbar-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  box-shadow: 0 1px 0 transparent;
+  transition: box-shadow 0.2s;
+}
+.tab-header.scrolled {
+  box-shadow: 0 1px 0 var(--line);
+}
+.tab-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.brand-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+/* ───────── tab bar ───────── */
+.tabbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--tabbar-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  background: var(--tabbar-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  box-shadow: 0 -1px 0 var(--line);
+}
+.tab-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--text-4);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: color 0.15s;
+}
+.tab-btn.on {
+  color: var(--text-1);
+}
+.tab-btn .tab-ic {
+  position: relative;
+  display: flex;
+  transition: transform 0.18s var(--ease-out);
+}
+.tab-btn:active .tab-ic {
+  transform: scale(0.88);
+}
+.tab-btn .badge-dot {
+  position: absolute;
+  top: -1px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--up);
+  box-shadow: 0 0 0 2px var(--tabbar-bg);
+}
+
+/* ───────── pressable feedback ───────── */
+.pressable {
+  transition: background-color 0.12s, transform 0.12s var(--ease-out);
+}
+.pressable:active {
+  background-color: var(--press);
+}
+.press-scale {
+  transition: transform 0.16s var(--ease-out), background-color 0.12s;
+}
+.press-scale:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .pressable:hover {
+    background-color: var(--press);
+  }
+}
+
+/* ───────── motion preferences ───────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
