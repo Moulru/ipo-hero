@@ -21,6 +21,7 @@ import {
   fmtBig,
   isBoss,
   maxAffordable,
+  monsterAt,
   rewardScale,
   upgradeCostN,
   zoneOf,
@@ -232,6 +233,7 @@ function useHold(fn: () => boolean) {
       stop()
       t.current = window.setTimeout(() => {
         fired.current = true
+        if (!fn()) return // 길게 누른 순간 1회 구매 후 연속 구매 시작
         iv.current = window.setInterval(() => {
           if (!fn()) stop()
         }, 90)
@@ -493,7 +495,12 @@ function CardDraw() {
           10회 <span className="sub num">{fmtBig(c10)}골드</span>
         </button>
       </div>
-      {!complete && gold < c1 && <p className="draw-hint">몬스터를 처치하고 퀘스트를 완료해 골드를 모아요</p>}
+      {!complete && (
+        <p className="draw-hint">
+          {gold < c1 ? '몬스터를 처치하고 퀘스트를 완료해 골드를 모아요 · ' : ''}1회 = 지금 스테이지 몬스터 약{' '}
+          {Math.max(1, Math.round(c1 / Math.max(1, monsterAt(Math.max(1, best)).gold)))}마리분
+        </p>
+      )}
 
       <div className="hr" />
       <MenuRow

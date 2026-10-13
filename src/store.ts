@@ -437,6 +437,11 @@ export const useStore = create<Store>()(
           const boss = isBoss(r.stage)
           let { stage, best, farming, farmCount } = r
           let newBest = false
+          // 파밍 중이라도 아직 깬 적 없는 스테이지(예: 첫 스테이지에서 패배 후)를 이기면 정상 진행으로 복귀
+          if (farming && stage > best) {
+            farming = false
+            farmCount = 0
+          }
           if (!farming) {
             if (stage > best) {
               best = stage
@@ -455,7 +460,16 @@ export const useStore = create<Store>()(
           if (newBest) items = bump(items, 'stage')
           const patch: Partial<Store> = {
             gold: s.gold + Math.max(0, Math.round(gold)),
-            rpg: { ...r, stage, best, farming, farmCount, kills: r.kills + 1, bosses: r.bosses + (boss ? 1 : 0), lastSeen: Date.now() },
+            rpg: {
+              ...r,
+              stage,
+              best,
+              farming,
+              farmCount,
+              kills: r.kills + 1,
+              bosses: r.bosses + (boss && newBest ? 1 : 0) /* 파밍 중 보스 재처치는 업적 집계 제외 */,
+              lastSeen: Date.now(),
+            },
             quests: { ...s.quests, items },
           }
           return { ...patch, ...withAchievements({ ...s, ...patch }) }

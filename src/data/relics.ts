@@ -1,7 +1,9 @@
 import type { Rarity, Relic } from '../types'
 
-export const RELIC_COST = 200 // 1회 뽑기 기본 비용(스테이지 1 기준) — 실제 비용은 relicCost(최고 스테이지)
-export const RELIC_COST_10 = 1800 // 10연차 기본 비용(할인)
+// 기본 비용(스테이지 1 기준) — 실제 비용은 relicCost(최고 스테이지). 1회 ≈ 최고 스테이지 몬스터 15마리분:
+// 강화(같은 골드로 한 능력치 +약 7%)와 카드(전체 +1–8% + 효과)의 효율이 비슷하도록 시뮬레이션으로 맞춤(도감 완성 ≈ 327회)
+export const RELIC_COST = 60
+export const RELIC_COST_10 = 540 // 10연차 10% 할인
 // 최고 돌파 스테이지에 맞춰 비용·중복 환불이 함께 커짐(보상 스케일과 동일) — 후반에도 카드가 의미 있게
 const scale = (best: number) => 1.12 ** Math.max(0, best - 1)
 export const relicCost = (best: number) => Math.round(RELIC_COST * scale(best))

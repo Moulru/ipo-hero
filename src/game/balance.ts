@@ -5,8 +5,8 @@ import { RELICS, aggregateEffects } from '../data/relics'
 
 export type StatKind = 'atk' | 'def' | 'hp'
 
-export const HERO_ATK_INTERVAL = 0.8 // 초
-export const MON_ATK_INTERVAL = 1.2
+export const HERO_ATK_INTERVAL = 0.65 // 초
+export const MON_ATK_INTERVAL = 1.0
 export const BASE_CRIT = 0.05
 export const OFFLINE_CAP_SEC = 8 * 3600
 export const OFFLINE_EFFICIENCY = 0.5
@@ -162,7 +162,7 @@ export function rewardScale(bestCleared: number): number {
 // 큰 수 한국식 표기: 9,999 → 1.2만 → 3.4억 → 5.6조 …
 const UNITS = ['', '만', '억', '조', '경', '해', '자', '양', '구', '간', '정', '재', '극']
 export function fmtBig(n: number): string {
-  if (!isFinite(n)) return '∞'
+  if (!isFinite(n)) return '0'
   const v = Math.floor(Math.max(0, n))
   if (v < 10_000) return v.toLocaleString('ko-KR')
   let u = 0
@@ -171,5 +171,6 @@ export function fmtBig(n: number): string {
     x /= 10_000
     u++
   }
-  return `${x >= 100 ? Math.floor(x) : x.toFixed(x >= 10 ? 1 : 2).replace(/\.?0+$/, '')}${UNITS[u]}`
+  const shown = x >= 100 ? Math.floor(x) : Math.floor(x * (x >= 10 ? 10 : 100)) / (x >= 10 ? 10 : 100) // 내림(반올림 경계 방지)
+  return `${shown.toLocaleString('ko-KR', { maximumFractionDigits: 2 })}${UNITS[u]}`
 }

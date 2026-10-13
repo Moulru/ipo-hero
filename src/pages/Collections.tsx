@@ -13,7 +13,7 @@ import { Sheet } from '../ui/Sheet'
 import { Card, ChipTabs, Empty, Progress, StockLogo } from '../ui/kit'
 import { Emoji } from '../ui/Emoji'
 import { Lock } from '../ui/icons'
-import { RARITY_STAT_PCT } from '../game/balance'
+import { RARITY_STAT_PCT, fmtBig, rewardScale } from '../game/balance'
 import { IpoRow } from '../components/IpoRow'
 import { betRight } from '../screens/Home'
 
@@ -149,6 +149,7 @@ export function CardDexPage() {
 // ───────── 업적 ─────────
 export function AchievementsPage() {
   const achievements = useStore((s) => s.achievements)
+  const best = useStore((s) => s.rpg.best)
   const got = ACHIEVEMENTS.filter((a) => achievements.includes(a.id))
   const locked = ACHIEVEMENTS.filter((a) => !achievements.includes(a.id))
   return (
@@ -171,7 +172,7 @@ export function AchievementsPage() {
                 <span className="ach-desc">{a.desc}</span>
               </span>
               <span className="ach-rew">
-                <span className="num">{a.gold.toLocaleString()}골드</span>
+                <span className="num">{fmtBig(a.gold * rewardScale(best))}골드</span>
                 {a.title && <span className="t4 fs12">칭호 ‘{a.title}’</span>}
               </span>
             </div>

@@ -213,7 +213,7 @@ export function startGame() {
     let dt = (now - last) / 1000
     last = now
     if (document.hidden) return // 백그라운드는 방치 보상으로 정산
-    if (dt > 0.5) dt = 0.05 // 오랜 정지(스로틀) 후 순간이동 방지
+    if (dt > 0.5) dt = 0.5 // 오랜 정지(스로틀) 후 순간이동 방지 — 느린 타이머에서도 진행 속도 유지
     step(dt)
   }, 50)
 }
@@ -232,6 +232,7 @@ export function computeOffline(now = Date.now()): { sec: number; kills: number; 
     stage--
     pf = predictFight(h, monsterAt(stage))
   }
+  if (!pf.win) return null // 이길 수 있는 스테이지가 없으면 보상 없음
   const cycle = pf.killTime + WALK_SEC + WIN_SEC
   const kills = Math.floor((sec * OFFLINE_EFFICIENCY) / cycle)
   if (kills <= 0) return null
@@ -241,6 +242,7 @@ export function computeOffline(now = Date.now()): { sec: number; kills: number; 
 
 // 짧은 숫자: 1,234 / 1.2만 / 3.4억
 export function fmtShort(n: number): string {
+  if (!isFinite(n)) return '0'
   const v = Math.max(0, n)
   if (v < 10_000) return Math.round(v).toLocaleString('ko-KR')
   const units = ['만', '억', '조', '경', '해', '자', '양', '구', '간']
@@ -250,5 +252,6 @@ export function fmtShort(n: number): string {
     x /= 10_000
     u++
   }
-  return `${x >= 100 ? Math.floor(x) : x.toFixed(1).replace(/\.0$/, '')}${units[u]}`
+  const shown = x >= 100 ? Math.floor(x) : Math.floor(x * 10) / 10 // 내림 — '10000만' 같은 반올림 경계 방지
+  return `${shown.toLocaleString('ko-KR', { maximumFractionDigits: 1 })}${units[u]}`
 }

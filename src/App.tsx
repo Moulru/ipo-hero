@@ -21,6 +21,7 @@ import { LicensesPage, SettingsPage } from './pages/Settings'
 import { AchievementsPage, CardDexPage, IpoDexPage, ListedPage, MyBetsPage } from './pages/Collections'
 import { CardReveal, SettleResult } from './overlays/Overlays'
 import { computeOffline, startGame } from './game/engine'
+import { fmtBig, rewardScale } from './game/balance'
 import { OfflineSheet } from './sheets/GameSheets'
 
 export default function App() {
@@ -102,7 +103,11 @@ export default function App() {
     if (!lastUnlocks.length) return
     lastUnlocks.forEach((id, i) => {
       const a = achById(id)
-      if (a) setTimeout(() => toast(`업적 달성 · ${a.name} (${a.gold.toLocaleString()}골드)`, a.emoji), i * 2700)
+      if (a)
+        setTimeout(
+          () => toast(`업적 달성 · ${a.name} (${fmtBig(a.gold * rewardScale(useStore.getState().rpg.best))}골드)`, a.emoji),
+          i * 2700
+        )
     })
     confetti()
     haptic([20, 40, 20])

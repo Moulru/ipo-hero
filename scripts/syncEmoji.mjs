@@ -37,7 +37,7 @@ const code = (s, keepFE0F) =>
     .filter((h) => keepFE0F || h !== 'fe0f')
     .join('-')
 
-rmSync(outDir, { recursive: true, force: true })
+// 폴더째 지우지 않고 파일 단위로 갱신(실행 중인 개발 서버가 public/ 감시를 잃지 않게)
 mkdirSync(outDir, { recursive: true })
 const have = []
 const miss = []
@@ -50,6 +50,8 @@ for (const e of found) {
     have.push(key)
   } else miss.push(e)
 }
+// 더 이상 쓰지 않는 이모지 파일 정리
+for (const f of readdirSync(outDir)) if (!have.includes(f.replace(/\.webp$/, ''))) rmSync(join(outDir, f))
 have.sort()
 writeFileSync(
   join(root, 'src/data/emojiSet.ts'),
