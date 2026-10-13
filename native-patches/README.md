@@ -18,7 +18,7 @@
 | `android/variables.gradle` | minSdk 24(Play 자동 보호 요건) · compileSdk 36 · targetSdk 36 |
 | `android/build.gradle` | AGP `com.android.tools.build:gradle:8.9.1` |
 | `android/gradle/wrapper/gradle-wrapper.properties` | `gradle-8.11.1-all.zip` |
-| `android/app/build.gradle` defaultConfig | applicationId `cc.eous.ipohero` · versionName `2.0.0`(2.0 대규모 업데이트 — 웹 `APP_VERSION`과 동일) · **versionCode는 빌드마다 +1(출시본 12 → 다음 13)** |
+| `android/app/build.gradle` defaultConfig | applicationId `cc.eous.ipohero` · versionName `2.0.0`(2.0 대규모 업데이트 — 웹 `APP_VERSION`과 동일) · **versionCode는 빌드마다 +1(출시본 12 → 현재 빌드 14)** |
 | `android/app/build.gradle` buildTypes.release | `minifyEnabled true` + `proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'` |
 | JDK | 17 |
 
