@@ -105,74 +105,44 @@ function Hero({ staged, today, lists }: { staged: { ipo: Ipo; stage: Stage }[]; 
   const starts = pool.filter((x) => x.stage === 'subscription' && x.ipo.subscriptionStart === today).length
   const listsToday = pool.filter((x) => x.ipo.listingDate === today).length
 
+  // 아래 '오늘 일정' 카드와 겹치지 않게 짧은 요약 한 줄로 (항목 단위로만 줄바꿈)
   let headline: ReactNode
-  const parts: ReactNode[] = []
-  if (closes)
-    parts.push(
-      <span key="c">
-        청약 마감 <em>{closes}건</em>
-      </span>
-    )
-  if (starts)
-    parts.push(
-      <span key="s">
-        청약 시작 <em>{starts}건</em>
-      </span>
-    )
-  if (listsToday)
-    parts.push(
-      <span key="l">
-        상장 <em>{listsToday}건</em>
-      </span>
-    )
+  const parts: { label: string; n: number }[] = []
+  if (closes) parts.push({ label: '청약 마감', n: closes })
+  if (starts) parts.push({ label: '청약 시작', n: starts })
+  if (listsToday) parts.push({ label: '상장', n: listsToday })
 
   if (parts.length) {
-    headline = (
-      <>
-        오늘{' '}
-        {parts.map((p, i) => (
-          <span key={i}>
-            {p}
-            {i < parts.length - 1 ? ', ' : ''}
-          </span>
-        ))}
-        이<br />
-        있어요
-      </>
-    )
+    headline = parts.flatMap((p, i) => [
+      <span key={p.label} className="hero-part">
+        {p.label} <em>{p.n}건</em>
+        {i < parts.length - 1 && ','}
+      </span>,
+      i < parts.length - 1 ? ' ' : null,
+    ])
   } else {
     const ongoing = lists.subscription.filter(notSpac).length
     const next = nextEvent(pool, today)
     if (ongoing) {
       headline = (
         <>
-          지금 청약할 수 있는
-          <br />
-          공모주가 <em>{ongoing}개</em> 있어요
+          지금 청약할 수 있는 공모주 <em>{ongoing}개</em>
         </>
       )
     } else if (next) {
       headline = (
         <>
-          {next.d === 1 ? '내일' : `${next.d}일 뒤`} <em>{next.ipo.name}</em>
-          <br />
-          {next.label} 예정이에요
+          {next.d === 1 ? '내일' : `${next.d}일 뒤`} <em>{next.ipo.name}</em> {next.label}
         </>
       )
     } else {
-      headline = (
-        <>
-          아직 예정된
-          <br />
-          공모주 일정이 없어요
-        </>
-      )
+      headline = '예정된 공모주 일정이 없어요'
     }
   }
 
   return (
     <div className="home-hero">
-      <div className="hero-date">{fmtLongDate(today)}</div>
+      <div className="hero-date">오늘 · {fmtLongDate(today)}</div>
       <h1 className="hero-headline">{headline}</h1>
       <button
         className="fresh"
