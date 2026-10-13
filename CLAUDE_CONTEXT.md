@@ -13,7 +13,7 @@
 | 데이터 | 하이브리드(`npm run data`) → `ipos.json`. DART(opendart, 키=env `DART_API_KEY` 또는 `OpenAPIkey.txt`) + 거래소(KIND) + 보조 수요지표. DART 실패에 내성(재시도·부분실패 허용) |
 | 자동화 | GitHub Actions cron(30분, `public/ipos.json` 갱신). 앱이 런타임에 raw URL로 fetch |
 | 저장소 | github.com/Moulru/ipo-hero (public) · 라이브 데이터=`raw.githubusercontent.com/Moulru/ipo-hero/main/public/ipos.json` |
-| 모바일 | **Capacitor 6**(JDK 17 · AGP 8.9.1 · Gradle 8.11.1 · **targetSdk/compileSdk 36**, minSdk 22). appId **`cc.eous.ipohero`**. 플러그인: app(뒤로가기)·status-bar·splash-screen·share(종목 공유, 권한 불요). 커스텀 아이콘·스플래시. 라이브 URL=`.env.production`. 릴리스 서명=`android/keystore.properties`(gitignore) |
+| 모바일 | **Capacitor 6**(JDK 17 · AGP 8.9.1 · Gradle 8.11.1 · **targetSdk/compileSdk 36**, minSdk 24(Play 자동 보호 요건, 2026-10-13 상향)). appId **`cc.eous.ipohero`**. 플러그인: app(뒤로가기)·status-bar·splash-screen·share(종목 공유, 권한 불요). 커스텀 아이콘·스플래시. 라이브 URL=`.env.production`. 릴리스 서명=`android/keystore.properties`(gitignore) |
 | 연락 | contact@eous.cc (CF Email Routing → naver) |
 
 ## 실행
