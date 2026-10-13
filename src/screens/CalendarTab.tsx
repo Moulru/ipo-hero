@@ -5,7 +5,7 @@ import { computeStage } from '../lib/calc'
 import { fmtMDW, fmtMonthDay, isSpac, weekdayKo } from '../lib/format'
 import { haptic } from '../lib/juice'
 import { TabScreen } from '../ui/TabScreen'
-import { Card, Switch } from '../ui/kit'
+import { Card, Col, Cols, Switch } from '../ui/kit'
 import { ChevronLeft, ChevronRight } from '../ui/icons'
 import { Emoji } from '../ui/Emoji'
 import { IpoRow } from '../components/IpoRow'
@@ -112,135 +112,141 @@ export function CalendarTab({ today }: { today: string }) {
         </>
       }
     >
-      <Card className="cal-card">
-        <div className="cal-head">
-          <button className="icon-btn sm" onClick={() => move(-1)} aria-label="이전 달">
-            <ChevronLeft size={22} strokeWidth={2.2} />
-          </button>
-          <div className="cal-title">
-            {year}년 {month}월<span className="cal-count">{monthCount ? `일정 ${monthCount}개` : '일정 없음'}</span>
-          </div>
-          <button className="icon-btn sm" onClick={() => move(1)} aria-label="다음 달">
-            <ChevronRight size={22} strokeWidth={2.2} />
-          </button>
-        </div>
-
-        <div className="cal-week">
-          {WEEK.map((w, i) => (
-            <span key={w} className={i === 0 ? 'sun' : i === 6 ? 'sat' : undefined}>
-              {w}
-            </span>
-          ))}
-        </div>
-
-        <div
-          className={'cal-grid' + (slide ? ` slide-${slide}` : '')}
-          key={ym}
-          onAnimationEnd={() => setSlide(null)}
-          onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
-          onTouchEnd={(e) => {
-            const t = touch.current
-            touch.current = null
-            if (!t) return
-            const dx = e.changedTouches[0].clientX - t.x
-            const dy = e.changedTouches[0].clientY - t.y
-            if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1)
-          }}
-        >
-          {cells.map((date, idx) =>
-            date == null ? (
-              <span key={`b${idx}`} className="cal-day blank" />
-            ) : (
-              <button
-                key={date}
-                className={
-                  'cal-day' +
-                  (date === today ? ' today' : '') +
-                  (date === sel ? ' sel' : '') +
-                  (idx % 7 === 0 ? ' sun' : idx % 7 === 6 ? ' sat' : '') +
-                  (date < today ? ' past' : '')
-                }
-                onClick={() => {
-                  if (date !== sel) haptic(5)
-                  setSel(date)
-                }}
-                aria-label={`${fmtMonthDay(date)} ${weekdayKo(date)}요일${events.has(date) ? `, 일정 ${events.get(date)!.length}개` : ''}`}
-                aria-pressed={date === sel}
-              >
-                <span className="cal-num">{+date.slice(8)}</span>
-                <span className="cal-dots">
-                  {uniqTypes(events.get(date)).map((t) => (
-                    <i key={t} className={`cal-dot ev-${t}`} />
-                  ))}
-                </span>
+      <Cols>
+        <Col sticky>
+          <Card className="cal-card">
+            <div className="cal-head">
+              <button className="icon-btn sm" onClick={() => move(-1)} aria-label="이전 달">
+                <ChevronLeft size={22} strokeWidth={2.2} />
               </button>
-            )
-          )}
-        </div>
+              <div className="cal-title">
+                {year}년 {month}월<span className="cal-count">{monthCount ? `일정 ${monthCount}개` : '일정 없음'}</span>
+              </div>
+              <button className="icon-btn sm" onClick={() => move(1)} aria-label="다음 달">
+                <ChevronRight size={22} strokeWidth={2.2} />
+              </button>
+            </div>
 
-        <div className="cal-legend">
-          {(['demand', 'start', 'end', 'listing'] as EvType[]).map((t) => (
-            <span key={t}>
-              <i className={`cal-dot ev-${t}`} />
-              {EV[t].label}
-            </span>
-          ))}
-        </div>
-      </Card>
+            <div className="cal-week">
+              {WEEK.map((w, i) => (
+                <span key={w} className={i === 0 ? 'sun' : i === 6 ? 'sat' : undefined}>
+                  {w}
+                </span>
+              ))}
+            </div>
 
-      <Card>
-        <div className="card-head">
-          <div className="card-head-txt">
-            <h2 className="card-title">
-              {fmtMonthDay(sel)} {weekdayKo(sel)}요일
-              {sel === today && <span className="pill tone-brand sm head-pill">오늘</span>}
-            </h2>
-            <div className="card-sub">{selEvents.length ? `일정 ${selEvents.length}개` : '이 날은 공모주 일정이 없어요'}</div>
-          </div>
-        </div>
-        <div className="card-list">
-          {selEvents.map((e) => (
-            <IpoRow
-              key={`${e.ipo.id}-${e.type}`}
-              ipo={e.ipo}
-              stage={computeStage(e.ipo, today)}
-              today={today}
-              right={{ top: <span className={`pill tone-${EV[e.type].tone}`}>{EV[e.type].label}</span> }}
-            />
-          ))}
-          {!selEvents.length && upcoming.length > 0 && (
-            <>
-              <div className="list-label">다가오는 일정</div>
-              {upcoming.map((e) => (
+            <div
+              className={'cal-grid' + (slide ? ` slide-${slide}` : '')}
+              key={ym}
+              onAnimationEnd={() => setSlide(null)}
+              onTouchStart={(e) => (touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY })}
+              onTouchEnd={(e) => {
+                const t = touch.current
+                touch.current = null
+                if (!t) return
+                const dx = e.changedTouches[0].clientX - t.x
+                const dy = e.changedTouches[0].clientY - t.y
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1)
+              }}
+            >
+              {cells.map((date, idx) =>
+                date == null ? (
+                  <span key={`b${idx}`} className="cal-day blank" />
+                ) : (
+                  <button
+                    key={date}
+                    className={
+                      'cal-day' +
+                      (date === today ? ' today' : '') +
+                      (date === sel ? ' sel' : '') +
+                      (idx % 7 === 0 ? ' sun' : idx % 7 === 6 ? ' sat' : '') +
+                      (date < today ? ' past' : '')
+                    }
+                    onClick={() => {
+                      if (date !== sel) haptic(5)
+                      setSel(date)
+                    }}
+                    aria-label={`${fmtMonthDay(date)} ${weekdayKo(date)}요일${events.has(date) ? `, 일정 ${events.get(date)!.length}개` : ''}`}
+                    aria-pressed={date === sel}
+                  >
+                    <span className="cal-num">{+date.slice(8)}</span>
+                    <span className="cal-dots">
+                      {uniqTypes(events.get(date)).map((t) => (
+                        <i key={t} className={`cal-dot ev-${t}`} />
+                      ))}
+                    </span>
+                  </button>
+                )
+              )}
+            </div>
+
+            <div className="cal-legend">
+              {(['demand', 'start', 'end', 'listing'] as EvType[]).map((t) => (
+                <span key={t}>
+                  <i className={`cal-dot ev-${t}`} />
+                  {EV[t].label}
+                </span>
+              ))}
+            </div>
+          </Card>
+        </Col>
+
+        <Col>
+          <Card>
+            <div className="card-head">
+              <div className="card-head-txt">
+                <h2 className="card-title">
+                  {fmtMonthDay(sel)} {weekdayKo(sel)}요일
+                  {sel === today && <span className="pill tone-brand sm head-pill">오늘</span>}
+                </h2>
+                <div className="card-sub">{selEvents.length ? `일정 ${selEvents.length}개` : '이 날은 공모주 일정이 없어요'}</div>
+              </div>
+            </div>
+            <div className="card-list">
+              {selEvents.map((e) => (
                 <IpoRow
                   key={`${e.ipo.id}-${e.type}`}
                   ipo={e.ipo}
                   stage={computeStage(e.ipo, today)}
                   today={today}
-                  sub={`${fmtMDW(e.date)} ${EV[e.type].label}`}
                   right={{ top: <span className={`pill tone-${EV[e.type].tone}`}>{EV[e.type].label}</span> }}
                 />
               ))}
-            </>
-          )}
-          {!selEvents.length && !upcoming.length && (
-            <div className="empty">
-              <Emoji e="🗓️" size={56} />
-              <div className="empty-desc">이후로 예정된 일정이 없어요</div>
+              {!selEvents.length && upcoming.length > 0 && (
+                <>
+                  <div className="list-label">다가오는 일정</div>
+                  {upcoming.map((e) => (
+                    <IpoRow
+                      key={`${e.ipo.id}-${e.type}`}
+                      ipo={e.ipo}
+                      stage={computeStage(e.ipo, today)}
+                      today={today}
+                      sub={`${fmtMDW(e.date)} ${EV[e.type].label}`}
+                      right={{ top: <span className={`pill tone-${EV[e.type].tone}`}>{EV[e.type].label}</span> }}
+                    />
+                  ))}
+                </>
+              )}
+              {!selEvents.length && !upcoming.length && (
+                <div className="empty">
+                  <Emoji e="🗓️" size={56} />
+                  <div className="empty-desc">이후로 예정된 일정이 없어요</div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </Card>
+          </Card>
 
-      <Card pad={false}>
-        <div className="menu-row">
-          <span className="menu-txt">
-            <span className="menu-label">스팩 일정도 보기</span>
-            <span className="menu-sub">기업인수목적회사 공모 일정</span>
-          </span>
-          <Switch checked={withSpac} onChange={setWithSpac} label="스팩 일정 보기" />
-        </div>
-      </Card>
+          <Card pad={false}>
+            <div className="menu-row">
+              <span className="menu-txt">
+                <span className="menu-label">스팩 일정도 보기</span>
+                <span className="menu-sub">기업인수목적회사 공모 일정</span>
+              </span>
+              <Switch checked={withSpac} onChange={setWithSpac} label="스팩 일정 보기" />
+            </div>
+          </Card>
+        </Col>
+      </Cols>
     </TabScreen>
   )
 }

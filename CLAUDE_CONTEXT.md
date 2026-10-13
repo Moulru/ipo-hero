@@ -56,7 +56,7 @@ src/
   sheets/   InfoSheets(수요 등급·용어·확률·등급 사다리) · ProfileSheets(투자 성향·칭호)
   overlays/ Overlays(정산 결과·카드 뽑기)
   components/ IpoRow(종목 행 공통) · TabBar
-  styles/   tokens · base · components · screens (.css)
+  styles/   tokens · base · components · screens · responsive (.css)
 public/emoji/  Fluent Emoji 3D webp(코드에서 쓰는 것만, ~130개 · 약 0.7MB)
 ```
 
@@ -75,7 +75,7 @@ public/emoji/  Fluent Emoji 3D webp(코드에서 쓰는 것만, ~130개 · 약 0
 - 단계는 `computeStage(ipo, 오늘)` 동적 계산. 상장 **D-day 이후**만 '상장 대기'에서 숨김.
 - **런타임 데이터**: `useIpos()`(useSyncExternalStore) — 번들로 즉시 표시 후 `VITE_DATA_URL`‖`/ipos.json` fetch해 더 최신(`generatedAt`)이면 교체. 실패 시 번들 유지. `useDataTimestamp()`=갱신 시각.
 - **게임 엔진**: `game/engine.ts` 앱 전역 루프(50ms, `document.hidden`이면 정지 → 복귀 시 `computeOffline`) · 렌더는 `game/Battle.tsx`(라운지 탭 활성일 때만 rAF) · 도트 원본 `game/sprites.ts`(16×16 자체 제작, 기사+몬스터 9종+보스) · 스토어 `rpg`(lv·stage·best·farming·lastSeen…), persist v4 migrate(1.x 레벨×150 골드 보상).
-- **테마/디자인**: 새 색은 반드시 토큰 변수(`var(--surface)`, `var(--text-3)` …) — 하드코딩 금지(예외: 카드 뽑기 연출의 고정 다크 배경). 숫자는 `.num`(고정폭). 새 이모지를 코드에 쓰면 `npm run emoji`(없으면 시스템 글리프로 폴백). 페이지는 `nav.push({k:…})`, 시트는 조건부 렌더 `<Sheet onClose>`(내부에서 닫힘 애니메이션 후 onClose). 상태바 색=`lib/native.ts THEME_BG`(= `--bg`).
+- **테마/디자인**: 새 색은 반드시 토큰 변수(`var(--surface)`, `var(--text-3)` …) — 하드코딩 금지(예외: 카드 뽑기 연출의 고정 다크 배경). 숫자는 `.num`(고정폭). 새 이모지를 코드에 쓰면 `npm run emoji`(없으면 시스템 글리프로 폴백). 페이지는 `nav.push({k:…})`, 시트는 조건부 렌더 `<Sheet onClose>`(내부에서 닫힘 애니메이션 후 onClose). 상태바 색=`lib/native.ts THEME_BG`(= `--bg`). **반응형**(`styles/responsive.css`): 600px~(펼친 폴드·태블릿) 전체 폭+탭 화면 좌우 2열(`ui/kit` `Cols`/`Col` — 폰에선 `display: contents`라 순서 그대로, 좌측 묶음→우측 묶음 순서=폰 순서가 되게 배치) · 탭 콘텐츠 최대 960px, 스택 페이지 본문 680px · `Col sticky`는 세로 600px 이상일 때만 · 360px 미만은 `--gutter` 16px.
 - **투자 카드 가챠**(100종): 천장=미보유 확정, 등급별 확률 고정. 중복=스택 없이 골드 환불(최대 100G). 100종 완성 시 뽑기 잠금.
 - **UI 용어**: 화면 표기는 '투자 성향'(코드 식별자는 `chosenClass`/`CLASSES`). 문구는 해요체·짧게(토스트 '…했어요').
 - **스토어 persist v3**: v2→v3 migrate(`darkMode`→`theme`, 기존 사용자 테마 유지). 신규 필드 `watchlist`·`recentSearches`. persist 키 `ct-save-v6` 유지(사용자 데이터 보존).

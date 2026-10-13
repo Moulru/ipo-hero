@@ -7,7 +7,7 @@ import { CLASSES } from '../data/classes'
 import { confetti, haptic, toast } from '../lib/juice'
 import { nav } from '../nav'
 import { TabScreen } from '../ui/TabScreen'
-import { Card, CardHead, MenuRow, Progress, Segmented, Switch } from '../ui/kit'
+import { Card, CardHead, Col, Cols, MenuRow, Progress, Segmented, Switch } from '../ui/kit'
 import { Emoji } from '../ui/Emoji'
 import { Check, ChevronRight, CircleHelp } from '../ui/icons'
 import { OddsSheet, RankSheet } from '../sheets/InfoSheets'
@@ -43,13 +43,19 @@ export function Lounge({ today, active }: { today: string; active: boolean }) {
         </>
       }
     >
-      <BattleCard active={active} />
-      <Upgrades />
-      <Bonuses />
-      <RankCard />
-      <CheckIn today={today} />
-      <Quests />
-      <CardDraw />
+      <Cols>
+        <Col>
+          <BattleCard active={active} />
+          <Upgrades />
+        </Col>
+        <Col>
+          <Bonuses />
+          <RankCard />
+          <CheckIn today={today} />
+          <Quests />
+          <CardDraw />
+        </Col>
+      </Cols>
       {intro && active && <IntroSheet />}
     </TabScreen>
   )

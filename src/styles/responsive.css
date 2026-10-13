@@ -1,0 +1,69 @@
+/* ───────── 화면 크기 대응: 좁은 커버 화면 · 펼친 폴드/태블릿 ───────── */
+
+/* 2열 래퍼(ui/kit Cols·Col): 폰에선 없는 것처럼 — 카드가 원래 순서대로 한 줄 */
+.cols,
+.col {
+  display: contents;
+}
+
+/* 좁은 커버 화면(갤럭시 Z 폴드 접힘 등, 360px 미만) */
+@media (max-width: 359px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+/* 펼친 폴드·태블릿(600px~): 전체 폭을 쓰고 탭 화면은 좌우 2열 */
+@media (min-width: 600px) {
+  :root {
+    --wide-max: 960px; /* 탭 화면 콘텐츠 최대 폭 */
+    --page-max: 680px; /* 상세·설정 등 스택 페이지 본문 최대 폭 */
+  }
+  .app {
+    max-width: none;
+    box-shadow: none;
+  }
+
+  .tab-body {
+    max-width: var(--wide-max);
+    margin: 0 auto;
+    padding: 0 6px;
+  }
+  .tab-header {
+    padding-left: max(var(--gutter), calc((100% - var(--wide-max)) / 2 + var(--gutter)));
+    padding-right: max(8px, calc((100% - var(--wide-max)) / 2 + 8px));
+  }
+  .cols {
+    display: flex;
+    align-items: flex-start;
+  }
+  .col {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  /* 탭 버튼이 너무 벌어지지 않게 가운데로 */
+  .tabbar {
+    padding-left: max(0px, calc((100% - 560px) / 2));
+    padding-right: max(0px, calc((100% - 560px) / 2));
+  }
+
+  .page-body {
+    padding-left: max(0px, calc((100% - var(--page-max)) / 2));
+    padding-right: max(0px, calc((100% - var(--page-max)) / 2));
+  }
+  .page-footer {
+    padding-left: max(20px, calc((100% - var(--page-max)) / 2 + 20px));
+    padding-right: max(20px, calc((100% - var(--page-max)) / 2 + 20px));
+  }
+}
+
+/* 좌측 열 고정(달력 등)은 세로가 충분할 때만 — 가로로 눕힌 폰에선 고정 시 아래가 잘림 */
+@media (min-width: 600px) and (min-height: 600px) {
+  .col.sticky {
+    position: sticky;
+    top: calc(var(--appbar-h) + var(--safe-top));
+    z-index: 1;
+  }
+}

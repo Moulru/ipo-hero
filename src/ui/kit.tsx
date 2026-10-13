@@ -148,6 +148,14 @@ export function Card({ children, className, pad = false }: { children: ReactNode
   return <section className={'card' + (pad ? ' pad' : '') + (className ? ` ${className}` : '')}>{children}</section>
 }
 
+// 넓은 화면(펼친 폴드·태블릿, 600px~)에서 좌우 2열 — 좁은 화면에선 래퍼가 사라져(display: contents) 기존 순서 그대로 한 줄
+export function Cols({ children }: { children: ReactNode }) {
+  return <div className="cols">{children}</div>
+}
+export function Col({ children, sticky }: { children: ReactNode; sticky?: boolean }) {
+  return <div className={'col' + (sticky ? ' sticky' : '')}>{children}</div>
+}
+
 export function CardHead({ title, sub, right, onMore }: { title: ReactNode; sub?: ReactNode; right?: ReactNode; onMore?: () => void }) {
   return (
     <div className="card-head">

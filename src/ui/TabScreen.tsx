@@ -40,7 +40,7 @@ export function TabScreen({
       }}
     >
       <header className={'tab-header' + (scrolled ? ' scrolled' : '')}>{header}</header>
-      {children}
+      <div className="tab-body">{children}</div>
     </div>
   )
 }

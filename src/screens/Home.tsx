@@ -9,7 +9,7 @@ import { usePullToRefresh } from '../lib/usePullToRefresh'
 import { manualRefresh } from '../lib/refresh'
 import { nav, openIpo } from '../nav'
 import { TabScreen } from '../ui/TabScreen'
-import { Card, CardHead, ChipTabs, Empty, MenuRow } from '../ui/kit'
+import { Card, CardHead, ChipTabs, Col, Cols, Empty, MenuRow } from '../ui/kit'
 import { Emoji } from '../ui/Emoji'
 import { BrandMark, ChevronDown, RefreshCw, Search, WifiOff } from '../ui/icons'
 import { IpoRow } from '../components/IpoRow'
@@ -68,20 +68,26 @@ export function Home({ today }: { today: string }) {
       )}
 
       <Hero staged={staged} today={today} lists={lists} />
-      <TodayCard staged={staged} today={today} />
-      <MyBets staged={staged} today={today} />
-      <Watchlist staged={staged} today={today} />
-      <ScheduleCard lists={lists} today={today} />
-      <RecentListings staged={staged} today={today} />
+      <Cols>
+        <Col>
+          <TodayCard staged={staged} today={today} />
+          <MyBets staged={staged} today={today} />
+          <Watchlist staged={staged} today={today} />
+          <ScheduleCard lists={lists} today={today} />
+        </Col>
+        <Col>
+          <RecentListings staged={staged} today={today} />
 
-      <Card pad={false}>
-        <MenuRow
-          icon={<Emoji e="🏅" size={26} />}
-          label="수요 등급은 어떻게 정해지나요?"
-          sub="S·A·B·C 등급 산정 기준"
-          onClick={() => setGradeOpen(true)}
-        />
-      </Card>
+          <Card pad={false}>
+            <MenuRow
+              icon={<Emoji e="🏅" size={26} />}
+              label="수요 등급은 어떻게 정해지나요?"
+              sub="S·A·B·C 등급 산정 기준"
+              onClick={() => setGradeOpen(true)}
+            />
+          </Card>
+        </Col>
+      </Cols>
 
       <footer className="home-foot">
         <p>공모주 히어로는 공모주 정보를 모아 보여 주는 앱이에요. 투자를 권유하지 않으며, 모의청약은 가상 머니로만 해요.</p>
