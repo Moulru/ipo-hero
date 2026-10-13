@@ -8,6 +8,8 @@ export interface AchStats {
   seedMoney: number
   streak: number
   hits: number
+  bestStage: number
+  bosses: number
 }
 
 export interface Achievement {
@@ -36,7 +38,10 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'streak30', name: '홀딩 30일', emoji: '🔥', desc: '30일 연속 출석', gold: 1000, title: '홀더', check: (s) => s.streak >= 30 },
   { id: 'streak100', name: '백일 홀딩', emoji: '💎', desc: '100일 연속 출석', gold: 3000, title: '홀더왕', check: (s) => s.streak >= 100 },
   { id: 'rich', name: '우상향', emoji: '📈', desc: '시즌 자산 5,000만원 돌파', gold: 1200, title: '우상향', check: (s) => s.seedMoney >= 50_000_000 },
-  { id: 'king', name: '공모왕', emoji: '👑', desc: '공모왕 등극 (Lv.51)', gold: 2500, title: '공모왕', check: (s) => s.level >= 51 },
+  { id: 'stage50', name: '중견 기사', emoji: '🗡️', desc: '스테이지 50 돌파', gold: 800, title: '기사', check: (s) => s.bestStage >= 50 },
+  { id: 'stage100', name: '베테랑 기사', emoji: '🛡️', desc: '스테이지 100 돌파', gold: 1500, title: '베테랑', check: (s) => s.bestStage >= 100 },
+  { id: 'boss20', name: '보스 사냥꾼', emoji: '🐉', desc: '보스 20마리 처치', gold: 1200, title: '사냥꾼', check: (s) => s.bosses >= 20 },
+  { id: 'king', name: '공모왕', emoji: '👑', desc: '공모왕 등극 (스테이지 200 돌파)', gold: 2500, title: '공모왕', check: (s) => s.bestStage >= 200 },
 ]
 
 export function achById(id: string): Achievement | undefined {

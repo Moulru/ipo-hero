@@ -17,7 +17,7 @@ export function MyTab() {
   const s = useStore()
   const [sheet, setSheet] = useState<'class' | 'title' | null>(null)
   const cls = CLASSES.find((c) => c.id === s.chosenClass) ?? CLASSES[0]
-  const { rank, rankLevel } = rankInfo(s.level)
+  const { rank } = rankInfo(s.rpg.best)
   const title = s.equippedTitle ? achById(s.equippedTitle)?.title : null
   const escrowTotal = Object.values(s.escrow).reduce((a, b) => a + b, 0)
   const total = s.seedMoney + escrowTotal
@@ -49,7 +49,7 @@ export function MyTab() {
             {cls.name}
           </span>
           <span className="profile-sub">
-            <Emoji e={rank.emoji} size={16} /> {rank.name} Lv.{rankLevel}
+            <Emoji e={rank.emoji} size={16} /> {rank.name} · 최고 스테이지 {s.rpg.best}
           </span>
         </span>
         <span className="text-btn">

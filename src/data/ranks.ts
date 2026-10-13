@@ -1,33 +1,32 @@
-// 투자자 등급(랭크) 사다리 — 랭크마다 10레벨, Lv.10 달성 시 다음 랭크 Lv.1로 승급(계단식)
-// 개미 1~10 → 불개미 1~10 → 슈퍼개미 → 큰손 → 슈퍼큰손 → 공모왕 1~무한
+// 투자자 등급 — 방치형 RPG의 '최고 돌파 스테이지'로 결정 (2.0~: 경험치 레벨 대체)
+// 개미 → 불개미(20) → 슈퍼개미(50) → 큰손(100) → 슈퍼큰손(150) → 공모왕(200)
 export interface Rank {
   name: string
   emoji: string
+  minStage: number // 이 스테이지를 돌파하면 승급
 }
 
 export const RANKS: Rank[] = [
-  { name: '개미', emoji: '🐜' },
-  { name: '불개미', emoji: '🔥' },
-  { name: '슈퍼개미', emoji: '⭐' },
-  { name: '큰손', emoji: '🤑' },
-  { name: '슈퍼큰손', emoji: '💰' },
-  { name: '공모왕', emoji: '👑' },
+  { name: '개미', emoji: '🐜', minStage: 0 },
+  { name: '불개미', emoji: '🔥', minStage: 20 },
+  { name: '슈퍼개미', emoji: '⭐', minStage: 50 },
+  { name: '큰손', emoji: '🤑', minStage: 100 },
+  { name: '슈퍼큰손', emoji: '💰', minStage: 150 },
+  { name: '공모왕', emoji: '👑', minStage: 200 },
 ]
 
-export const LEVELS_PER_RANK = 10
-
-// 전역 레벨(1~) → 랭크 + 랭크 내 레벨(1~10, 최종 랭크 공모왕은 1~무한)
-export function rankInfo(level: number): { rank: Rank; index: number; rankLevel: number; isMaxRank: boolean } {
-  const index = Math.min(RANKS.length - 1, Math.floor((level - 1) / LEVELS_PER_RANK))
-  const rankLevel = level - index * LEVELS_PER_RANK
-  return { rank: RANKS[index], index, rankLevel, isMaxRank: index === RANKS.length - 1 }
-}
-
-export function rankForLevel(level: number): Rank {
-  return rankInfo(level).rank
-}
-
-export function nextRank(level: number): Rank | null {
-  const { index } = rankInfo(level)
-  return index < RANKS.length - 1 ? RANKS[index + 1] : null
+// 최고 돌파 스테이지 → 등급 + 다음 등급까지 진행률
+export function rankInfo(bestCleared: number): {
+  rank: Rank
+  index: number
+  next: Rank | null
+  progress: number // 0–1 (현재 등급 구간 내)
+  isMaxRank: boolean
+} {
+  let index = 0
+  for (let i = 0; i < RANKS.length; i++) if (bestCleared >= RANKS[i].minStage) index = i
+  const rank = RANKS[index]
+  const next = RANKS[index + 1] ?? null
+  const progress = next ? Math.min(1, (bestCleared - rank.minStage) / (next.minStage - rank.minStage)) : 1
+  return { rank, index, next, progress, isMaxRank: !next }
 }

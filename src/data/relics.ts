@@ -1,66 +1,71 @@
 import type { Rarity, Relic } from '../types'
 
-export const RELIC_COST = 200 // 1회 뽑기 골드 비용
-export const RELIC_COST_10 = 1800 // 10연차 (할인)
+export const RELIC_COST = 200 // 1회 뽑기 기본 비용(스테이지 1 기준) — 실제 비용은 relicCost(최고 스테이지)
+export const RELIC_COST_10 = 1800 // 10연차 기본 비용(할인)
+// 최고 돌파 스테이지에 맞춰 비용·중복 환불이 함께 커짐(보상 스케일과 동일) — 후반에도 카드가 의미 있게
+const scale = (best: number) => 1.12 ** Math.max(0, best - 1)
+export const relicCost = (best: number) => Math.round(RELIC_COST * scale(best))
+export const relicCost10 = (best: number) => Math.round(RELIC_COST_10 * scale(best))
 export const PITY_PULLS = 10 // 천장: 누적 10회 안에 '미보유 카드' 확정 (등급 확률은 그대로 유지)
 
-// 효과는 게임 레이어(정산 시 XP·골드 획득)만. 시즌 자산(배정·수익)엔 영향 없음 → 순수 실력.
+// 효과는 게임 레이어(라운지 RPG)만: xpMult=공격력 %, goldMult=골드 획득 %, 보유 카드 전체=도감 보너스(전체 스탯).
+// 시즌 자산(배정·수익)엔 영향 없음 → 순수 실력.
 // 핵심 재미는 수집(도감). 'none' 카드는 순수 수집용(효과 없음, 플레이버만).
 export const RELICS: Relic[] = [
   // ===== common (18) =====
-  { id: 'coin', name: '행운의 동전', emoji: '🪙', rarity: 'common', desc: '정산 골드 +10%', effect: { kind: 'goldMult', value: 0.1 } },
-  { id: 'note', name: '분석 노트', emoji: '📓', rarity: 'common', desc: '정산 XP +10%', effect: { kind: 'xpMult', value: 0.1 } },
-  { id: 'chart', name: '차트 보살', emoji: '📊', rarity: 'common', desc: '정산 XP +10%', effect: { kind: 'xpMult', value: 0.1 } },
-  { id: 'pocket', name: '동전 주머니', emoji: '👝', rarity: 'common', desc: '정산 골드 +15%', effect: { kind: 'goldMult', value: 0.15 } },
+  { id: 'coin', name: '행운의 동전', emoji: '🪙', rarity: 'common', desc: '골드 획득 +10%', effect: { kind: 'goldMult', value: 0.1 } },
+  { id: 'note', name: '분석 노트', emoji: '📓', rarity: 'common', desc: '공격력 +10%', effect: { kind: 'xpMult', value: 0.1 } },
+  { id: 'chart', name: '차트 보살', emoji: '📊', rarity: 'common', desc: '공격력 +10%', effect: { kind: 'xpMult', value: 0.1 } },
+  { id: 'pocket', name: '동전 주머니', emoji: '👝', rarity: 'common', desc: '골드 획득 +15%', effect: { kind: 'goldMult', value: 0.15 } },
   { id: 'calm', name: '차분한 멘탈', emoji: '🧘', rarity: 'common', desc: '흔들리지 않는 마음', effect: { kind: 'none', value: 0 } },
-  { id: 'piggy', name: '돼지꿈 꾸는 날', emoji: '🐷', rarity: 'common', desc: '정산 골드 +10%', effect: { kind: 'goldMult', value: 0.1 } },
-  { id: 'ledger', name: '거래 장부', emoji: '📒', rarity: 'common', desc: '정산 XP +10%', effect: { kind: 'xpMult', value: 0.1 } },
-  { id: 'ticket', name: '공모주 줍줍', emoji: '🎫', rarity: 'common', desc: '정산 골드 +10%', effect: { kind: 'goldMult', value: 0.1 } },
-  { id: 'bell', name: '상장 알림벨', emoji: '🔔', rarity: 'common', desc: '정산 XP +10%', effect: { kind: 'xpMult', value: 0.1 } },
+  { id: 'piggy', name: '돼지꿈 꾸는 날', emoji: '🐷', rarity: 'common', desc: '골드 획득 +10%', effect: { kind: 'goldMult', value: 0.1 } },
+  { id: 'ledger', name: '거래 장부', emoji: '📒', rarity: 'common', desc: '공격력 +10%', effect: { kind: 'xpMult', value: 0.1 } },
+  { id: 'ticket', name: '공모주 줍줍', emoji: '🎫', rarity: 'common', desc: '골드 획득 +10%', effect: { kind: 'goldMult', value: 0.1 } },
+  { id: 'bell', name: '상장 알림벨', emoji: '🔔', rarity: 'common', desc: '공격력 +10%', effect: { kind: 'xpMult', value: 0.1 } },
   { id: 'clover', name: '네잎클로버', emoji: '🍀', rarity: 'common', desc: '행운을 부르는 네 잎', effect: { kind: 'none', value: 0 } },
-  { id: 'newspaper', name: '경제 신문', emoji: '📰', rarity: 'common', desc: '정산 XP +8%', effect: { kind: 'xpMult', value: 0.08 } },
-  { id: 'redpen', name: '빨간 펜', emoji: '🖊️', rarity: 'common', desc: '정산 XP +8%', effect: { kind: 'xpMult', value: 0.08 } },
-  { id: 'coffee', name: '월급 루팡 커피', emoji: '☕', rarity: 'common', desc: '정산 골드 +8%', effect: { kind: 'goldMult', value: 0.08 } },
+  { id: 'newspaper', name: '경제 신문', emoji: '📰', rarity: 'common', desc: '공격력 +8%', effect: { kind: 'xpMult', value: 0.08 } },
+  { id: 'redpen', name: '빨간 펜', emoji: '🖊️', rarity: 'common', desc: '공격력 +8%', effect: { kind: 'xpMult', value: 0.08 } },
+  { id: 'coffee', name: '월급 루팡 커피', emoji: '☕', rarity: 'common', desc: '골드 획득 +8%', effect: { kind: 'goldMult', value: 0.08 } },
   { id: 'candle', name: '양봉 농장', emoji: '🕯️', rarity: 'common', desc: '양봉(陽棒)만 키우고 싶다', effect: { kind: 'none', value: 0 } },
-  { id: 'abacus', name: '주판', emoji: '🧮', rarity: 'common', desc: '정산 XP +10%', effect: { kind: 'xpMult', value: 0.1 } },
-  { id: 'magnet', name: '수급 자석', emoji: '🧲', rarity: 'common', desc: '정산 골드 +12%', effect: { kind: 'goldMult', value: 0.12 } },
+  { id: 'abacus', name: '주판', emoji: '🧮', rarity: 'common', desc: '공격력 +10%', effect: { kind: 'xpMult', value: 0.1 } },
+  { id: 'magnet', name: '수급 자석', emoji: '🧲', rarity: 'common', desc: '골드 획득 +12%', effect: { kind: 'goldMult', value: 0.12 } },
   { id: 'umbrella', name: '비 올 때 물타기', emoji: '☂️', rarity: 'common', desc: '물렸을 땐 우산 쓰고', effect: { kind: 'none', value: 0 } },
-  { id: 'balloon', name: '따상 가즈아', emoji: '🎈', rarity: 'common', desc: '정산 골드 +10%', effect: { kind: 'goldMult', value: 0.1 } },
+  { id: 'balloon', name: '따상 가즈아', emoji: '🎈', rarity: 'common', desc: '골드 획득 +10%', effect: { kind: 'goldMult', value: 0.1 } },
   // ===== rare (15) =====
-  { id: 'glass', name: '분석가의 돋보기', emoji: '🔍', rarity: 'rare', desc: '정산 XP +25%', effect: { kind: 'xpMult', value: 0.25 } },
-  { id: 'seed', name: '균등의 씨앗', emoji: '🌱', rarity: 'rare', desc: '정산 골드 +20%', effect: { kind: 'goldMult', value: 0.2 } },
-  { id: 'wallet', name: '두둑한 지갑', emoji: '👛', rarity: 'rare', desc: '정산 골드 +25%', effect: { kind: 'goldMult', value: 0.25 } },
-  { id: 'focus', name: '집중의 안경', emoji: '🤓', rarity: 'rare', desc: '정산 XP +20%', effect: { kind: 'xpMult', value: 0.2 } },
-  { id: 'briefcase', name: '서류 가방', emoji: '💼', rarity: 'rare', desc: '정산 골드 +20%', effect: { kind: 'goldMult', value: 0.2 } },
-  { id: 'compass', name: '투자 나침반', emoji: '🧭', rarity: 'rare', desc: '정산 XP +20%', effect: { kind: 'xpMult', value: 0.2 } },
-  { id: 'battery', name: '홀딩 배터리', emoji: '🔋', rarity: 'rare', desc: '정산 XP +22%', effect: { kind: 'xpMult', value: 0.22 } },
-  { id: 'rocket', name: '초기 로켓', emoji: '🚀', rarity: 'rare', desc: '정산 골드 +22%', effect: { kind: 'goldMult', value: 0.22 } },
-  { id: 'reqkey', name: '상장 열쇠', emoji: '🔑', rarity: 'rare', desc: '정산 XP +22%', effect: { kind: 'xpMult', value: 0.22 } },
-  { id: 'scope', name: '무릎 매수각', emoji: '🎯', rarity: 'rare', desc: '정산 XP +25%', effect: { kind: 'xpMult', value: 0.25 } },
+  { id: 'glass', name: '분석가의 돋보기', emoji: '🔍', rarity: 'rare', desc: '공격력 +25%', effect: { kind: 'xpMult', value: 0.25 } },
+  { id: 'seed', name: '균등의 씨앗', emoji: '🌱', rarity: 'rare', desc: '골드 획득 +20%', effect: { kind: 'goldMult', value: 0.2 } },
+  { id: 'wallet', name: '두둑한 지갑', emoji: '👛', rarity: 'rare', desc: '골드 획득 +25%', effect: { kind: 'goldMult', value: 0.25 } },
+  { id: 'focus', name: '집중의 안경', emoji: '🤓', rarity: 'rare', desc: '공격력 +20%', effect: { kind: 'xpMult', value: 0.2 } },
+  { id: 'briefcase', name: '서류 가방', emoji: '💼', rarity: 'rare', desc: '골드 획득 +20%', effect: { kind: 'goldMult', value: 0.2 } },
+  { id: 'compass', name: '투자 나침반', emoji: '🧭', rarity: 'rare', desc: '공격력 +20%', effect: { kind: 'xpMult', value: 0.2 } },
+  { id: 'battery', name: '홀딩 배터리', emoji: '🔋', rarity: 'rare', desc: '공격력 +22%', effect: { kind: 'xpMult', value: 0.22 } },
+  { id: 'rocket', name: '초기 로켓', emoji: '🚀', rarity: 'rare', desc: '골드 획득 +22%', effect: { kind: 'goldMult', value: 0.22 } },
+  { id: 'reqkey', name: '상장 열쇠', emoji: '🔑', rarity: 'rare', desc: '공격력 +22%', effect: { kind: 'xpMult', value: 0.22 } },
+  { id: 'scope', name: '무릎 매수각', emoji: '🎯', rarity: 'rare', desc: '공격력 +25%', effect: { kind: 'xpMult', value: 0.25 } },
   { id: 'crystal', name: '수정 구슬', emoji: '🔮', rarity: 'rare', desc: '미래를 엿보는 구슬', effect: { kind: 'none', value: 0 } },
-  { id: 'gears', name: '분석 엔진', emoji: '⚙️', rarity: 'rare', desc: '정산 XP +20%', effect: { kind: 'xpMult', value: 0.2 } },
-  { id: 'moneybag', name: '보너스 주머니', emoji: '💰', rarity: 'rare', desc: '정산 골드 +25%', effect: { kind: 'goldMult', value: 0.25 } },
-  { id: 'scale', name: '밸류 저울', emoji: '⚖️', rarity: 'rare', desc: '정산 XP +20%', effect: { kind: 'xpMult', value: 0.2 } },
-  { id: 'lightning', name: '단타 번개', emoji: '⚡', rarity: 'rare', desc: '정산 골드 +20%', effect: { kind: 'goldMult', value: 0.2 } },
+  { id: 'gears', name: '분석 엔진', emoji: '⚙️', rarity: 'rare', desc: '공격력 +20%', effect: { kind: 'xpMult', value: 0.2 } },
+  { id: 'moneybag', name: '보너스 주머니', emoji: '💰', rarity: 'rare', desc: '골드 획득 +25%', effect: { kind: 'goldMult', value: 0.25 } },
+  { id: 'scale', name: '밸류 저울', emoji: '⚖️', rarity: 'rare', desc: '공격력 +20%', effect: { kind: 'xpMult', value: 0.2 } },
+  { id: 'lightning', name: '단타 번개', emoji: '⚡', rarity: 'rare', desc: '골드 획득 +20%', effect: { kind: 'goldMult', value: 0.2 } },
   // ===== epic (12) =====
-  { id: 'receipt', name: '황금 영수증', emoji: '🧾', rarity: 'epic', desc: '정산 골드 +50%', effect: { kind: 'goldMult', value: 0.5 } },
-  { id: 'charm', name: '행운의 부적', emoji: '🧧', rarity: 'epic', desc: '정산 골드 +35%', effect: { kind: 'goldMult', value: 0.35 } },
-  { id: 'terminal', name: '분석가 단말기', emoji: '🖥️', rarity: 'epic', desc: '정산 XP +50%', effect: { kind: 'xpMult', value: 0.5 } },
-  { id: 'shield', name: '강철 멘탈', emoji: '🛡️', rarity: 'epic', desc: '정산 XP +30%', effect: { kind: 'xpMult', value: 0.3 } },
-  { id: 'crown', name: '청약 왕관', emoji: '👑', rarity: 'epic', desc: '정산 골드 +40%', effect: { kind: 'goldMult', value: 0.4 } },
-  { id: 'trophy', name: '수익 트로피', emoji: '🏆', rarity: 'epic', desc: '정산 XP +40%', effect: { kind: 'xpMult', value: 0.4 } },
-  { id: 'ring', name: '블루칩 반지', emoji: '💍', rarity: 'epic', desc: '정산 골드 +45%', effect: { kind: 'goldMult', value: 0.45 } },
-  { id: 'telescope', name: '장기 망원경', emoji: '🔭', rarity: 'epic', desc: '정산 XP +50%', effect: { kind: 'xpMult', value: 0.5 } },
-  { id: 'vault', name: '금고 열쇠', emoji: '🏦', rarity: 'epic', desc: '정산 골드 +50%', effect: { kind: 'goldMult', value: 0.5 } },
-  { id: 'phoenix', name: '불사조 차트', emoji: '🔥', rarity: 'epic', desc: '정산 XP +45%', effect: { kind: 'xpMult', value: 0.45 } },
-  { id: 'wand', name: '작전 지팡이', emoji: '🪄', rarity: 'epic', desc: '정산 골드 +40%', effect: { kind: 'goldMult', value: 0.4 } },
-  { id: 'hourglass', name: '복리의 모래시계', emoji: '⏳', rarity: 'epic', desc: '정산 XP +40%', effect: { kind: 'xpMult', value: 0.4 } },
+  { id: 'receipt', name: '황금 영수증', emoji: '🧾', rarity: 'epic', desc: '골드 획득 +50%', effect: { kind: 'goldMult', value: 0.5 } },
+  { id: 'charm', name: '행운의 부적', emoji: '🧧', rarity: 'epic', desc: '골드 획득 +35%', effect: { kind: 'goldMult', value: 0.35 } },
+  { id: 'terminal', name: '분석가 단말기', emoji: '🖥️', rarity: 'epic', desc: '공격력 +50%', effect: { kind: 'xpMult', value: 0.5 } },
+  { id: 'shield', name: '강철 멘탈', emoji: '🛡️', rarity: 'epic', desc: '공격력 +30%', effect: { kind: 'xpMult', value: 0.3 } },
+  { id: 'crown', name: '청약 왕관', emoji: '👑', rarity: 'epic', desc: '골드 획득 +40%', effect: { kind: 'goldMult', value: 0.4 } },
+  { id: 'trophy', name: '수익 트로피', emoji: '🏆', rarity: 'epic', desc: '공격력 +40%', effect: { kind: 'xpMult', value: 0.4 } },
+  { id: 'ring', name: '블루칩 반지', emoji: '💍', rarity: 'epic', desc: '골드 획득 +45%', effect: { kind: 'goldMult', value: 0.45 } },
+  { id: 'telescope', name: '장기 망원경', emoji: '🔭', rarity: 'epic', desc: '공격력 +50%', effect: { kind: 'xpMult', value: 0.5 } },
+  { id: 'vault', name: '금고 열쇠', emoji: '🏦', rarity: 'epic', desc: '골드 획득 +50%', effect: { kind: 'goldMult', value: 0.5 } },
+  { id: 'phoenix', name: '불사조 차트', emoji: '🔥', rarity: 'epic', desc: '공격력 +45%', effect: { kind: 'xpMult', value: 0.45 } },
+  { id: 'wand', name: '작전 지팡이', emoji: '🪄', rarity: 'epic', desc: '골드 획득 +40%', effect: { kind: 'goldMult', value: 0.4 } },
+  { id: 'hourglass', name: '복리의 모래시계', emoji: '⏳', rarity: 'epic', desc: '공격력 +40%', effect: { kind: 'xpMult', value: 0.4 } },
   // ===== legendary (5) =====
-  { id: 'diamond', name: '다이아몬드 핸드', emoji: '💎', rarity: 'legendary', desc: '정산 골드 +60%', effect: { kind: 'goldMult', value: 0.6 } },
-  { id: 'midas', name: '미다스의 손', emoji: '🤲', rarity: 'legendary', desc: '정산 골드 +100%', effect: { kind: 'goldMult', value: 1.0 } },
-  { id: 'bull', name: '황소의 뿔', emoji: '🐂', rarity: 'legendary', desc: '정산 XP +50%', effect: { kind: 'xpMult', value: 0.5 } },
-  { id: 'unicorn', name: '유니콘', emoji: '🦄', rarity: 'legendary', desc: '정산 XP +60%', effect: { kind: 'xpMult', value: 0.6 } },
-  { id: 'goldenbull', name: '황금 황소상', emoji: '🐮', rarity: 'legendary', desc: '정산 골드 +80%', effect: { kind: 'goldMult', value: 0.8 } },
+  { id: 'diamond', name: '다이아몬드 핸드', emoji: '💎', rarity: 'legendary', desc: '골드 획득 +60%', effect: { kind: 'goldMult', value: 0.6 } },
+  { id: 'midas', name: '미다스의 손', emoji: '🤲', rarity: 'legendary', desc: '골드 획득 +100%', effect: { kind: 'goldMult', value: 1.0 } },
+  { id: 'bull', name: '황소의 뿔', emoji: '🐂', rarity: 'legendary', desc: '공격력 +50%', effect: { kind: 'xpMult', value: 0.5 } },
+  { id: 'unicorn', name: '유니콘', emoji: '🦄', rarity: 'legendary', desc: '공격력 +60%', effect: { kind: 'xpMult', value: 0.6 } },
+  { id: 'goldenbull', name: '황금 황소상', emoji: '🐮', rarity: 'legendary', desc: '골드 획득 +80%', effect: { kind: 'goldMult', value: 0.8 } },
 
   // ===== 장식 카드 (효과 없음, 순수 수집용) =====
   // common 장식 (27)
@@ -124,8 +129,8 @@ const TIERS: Rarity[] = ['legendary', 'epic', 'rare', 'common']
 
 // 중복 시 등급별 골드 환불 (최대 100G)
 const DUP_REFUND: Record<Rarity, number> = { common: 20, rare: 40, epic: 70, legendary: 100 }
-export function dupRefund(rarity: Rarity): number {
-  return DUP_REFUND[rarity]
+export function dupRefund(rarity: Rarity, best = 1): number {
+  return Math.round(DUP_REFUND[rarity] * scale(best))
 }
 
 // 가중 추첨으로 등급 선택 (등급별 확률 고정)

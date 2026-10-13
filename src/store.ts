@@ -2,15 +2,48 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { ClassId, Ipo, PredictionChoice } from './types'
 import { SEED_MONEY, comboMult, outcomeFromReturn, rollAllocation, todayYmd } from './lib/calc'
-import { PITY_PULLS, RELIC_COST, RELIC_COST_10, aggregateEffects, dupRefund, pullCard } from './data/relics'
+import { PITY_PULLS, aggregateEffects, dupRefund, pullCard, relicCost, relicCost10 } from './data/relics'
+import { FARM_RETRY_KILLS, type StatKind, isBoss, rewardScale, upgradeCostN } from './game/balance'
 import { type QuestState, type QuestType, questById, rollDailyQuests } from './data/quests'
 import { ACHIEVEMENTS, type AchStats } from './data/achievements'
 
 const XP_PER_LEVEL = 100
 const levelOf = (xp: number) => Math.floor(xp / XP_PER_LEVEL) + 1
-// 순수 실력: 모든 클래스 동일 시드. 클래스는 XP에만, 카드는 게임 레이어(XP·골드)에만 영향.
+// 순수 실력: 모든 클래스 동일 시드. 성향·카드는 게임 레이어(라운지 RPG·골드)에만 영향. 게임은 시즌 자산을 읽기만 함(배율).
 
 export type ThemeMode = 'system' | 'light' | 'dark'
+
+// 라운지 방치형 RPG 진행 상태
+export interface RpgState {
+  lv: Record<StatKind, number>
+  stage: number // 현재 싸우는 스테이지
+  best: number // 최고 돌파(클리어) 스테이지 — 투자자 등급 기준
+  kills: number
+  bosses: number
+  farming: boolean // 패배 후 이전 스테이지에서 골드 파밍 중
+  farmCount: number
+  auto: boolean // 파밍 N마리 후 자동 재도전
+  lastSeen: number // ms — 방치 보상 계산 기준
+  intro: boolean // 2.0 소개 시트 표시 여부
+  legacy: number // 1.x 등급(경험치) 이전 보상 골드
+}
+
+export const RPG_DEFAULT: RpgState = {
+  lv: { atk: 1, def: 1, hp: 1 },
+  stage: 1,
+  best: 0,
+  kills: 0,
+  bosses: 0,
+  farming: false,
+  farmCount: 0,
+  auto: true,
+  lastSeen: 0,
+  intro: true,
+  legacy: 0,
+}
+
+// 출석 보상: 연속일수(최대 7일) × 최고 스테이지 스케일
+export const checkinReward = (streak: number, best: number) => Math.round((50 + Math.min(streak, 7) * 20) * rewardScale(best))
 
 export interface PlayResult {
   kind: 'real'
@@ -62,6 +95,7 @@ interface Store {
   haptics: boolean // 진동(햅틱) 효과 on/off
   watchlist: string[] // 관심 종목(ipo id)
   recentSearches: string[] // 최근 검색어(최신순, 최대 10)
+  rpg: RpgState
 
   chooseClass: (c: ClassId) => void
   tick: () => void
@@ -85,6 +119,14 @@ interface Store {
   removeRecentSearch: (q: string) => void
   clearRecentSearches: () => void
   resetSeason: () => void
+  rpgWin: (gold: number) => void
+  rpgLose: () => void
+  rpgUpgrade: (kind: StatKind, n: number) => boolean
+  rpgChallenge: () => void
+  rpgSetAuto: (v: boolean) => void
+  rpgOffline: (gold: number, kills: number) => void
+  rpgSeen: () => void
+  rpgCloseIntro: () => void
 }
 
 function bump(items: QuestState[], type: QuestType, n = 1): QuestState[] {
@@ -104,13 +146,15 @@ function withAchievements(cand: Store): Partial<Store> {
     seedMoney: cand.seedMoney,
     streak: cand.streak,
     hits: cand.hits,
+    bestStage: cand.rpg.best,
+    bosses: cand.rpg.bosses,
   }
   const newly: string[] = []
   let bonus = 0
   for (const a of ACHIEVEMENTS) {
     if (!cand.achievements.includes(a.id) && a.check(stats)) {
       newly.push(a.id)
-      bonus += a.gold
+      bonus += Math.round(a.gold * rewardScale(cand.rpg.best))
     }
   }
   if (!newly.length) return {}
@@ -150,6 +194,7 @@ export const useStore = create<Store>()(
       haptics: true,
       watchlist: [],
       recentSearches: [],
+      rpg: RPG_DEFAULT,
 
       chooseClass: (c) => set({ chosenClass: c }),
 
@@ -180,7 +225,7 @@ export const useStore = create<Store>()(
         set((s) => {
           const t = todayYmd()
           if (s.lastRewardClaim === t) return s
-          const reward = 50 + Math.min(s.streak, 7) * 20
+          const reward = checkinReward(s.streak, s.rpg.best)
           const patch: Partial<Store> = { gold: s.gold + reward, lastRewardClaim: t }
           return { ...patch, ...withAchievements({ ...s, ...patch }) }
         }),
@@ -236,7 +281,10 @@ export const useStore = create<Store>()(
 
           // 카드 효과도 게임 레이어(골드·XP)에만
           const fx = aggregateEffects(s.ownedRelics)
-          const goldGain = Math.round((120 + (correct ? 150 : 0) + Math.max(0, Math.round(profit / 80000))) * fx.goldMult)
+          // 정산 골드는 최고 스테이지 스케일 적용(후반에도 모의청약 참여가 의미 있게) — 시즌 자산 손익과는 별개
+          const goldGain = Math.round(
+            (120 + (correct ? 150 : 0) + Math.max(0, Math.round(profit / 80000))) * fx.goldMult * cm * rewardScale(s.rpg.best)
+          )
           const xpGain = Math.round((30 + (shares > 0 ? 15 : 0) + (correct ? 50 : 0)) * fx.xpMult * classXpMult)
           const newXp = s.xp + xpGain
           const newLevel = levelOf(newXp)
@@ -282,14 +330,15 @@ export const useStore = create<Store>()(
       // 1회 뽑기: 천장(누적 PITY_PULLS) 시 미보유 확정. 중복이면 등급별 골드 환불.
       pullRelic: () =>
         set((s) => {
-          if (s.gold < RELIC_COST) return s
+          const cost = relicCost(s.rpg.best)
+          if (s.gold < cost) return s
           let pity = s.pullsSinceEpic + 1
           const card = pullCard(s.ownedRelics, pity >= PITY_PULLS)
           const isNew = !s.ownedRelics.includes(card.id)
-          const refund = isNew ? 0 : dupRefund(card.rarity)
+          const refund = isNew ? 0 : dupRefund(card.rarity, s.rpg.best)
           if (isNew) pity = 0
           const patch: Partial<Store> = {
-            gold: s.gold - RELIC_COST + refund,
+            gold: s.gold - cost + refund,
             ownedRelics: isNew ? [...s.ownedRelics, card.id] : s.ownedRelics, // 중복은 스택 안 쌓음(환불만)
             pulls: s.pulls + 1,
             pullsSinceEpic: pity,
@@ -301,7 +350,8 @@ export const useStore = create<Store>()(
 
       pullRelic10: () =>
         set((s) => {
-          if (s.gold < RELIC_COST_10) return s
+          const cost = relicCost10(s.rpg.best)
+          if (s.gold < cost) return s
           let pity = s.pullsSinceEpic
           const owned = [...s.ownedRelics]
           const ids: string[] = []
@@ -312,7 +362,7 @@ export const useStore = create<Store>()(
             const card = pullCard(owned, pity >= PITY_PULLS)
             fresh.push(!owned.includes(card.id))
             if (owned.includes(card.id)) {
-              refund += dupRefund(card.rarity) // 중복: 환불만, 스택 안 쌓음
+              refund += dupRefund(card.rarity, s.rpg.best) // 중복: 환불만, 스택 안 쌓음
             } else {
               pity = 0
               owned.push(card.id) // 신규만 도감에 추가
@@ -320,7 +370,7 @@ export const useStore = create<Store>()(
             ids.push(card.id)
           }
           const patch: Partial<Store> = {
-            gold: s.gold - RELIC_COST_10 + refund,
+            gold: s.gold - cost + refund,
             ownedRelics: owned,
             pulls: s.pulls + 10,
             pullsSinceEpic: pity,
@@ -339,7 +389,8 @@ export const useStore = create<Store>()(
           if (!def || !q || q.claimed || q.progress < def.target) return s
           const items = s.quests.items.map((x) => (x.id === id ? { ...x, claimed: true } : x))
           const xp = s.xp + def.xp
-          const patch: Partial<Store> = { gold: s.gold + def.gold, xp, level: levelOf(xp), quests: { ...s.quests, items } }
+          const gold = Math.round(def.gold * rewardScale(s.rpg.best))
+          const patch: Partial<Store> = { gold: s.gold + gold, xp, level: levelOf(xp), quests: { ...s.quests, items } }
           return { ...patch, ...withAchievements({ ...s, ...patch }) }
         }),
 
@@ -378,11 +429,76 @@ export const useStore = create<Store>()(
       removeRecentSearch: (q) => set((s) => ({ recentSearches: s.recentSearches.filter((x) => x !== q) })),
       clearRecentSearches: () => set({ recentSearches: [] }),
 
+      // ── 라운지 RPG ──
+      // 몬스터 처치: 골드 지급 + 스테이지 진행(파밍 중이면 N마리 후 자동 재도전)
+      rpgWin: (gold) =>
+        set((s) => {
+          const r = s.rpg
+          const boss = isBoss(r.stage)
+          let { stage, best, farming, farmCount } = r
+          let newBest = false
+          if (!farming) {
+            if (stage > best) {
+              best = stage
+              newBest = true
+            }
+            stage = stage + 1
+          } else {
+            farmCount++
+            if (r.auto && farmCount >= FARM_RETRY_KILLS) {
+              farming = false
+              farmCount = 0
+              stage = best + 1
+            }
+          }
+          let items = bump(s.quests.items, 'kill')
+          if (newBest) items = bump(items, 'stage')
+          const patch: Partial<Store> = {
+            gold: s.gold + Math.max(0, Math.round(gold)),
+            rpg: { ...r, stage, best, farming, farmCount, kills: r.kills + 1, bosses: r.bosses + (boss ? 1 : 0), lastSeen: Date.now() },
+            quests: { ...s.quests, items },
+          }
+          return { ...patch, ...withAchievements({ ...s, ...patch }) }
+        }),
+      // 패배: 이전 스테이지로 물러나 파밍
+      rpgLose: () =>
+        set((s) => ({
+          rpg: { ...s.rpg, farming: true, farmCount: 0, stage: Math.max(1, Math.min(s.rpg.stage - 1, s.rpg.best)), lastSeen: Date.now() },
+        })),
+      rpgUpgrade: (kind, n) => {
+        const s = get()
+        if (n <= 0) return false
+        const cost = upgradeCostN(kind, s.rpg.lv[kind], n)
+        if (s.gold < cost) return false
+        set((st) => {
+          const patch: Partial<Store> = {
+            gold: st.gold - cost,
+            rpg: { ...st.rpg, lv: { ...st.rpg.lv, [kind]: st.rpg.lv[kind] + n } },
+            quests: { ...st.quests, items: bump(st.quests.items, 'upgrade', n) },
+          }
+          return { ...patch, ...withAchievements({ ...st, ...patch }) }
+        })
+        return true
+      },
+      rpgChallenge: () => set((s) => ({ rpg: { ...s.rpg, farming: false, farmCount: 0, stage: s.rpg.best + 1 } })),
+      rpgSetAuto: (v) => set((s) => ({ rpg: { ...s.rpg, auto: v } })),
+      rpgOffline: (gold, kills) =>
+        set((s) => {
+          const patch: Partial<Store> = {
+            gold: s.gold + Math.max(0, Math.round(gold)),
+            rpg: { ...s.rpg, kills: s.rpg.kills + kills, lastSeen: Date.now() },
+            quests: { ...s.quests, items: bump(s.quests.items, 'kill', kills) },
+          }
+          return { ...patch, ...withAchievements({ ...s, ...patch }) }
+        }),
+      rpgSeen: () => set((s) => ({ rpg: { ...s.rpg, lastSeen: Date.now() } })),
+      rpgCloseIntro: () => set((s) => ({ rpg: { ...s.rpg, intro: false } })),
+
       resetSeason: () => set({ seedMoney: SEED_MONEY, subscriptions: {}, predictions: {}, settledIds: [], escrow: {} }),
     }),
     {
       name: 'ct-save-v6',
-      version: 3,
+      version: 4,
       partialize: (s) => ({ ...s, lastResult: null, relicReveal: null, lastUnlocks: [] }),
       // v2 → v3: darkMode(boolean) → theme. 기존 사용자는 쓰던 테마를 그대로 유지(신규 사용자만 시스템 따름).
       migrate: (persisted, version) => {
@@ -390,6 +506,12 @@ export const useStore = create<Store>()(
         if (version < 3) {
           p.theme = p.darkMode ? 'dark' : 'light'
           delete p.darkMode
+        }
+        if (version < 4) {
+          // 2.0: 경험치 등급 → 스테이지 등급. 기존 레벨만큼 시작 골드로 보상하고 소개 시트를 띄움
+          const legacy = Math.max(0, ((p.level as number) ?? 1) - 1) * 150
+          p.gold = ((p.gold as number) ?? 0) + legacy
+          p.rpg = { ...RPG_DEFAULT, legacy }
         }
         return p as unknown as Store
       },

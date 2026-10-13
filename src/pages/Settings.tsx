@@ -13,7 +13,7 @@ import { Confirm } from '../ui/Sheet'
 import { Card, MenuRow, Segmented, Switch } from '../ui/kit'
 import { ExternalLink, FileText, Info, Mail, Moon, RefreshCw, RotateCcw, Sun } from '../ui/icons'
 
-export const APP_VERSION = '1.0.0' // 다음 출시 versionName 확정 시 함께 변경
+export const APP_VERSION = '2.0.0' // android versionName과 동일하게 유지
 const CONTACT_EMAIL = 'contact@eous.cc'
 const PRIVACY_URL = 'https://app.eous.cc/ipo-hero-privacy'
 

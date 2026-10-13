@@ -1027,3 +1027,9 @@
   margin-left: 2px;
   color: var(--text-2);
 }
+
+/* 시트·다이얼로그는 열릴 때 프로그램으로 포커스를 받으므로 테두리 표시 안 함 */
+.sheet:focus,
+.sheet:focus-visible {
+  outline: none;
+}

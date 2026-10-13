@@ -13,6 +13,7 @@ import { Sheet } from '../ui/Sheet'
 import { Card, ChipTabs, Empty, Progress, StockLogo } from '../ui/kit'
 import { Emoji } from '../ui/Emoji'
 import { Lock } from '../ui/icons'
+import { RARITY_STAT_PCT } from '../game/balance'
 import { IpoRow } from '../components/IpoRow'
 import { betRight } from '../screens/Home'
 
@@ -125,14 +126,19 @@ export function CardDexPage() {
             </div>
             <span className="rarity-label">{RARITY_META[sel.rarity].label}</span>
             <div className="relic-detail-name">{sel.name}</div>
-            {sel.effect.kind !== 'none' ? (
-              <div className="callout brand mt16">
-                <Emoji e="✨" size={20} />
-                <span>보유 효과 · {sel.desc}</span>
-              </div>
-            ) : (
-              <div className="relic-detail-desc">“{sel.desc}”</div>
-            )}
+            {sel.effect.kind === 'none' && <div className="relic-detail-desc">“{sel.desc}”</div>}
+            <div className="callout brand mt16">
+              <Emoji e="✨" size={20} />
+              <span>
+                도감 보너스 · 전체 능력치 +{RARITY_STAT_PCT[sel.rarity]}%
+                {sel.effect.kind !== 'none' && (
+                  <>
+                    <br />
+                    카드 효과 · {sel.desc}
+                  </>
+                )}
+              </span>
+            </div>
           </div>
         </Sheet>
       )}

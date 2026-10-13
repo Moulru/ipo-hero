@@ -7,7 +7,7 @@ import { Sheet } from '../ui/Sheet'
 import { Emoji } from '../ui/Emoji'
 import { Check } from '../ui/icons'
 
-// 투자 성향 — 경험치 보너스에만 영향 (시즌 자산과 무관)
+// 투자 성향 — 라운지 전투 패시브 (시즌 자산·모의청약과 무관)
 export function ClassSheet({ onClose }: { onClose: () => void }) {
   const chosen = useStore((s) => s.chosenClass)
   const choose = useStore((s) => s.chooseClass)
@@ -15,7 +15,7 @@ export function ClassSheet({ onClose }: { onClose: () => void }) {
     <Sheet title="투자 성향" onClose={onClose}>
       {(close) => (
         <>
-          <p className="sheet-lead">성향에 따라 정산 때 받는 경험치 보너스가 달라져요. 모의청약 수익에는 영향이 없어요.</p>
+          <p className="sheet-lead">성향에 따라 라운지 기사의 전투 특성이 달라져요. 언제든 바꿀 수 있고, 모의청약 수익에는 영향이 없어요.</p>
           <div className="choice-list">
             {CLASSES.map((c) => {
               const on = chosen === c.id

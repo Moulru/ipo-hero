@@ -2,7 +2,7 @@ import { Sheet } from '../ui/Sheet'
 import { Emoji } from '../ui/Emoji'
 import { GRADE_META, RARITY_META } from '../lib/calc'
 import { PITY_PULLS, RELICS } from '../data/relics'
-import { RANKS, LEVELS_PER_RANK } from '../data/ranks'
+import { RANKS } from '../data/ranks'
 import type { Rarity } from '../types'
 
 const okBtn = (close: () => void) => (
@@ -127,8 +127,8 @@ export function OddsSheet({ onClose }: { onClose: () => void }) {
       </div>
       <ul className="bullets">
         <li>{PITY_PULLS}회 안에 아직 없는 카드가 반드시 나와요. 등급별 확률은 바뀌지 않아요.</li>
-        <li>이미 가진 카드가 나오면 등급에 따라 골드로 돌려드려요(최대 100골드).</li>
-        <li>카드는 정산 보상(골드·경험치)에만 영향을 주고, 모의청약 수익에는 영향이 없어요.</li>
+        <li>이미 가진 카드가 나오면 등급에 따라 골드로 돌려드려요. 뽑기 비용과 환불은 최고 스테이지에 맞춰 함께 커져요.</li>
+        <li>카드는 라운지 전투(도감 보너스·공격력·골드)에만 영향을 주고, 모의청약 수익에는 영향이 없어요.</li>
         <li>골드는 앱 안에서만 쓰는 가상 재화예요. 현금으로 구매하거나 바꿀 수 없어요.</li>
       </ul>
     </Sheet>
@@ -140,8 +140,7 @@ export function RankSheet({ index, onClose }: { index: number; onClose: () => vo
   return (
     <Sheet title="투자자 등급" onClose={onClose} footer={okBtn}>
       <p className="sheet-lead">
-        등급마다 {LEVELS_PER_RANK}레벨이 있고, Lv.{LEVELS_PER_RANK}를 넘기면 다음 등급으로 올라가요. 출석·퀘스트·모의청약 정산으로 경험치를
-        모을 수 있어요.
+        라운지 전투에서 돌파한 최고 스테이지로 등급이 정해져요. 기사를 강화하고, 모의청약으로 시즌 자산을 불려 전투력을 높여 보세요.
       </p>
       <div className="rank-ladder">
         {RANKS.map((r, i) => (
@@ -149,10 +148,7 @@ export function RankSheet({ index, onClose }: { index: number; onClose: () => vo
             <Emoji e={r.emoji} size={36} />
             <div className="rank-step-txt">
               <div className="fw6">{r.name}</div>
-              <div className="t3 fs13">
-                Lv.{i * LEVELS_PER_RANK + 1}
-                {i < RANKS.length - 1 ? ` ~ ${(i + 1) * LEVELS_PER_RANK}` : ' 이상'}
-              </div>
+              <div className="t3 fs13">{r.minStage === 0 ? '시작 등급' : `스테이지 ${r.minStage} 돌파`}</div>
             </div>
             {i === index && <span className="pill tone-brand sm">현재</span>}
             {i < index && <span className="pill tone-muted sm">달성</span>}

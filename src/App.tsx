@@ -20,6 +20,8 @@ import { SearchPage } from './pages/Search'
 import { LicensesPage, SettingsPage } from './pages/Settings'
 import { AchievementsPage, CardDexPage, IpoDexPage, ListedPage, MyBetsPage } from './pages/Collections'
 import { CardReveal, SettleResult } from './overlays/Overlays'
+import { computeOffline, startGame } from './game/engine'
+import { OfflineSheet } from './sheets/GameSheets'
 
 export default function App() {
   const tick = useStore((s) => s.tick)
@@ -34,6 +36,7 @@ export default function App() {
   const stack = useNavStack()
 
   const [tab, setTab] = useState<Tab>('home')
+  const [offline, setOffline] = useState<{ sec: number; kills: number; gold: number } | null>(null)
   // 한 번 방문한 탭은 마운트 유지(스크롤 위치·입력 상태 보존)
   const [visited, setVisited] = useState<Set<Tab>>(() => new Set(['home']))
   const tabRef = useRef(tab)
@@ -50,6 +53,17 @@ export default function App() {
   useEffect(() => {
     preloadEmoji(['🎰', '📦', '🎉', '😢', '🙂', '😅', '🎯', '💨', '🪙', '⭐', '🎁', '✅', '👌', '📡'])
     refreshIpos()
+    // 라운지 RPG: 자리를 비운 동안의 보상 정산 후 전투 루프 시작
+    const settleOffline = () => {
+      const o = computeOffline()
+      const st = useStore.getState()
+      if (o) {
+        st.rpgOffline(o.gold, o.kills)
+        setOffline(o)
+      } else st.rpgSeen()
+    }
+    settleOffline()
+    startGame()
     // 뒤로가기: (오버레이·페이지는 backStack이 먼저 처리) → 홈 탭이 아니면 홈으로 → 앱 종료
     setupNative(() => {
       if (tabRef.current !== 'home') {
@@ -60,11 +74,17 @@ export default function App() {
     })
     // 백그라운드 복귀 시 데이터 자동 갱신 + 날짜 롤오버(출석·퀘스트) 반영
     onResume(() => {
+      settleOffline()
       refreshIpos()
       tick()
     })
     const onVis = () => {
+      if (document.visibilityState === 'hidden') {
+        useStore.getState().rpgSeen() // 방치 보상 기준 시각
+        return
+      }
       if (document.visibilityState === 'visible') {
+        settleOffline()
         refreshIpos()
         tick()
       }
@@ -101,7 +121,7 @@ export default function App() {
           <section key={t} className="tab-view" hidden={tab !== t} aria-hidden={tab !== t || stack.length > 0}>
             {t === 'home' && <Home today={today} />}
             {t === 'calendar' && <CalendarTab today={today} />}
-            {t === 'lounge' && <Lounge today={today} />}
+            {t === 'lounge' && <Lounge today={today} active={tab === 'lounge' && !stack.some((e) => !e.closing)} />}
             {t === 'my' && <MyTab />}
           </section>
         ) : null
@@ -122,6 +142,7 @@ export default function App() {
 
       {relicReveal && <CardReveal />}
       {lastResult && <SettleResult />}
+      {offline && <OfflineSheet {...offline} onClose={() => setOffline(null)} />}
       <ToastHost />
     </div>
   )

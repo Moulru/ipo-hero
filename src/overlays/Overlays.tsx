@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useStore } from '../store'
 import { relicById } from '../data/relics'
-import { rankInfo } from '../data/ranks'
+import { fmtBig } from '../game/balance'
 import type { Relic } from '../types'
 import { OUTCOME_META, RARITY_META, returnColor, signedPct } from '../lib/calc'
 import { fmtWon } from '../lib/format'
@@ -37,7 +37,6 @@ export function SettleResult() {
 
   const pos = r.profit > 0
   const emoji = phase < 1 ? '🎰' : r.allocatedShares === 0 ? '😅' : phase < 2 ? '📦' : pos ? '🎉' : r.profit < 0 ? '😢' : '🙂'
-  const lv = rankInfo(r.newLevel)
 
   return createPortal(
     <div className={'result-root' + (leaving ? ' leaving' : '')} role="dialog" aria-modal="true" aria-label="정산 결과">
@@ -110,23 +109,10 @@ export function SettleResult() {
             <div className="result-card rewards">
               <div className="rew">
                 <Emoji e="🪙" size={28} />
-                <span>골드</span>
-                <b className="num">+{r.goldGain.toLocaleString()}</b>
+                <span>라운지 골드{r.comboMult > 1 ? ` · 연속 적중 ×${r.comboMult.toFixed(1)}` : ''}</span>
+                <b className="num">+{fmtBig(r.goldGain)}</b>
               </div>
-              <div className="rew">
-                <Emoji e="⭐" size={28} />
-                <span>경험치</span>
-                <b className="num">+{r.xpGain.toLocaleString()}</b>
-              </div>
-              {r.leveledUp && (
-                <div className="rew lvup">
-                  <Emoji e={lv.rank.emoji} size={28} />
-                  <span>
-                    {lv.rank.name} Lv.{lv.rankLevel} 달성
-                  </span>
-                  <b>레벨 업!</b>
-                </div>
-              )}
+              <p className="rew-note">골드로 라운지 기사를 강화할 수 있어요</p>
             </div>
           )}
         </div>
