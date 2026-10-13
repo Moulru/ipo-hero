@@ -175,7 +175,7 @@ export function SearchPage() {
                 ))}
               </div>
             </section>
-            <p className="search-tip">초성으로도 찾을 수 있어요 · 예) ㅋㅇㅇ</p>
+            <p className="search-tip">초성으로도 찾을 수 있어요. 예: ㅋㅇㅇ</p>
           </div>
         ) : results.length ? (
           <>

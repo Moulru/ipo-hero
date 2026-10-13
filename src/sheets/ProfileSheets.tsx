@@ -15,7 +15,7 @@ export function ClassSheet({ onClose }: { onClose: () => void }) {
     <Sheet title="투자 성향" onClose={onClose}>
       {(close) => (
         <>
-          <p className="sheet-lead">성향에 따라 라운지 기사의 전투 특성이 달라져요. 언제든 바꿀 수 있고, 모의청약 수익에는 영향이 없어요.</p>
+          <p className="sheet-lead">성향마다 라운지 기사의 전투 특성이 달라요. 언제든 바꿀 수 있고, 모의청약 수익과는 관계없어요.</p>
           <div className="choice-list">
             {CLASSES.map((c) => {
               const on = chosen === c.id

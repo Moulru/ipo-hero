@@ -28,7 +28,7 @@ export function IpoDexPage() {
     <Page title="공모주 도감">
       <div className="page-hero">
         <div className="page-hero-num num">{collected.length}종</div>
-        <div className="t3 fs14">모의청약을 정산한 공모주가 등급별로 모여요</div>
+        <div className="t3 fs14">모의청약을 정산한 공모주가 여기에 모여요</div>
       </div>
       {!collected.length ? (
         <Card>
@@ -265,7 +265,7 @@ export function ListedPage() {
             </span>
           </div>
           <p className="ls-note">
-            평균은 소수의 급등 종목에 크게 끌려가서 중앙값으로 보여드려요 · {fmtMD(stats.from)} ~ {fmtMD(stats.to)} 상장 기준
+            몇몇 급등 종목에 평균이 끌려가지 않도록 중앙값으로 보여 드려요. {fmtMD(stats.from)}–{fmtMD(stats.to)} 상장 종목 기준이에요.
           </p>
         </Card>
       )}

@@ -101,7 +101,7 @@ function Detail({ ipo, all, today, initialTab }: { ipo: Ipo; all: Ipo[]; today: 
       ipo.institutionalRate ? `기관 경쟁률 ${fmtRate(ipo.institutionalRate)}` : null,
       ipo.underwriter ? `증권사 ${underwriters(ipo).join(', ')}` : null,
       '',
-      '공모주 히어로에서 확인했어요',
+      '공모주 히어로',
     ]
       .filter((x) => x != null)
       .join('\n')
@@ -343,7 +343,7 @@ function InfoTab({ ipo, all, stage, today, onHelp }: { ipo: Ipo; all: Ipo[]; sta
       )}
 
       <div className="d-disclaimer">
-        공개 자료(DART·KIND 등)를 바탕으로 정리한 정보로, 실제와 다르거나 늦게 반영될 수 있어요. 청약 전 증권사 공지를 꼭 확인해 주세요.
+        DART, KIND 등 공개 자료를 모은 정보라 실제와 다르거나 늦을 수 있어요. 청약하기 전에 증권사 공지를 확인해 주세요.
       </div>
     </div>
   )
@@ -481,7 +481,7 @@ function SimTab({ ipo, stage, mode, today, onHelp }: { ipo: Ipo; stage: Stage; m
             {listed
               ? '모의청약은 청약 중이거나 상장 전인 종목에서 할 수 있어요.'
               : ipo.subscriptionStart
-              ? `${fmtMDW(ipo.subscriptionStart)}부터 가상 머니로 청약하고 상장일 수익률을 예측해 보세요.`
+              ? `${fmtMDW(ipo.subscriptionStart)}부터 가상 머니로 청약할 수 있어요.`
               : '청약 일정이 정해지면 가상 머니로 청약해 볼 수 있어요.'}
           </div>
         </div>
@@ -507,12 +507,12 @@ function SimTab({ ipo, stage, mode, today, onHelp }: { ipo: Ipo; stage: Stage; m
           </div>
           <div className="sim-state-desc">
             {mode === 'settled'
-              ? '실제 상장 결과로 시즌 자산에 반영됐어요.'
+              ? '실제 상장 결과가 시즌 자산에 반영됐어요.'
               : mode === 'locked'
               ? isDday
                 ? '상장일에는 수정할 수 없어요. 내일 실제 종가로 정산돼요.'
                 : '상장 결과가 집계되면 바로 정산할 수 있어요.'
-              : '실제 상장 결과로 배정과 수익을 확인해 보세요.'}
+              : '배정받은 주식 수와 수익을 확인해 보세요.'}
           </div>
         </div>
         <section className="d-sec">
@@ -559,7 +559,7 @@ function SimTab({ ipo, stage, mode, today, onHelp }: { ipo: Ipo; stage: Stage; m
 
       <section className="d-sec">
         <h3 className="d-sec-title">상장일에 어떻게 될까요?</h3>
-        <p className="d-sec-desc">공모가 대비 상장일 종가를 예측해요. 맞히면 보상이 커져요.</p>
+        <p className="d-sec-desc">상장일 종가가 공모가보다 얼마나 오를지 골라 주세요. 맞히면 골드를 더 받아요.</p>
         <div className="opt-grid">
           {OUTCOMES.map((o) => {
             const m = OUTCOME_META[o]
@@ -642,7 +642,7 @@ function SimTab({ ipo, stage, mode, today, onHelp }: { ipo: Ipo; stage: Stage; m
             muted={expected == null}
           />
         </div>
-        {expected == null && <p className="t3 fs13 mt8">통합 경쟁률이 나오면 예상 배정 주수를 알려드려요.</p>}
+        {expected == null && <p className="t3 fs13 mt8">통합 경쟁률이 나오면 예상 배정 주식 수를 알려 드려요.</p>}
       </section>
 
       <div className="callout mx">
@@ -751,7 +751,7 @@ function SimFooter({ ipo, mode }: { ipo: Ipo; mode: Mode }) {
         onClick={() => {
           setSubscription(ipo.id, shares, deposit)
           haptic([10, 40, 10])
-          toast(editing ? `${shares.toLocaleString()}주로 수정했어요` : `${shares.toLocaleString()}주 모의청약을 완료했어요`, '🎉')
+          toast(editing ? `${shares.toLocaleString()}주로 수정했어요` : `${shares.toLocaleString()}주 모의청약했어요`, '🎉')
         }}
       >
         {unchanged ? '청약 완료' : editing ? '수정하기' : `${shares.toLocaleString()}주 청약하기`}

@@ -57,10 +57,10 @@ export const STAGE_META: Record<Stage, { label: string; tone: 'brand' | 'neutral
 
 // 공모주 '수요 등급' 표기 — rarity(수요 중심 산정, 도메인 규칙 3)를 정보 앱 언어로. 스팩은 등급 대신 '스팩'.
 export const GRADE_META: Record<Rarity, { grade: string; label: string; desc: string }> = {
-  legendary: { grade: 'S', label: '매우 높음', desc: '기관·청약 수요와 확약이 모두 최상위권' },
-  epic: { grade: 'A', label: '높음', desc: '수요 지표 대부분이 평균을 크게 웃돎' },
-  rare: { grade: 'B', label: '보통', desc: '수요 지표가 평균 수준' },
-  common: { grade: 'C', label: '낮음', desc: '수요 지표가 평균 이하이거나 아직 미확정' },
+  legendary: { grade: 'S', label: '매우 높음', desc: '기관·청약 수요와 확약 비율이 모두 최상위권이에요' },
+  epic: { grade: 'A', label: '높음', desc: '대부분의 수요 지표가 평균보다 높아요' },
+  rare: { grade: 'B', label: '보통', desc: '수요 지표가 평균 수준이에요' },
+  common: { grade: 'C', label: '낮음', desc: '수요 지표가 평균보다 낮거나 아직 안 나왔어요' },
 }
 
 // 가챠: 기대 배정(경쟁률 기반)에 운(±)을 곱해 실제 배정 결정 — 카드/클래스 영향 없음(순수)
@@ -91,8 +91,8 @@ export function outcomeFromReturn(r: number): PredictionChoice {
 // 색은 CSS 변수(테마 대응) — 국내 관례: 상승=빨강, 하락=파랑
 export const OUTCOME_META: Record<PredictionChoice, { label: string; range: string; color: string; emoji: string }> = {
   ttassang: { label: '따상', range: '+100% 이상', color: 'var(--up)', emoji: '🚀' },
-  up: { label: '상승', range: '+10% ~ +100%', color: 'var(--up)', emoji: '📈' },
-  flat: { label: '공모가 근처', range: '-10% ~ +10%', color: 'var(--text-2)', emoji: '⚖️' },
+  up: { label: '상승', range: '+10–100%', color: 'var(--up)', emoji: '📈' },
+  flat: { label: '공모가 근처', range: '-10–+10%', color: 'var(--text-2)', emoji: '⚖️' },
   down: { label: '하락', range: '-10% 이하', color: 'var(--down)', emoji: '📉' },
 }
 

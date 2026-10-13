@@ -88,7 +88,7 @@ function BattleCard({ active }: { active: boolean }) {
           <>
             <span className="farm-chip">
               <Emoji e="⛏️" size={18} />
-              재정비 중{rpg.auto ? ` · ${rpg.farmCount}/${FARM_RETRY_KILLS}마리 후 재도전` : ''}
+              골드 모으는 중{rpg.auto ? ` · ${rpg.farmCount}/${FARM_RETRY_KILLS}마리 잡으면 재도전` : ''}
             </span>
             <button
               className="btn btn-sm btn-primary"
@@ -102,7 +102,7 @@ function BattleCard({ active }: { active: boolean }) {
             </button>
           </>
         ) : (
-          <span className="t3 fs13">화면을 탭하면 추가로 공격해요</span>
+          <span className="t3 fs13">화면을 탭하면 한 번 더 공격해요</span>
         )}
         <span className="auto-row">
           <span className="fs13 t2">자동 재도전</span>
@@ -132,7 +132,7 @@ function Upgrades() {
       <div className="card-head">
         <div className="card-head-txt">
           <h2 className="card-title">능력치 강화</h2>
-          <div className="card-sub">10레벨마다 능력치가 2배로 뛰어요 · 길게 누르면 연속 강화</div>
+          <div className="card-sub">10레벨마다 능력치가 2배가 돼요. 길게 누르면 계속 강화해요</div>
         </div>
       </div>
       <div className="amount-seg">
@@ -179,7 +179,7 @@ function UpgradeRow({ kind, amount }: { kind: StatKind; amount: Amount }) {
       haptic(6)
       if (Math.floor((s.rpg.lv[kind] + nn) / 10) > Math.floor(s.rpg.lv[kind] / 10)) {
         haptic([10, 30, 10])
-        toast(`${m.label} 돌파! 능력치가 2배가 됐어요`, '✨')
+        toast(`${m.label}이 2배가 됐어요`, '✨')
       }
     }
     return ok
@@ -260,7 +260,6 @@ function Bonuses() {
     <Card pad={false}>
       <CardHead
         title="전투 보너스"
-        sub="모의청약 실력이 곧 전투력이에요"
         right={
           <button className="help-btn" onClick={() => setHelp(true)} aria-label="보너스 설명">
             <CircleHelp size={18} strokeWidth={2.2} />
@@ -281,7 +280,7 @@ function Bonuses() {
           <span className="bonus-txt">
             <span className="fw6">카드 도감</span>
             <span className="t3 fs13">
-              {owned}/{RELICS.length}장 보유 · 카드 효과 별도
+              {owned}/{RELICS.length}장 모음
             </span>
           </span>
           <b className="num t-brand">+{stats.collection}%</b>
@@ -320,7 +319,7 @@ function RankCard() {
         <Progress value={progress * 100} max={100} height={10} />
         <div className="rank-xp-row">
           <span className="t3 fs13 num">최고 스테이지 {best}</span>
-          <span className="t3 fs13">{isMaxRank ? '최고 등급이에요' : next ? `스테이지 ${next.minStage} 돌파 시 ${next.name}` : ''}</span>
+          <span className="t3 fs13">{isMaxRank ? '최고 등급이에요' : next ? `스테이지 ${next.minStage}부터 ${next.name}` : ''}</span>
         </div>
       </div>
       {open && <RankSheet index={index} onClose={() => setOpen(false)} />}
@@ -346,7 +345,7 @@ function CheckIn({ today }: { today: string }) {
             출석 체크 <span className="streak-badge">{streak}일 연속</span>
           </>
         }
-        sub={claimed ? '오늘 보상을 받았어요. 내일 또 만나요!' : '보상은 최고 스테이지에 맞춰 커져요'}
+        sub={claimed ? '오늘 보상을 받았어요' : '최고 스테이지가 높을수록 보상이 커져요'}
       />
       <div className="week-strip">
         {Array.from({ length: 7 }, (_, i) => {
@@ -391,7 +390,7 @@ function Quests() {
   const scale = rewardScale(best)
   return (
     <Card>
-      <CardHead title="오늘의 퀘스트" sub={`${doneCount}/${quests.items.length} 완료 · 매일 자정에 바뀌어요`} />
+      <CardHead title="오늘의 퀘스트" sub={`${doneCount}/${quests.items.length} 완료 · 자정에 새로 바뀌어요`} />
       <div className="card-list">
         {quests.items.map((q) => {
           const def = questById(q.id)
@@ -460,7 +459,7 @@ function CardDraw() {
           </span>
         </div>
         <div className="draw-title">투자 카드 뽑기</div>
-        <div className="draw-sub">{complete ? '100종을 모두 모았어요. 축하해요!' : '카드를 모을수록 전체 능력치가 올라가요'}</div>
+        <div className="draw-sub">{complete ? '카드 100종을 모두 모았어요' : '모은 카드만큼 전체 능력치가 올라가요'}</div>
       </div>
 
       {!complete && (
@@ -497,8 +496,8 @@ function CardDraw() {
       </div>
       {!complete && (
         <p className="draw-hint">
-          {gold < c1 ? '몬스터를 처치하고 퀘스트를 완료해 골드를 모아요 · ' : ''}1회 = 지금 스테이지 몬스터 약{' '}
-          {Math.max(1, Math.round(c1 / Math.max(1, monsterAt(Math.max(1, best)).gold)))}마리분
+          {gold < c1 ? '골드가 부족해요. ' : ''}몬스터 약 {Math.max(1, Math.round(c1 / Math.max(1, monsterAt(Math.max(1, best)).gold)))}
+          마리를 잡으면 1회 뽑을 수 있어요
         </p>
       )}
 

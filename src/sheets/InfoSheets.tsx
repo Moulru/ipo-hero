@@ -7,7 +7,7 @@ import type { Rarity } from '../types'
 
 const okBtn = (close: () => void) => (
   <button className="btn btn-primary btn-lg" onClick={close}>
-    확인했어요
+    확인
   </button>
 )
 
@@ -17,8 +17,7 @@ export function GradeSheet({ onClose }: { onClose: () => void }) {
   return (
     <Sheet title="수요 등급 안내" onClose={onClose} footer={okBtn}>
       <p className="sheet-lead">
-        <b>기관 수요예측 경쟁률 · 통합 청약경쟁률 · 의무보유확약 비율</b>을 핵심으로, 공모 규모를 함께 반영해 매겨요. 스팩은 등급을 매기지
-        않아요.
+        기관 수요예측 경쟁률, 통합 청약 경쟁률, 의무보유확약 비율을 중심으로 보고 공모 규모도 함께 따져요. 스팩은 등급을 매기지 않아요.
       </p>
       <div className="grade-table">
         {order.map((r) => {
@@ -36,7 +35,7 @@ export function GradeSheet({ onClose }: { onClose: () => void }) {
       </div>
       <div className="callout">
         <Emoji e="💡" size={20} />
-        <span>등급은 공개 지표를 정리한 참고 정보예요. 상장 후 수익을 보장하지 않으며 투자 권유가 아니에요.</span>
+        <span>등급은 공개 지표로 계산한 참고용이에요. 상장 후 수익을 보장하지 않아요.</span>
       </div>
     </Sheet>
   )
@@ -139,9 +138,7 @@ export function OddsSheet({ onClose }: { onClose: () => void }) {
 export function RankSheet({ index, onClose }: { index: number; onClose: () => void }) {
   return (
     <Sheet title="투자자 등급" onClose={onClose} footer={okBtn}>
-      <p className="sheet-lead">
-        라운지 전투에서 돌파한 최고 스테이지로 등급이 정해져요. 기사를 강화하고, 모의청약으로 시즌 자산을 불려 전투력을 높여 보세요.
-      </p>
+      <p className="sheet-lead">라운지에서 깬 최고 스테이지로 등급이 정해져요.</p>
       <div className="rank-ladder">
         {RANKS.map((r, i) => (
           <div key={r.name} className={'rank-step' + (i === index ? ' cur' : i < index ? ' done' : '')}>

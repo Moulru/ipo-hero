@@ -36,7 +36,7 @@ export function SettingsPage() {
           <div className="menu-row col">
             <span className="menu-txt">
               <span className="menu-label">테마</span>
-              <span className="menu-sub">시스템 설정을 따르면 기기 테마에 맞춰 바뀌어요</span>
+              <span className="menu-sub">시스템을 고르면 기기 설정을 따라요</span>
             </span>
             <Segmented<ThemeMode>
               size="sm"
@@ -95,7 +95,7 @@ export function SettingsPage() {
             }}
             chevron={false}
           />
-          <p className="settings-note">공모주 정보는 30분마다 자동으로 모아요. 앱을 다시 열 때도 최신 정보를 불러와요.</p>
+          <p className="settings-note">공모주 정보는 30분마다 자동으로 업데이트돼요.</p>
         </Card>
 
         <div className="menu-group-title">모의청약</div>
@@ -125,10 +125,7 @@ export function SettingsPage() {
 
         <div className="settings-foot">
           <p>공모주 히어로는 개인정보를 수집하지 않아요. 모든 기록은 이 기기에만 저장돼요.</p>
-          <p>
-            정보 제공과 가상 모의청약을 위한 서비스로, 투자 자문이나 권유가 아니에요. 데이터는 DART·KIND 등 공개 자료를 바탕으로 하며
-            지연되거나 다를 수 있어요.
-          </p>
+          <p>투자 자문이나 권유를 하지 않아요. 정보는 DART, KIND 등 공개 자료에서 가져오며 늦거나 다를 수 있어요.</p>
         </div>
       </div>
 
@@ -170,7 +167,7 @@ const LICENSES: { name: string; license: string; by: string; url: string }[] = [
 export function LicensesPage() {
   return (
     <Page title="오픈소스 라이선스">
-      <p className="page-lead">공모주 히어로는 아래 오픈소스 소프트웨어와 리소스를 사용해요. 만들어 주신 분들께 감사드려요.</p>
+      <p className="page-lead">공모주 히어로에 쓰인 오픈소스 소프트웨어와 리소스예요.</p>
       <Card pad={false}>
         {LICENSES.map((l) => (
           <MenuRow key={l.name} label={l.name} sub={`${l.license} · ${l.by}`} href={l.url} />

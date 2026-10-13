@@ -62,7 +62,7 @@ export function Home({ today }: { today: string }) {
       {status === 'error' && (
         <button className="offline-bar" onClick={() => manualRefresh()}>
           <WifiOff size={16} strokeWidth={2.2} />
-          <span>최신 정보를 불러오지 못했어요. 저장된 정보를 보여드려요</span>
+          <span>최신 정보를 불러오지 못해 저장된 정보를 보여 드리고 있어요</span>
           <b>다시 시도</b>
         </button>
       )}
@@ -84,10 +84,8 @@ export function Home({ today }: { today: string }) {
       </Card>
 
       <footer className="home-foot">
-        <p>
-          공모주 히어로는 공모주 정보를 모아 보여주는 정보 서비스이며, 투자 자문이나 권유가 아니에요. 모의청약은 가상 머니로만 진행돼요.
-        </p>
-        <p>정보 출처 · 금융감독원 DART, 한국거래소 KIND 등 공개 자료 (지연·오류가 있을 수 있어요)</p>
+        <p>공모주 히어로는 공모주 정보를 모아 보여 주는 앱이에요. 투자를 권유하지 않으며, 모의청약은 가상 머니로만 해요.</p>
+        <p>금융감독원 DART, 한국거래소 KIND 등 공개 자료를 모았어요. 늦게 반영되거나 틀릴 수 있어요.</p>
       </footer>
 
       {gradeOpen && <GradeSheet onClose={() => setGradeOpen(false)} />}
@@ -223,7 +221,7 @@ function TodayCard({ staged, today }: { staged: { ipo: Ipo; stage: Stage }[]; to
   if (!rows.length) return null
   return (
     <Card>
-      <CardHead title="오늘 일정" sub="놓치지 않게 챙겨 드릴게요" />
+      <CardHead title="오늘 일정" />
       <div className="card-list">
         {rows.map((r) => (
           <IpoRow
@@ -252,7 +250,7 @@ function MyBets({ staged, today }: { staged: { ipo: Ipo; stage: Stage }[]; today
     <Card>
       <CardHead
         title={<>내 모의청약 {ready > 0 && <span className="pill tone-up sm head-pill">정산 {ready}건</span>}</>}
-        sub="상장 다음 날, 실제 결과로 정산돼요"
+        sub="상장 다음 날 실제 종가로 정산돼요"
         onMore={mine.length > 3 ? () => nav.push({ k: 'myBets' }) : undefined}
       />
       <div className="card-list">
@@ -352,7 +350,7 @@ function ScheduleCard({ lists, today }: { lists: Record<Sched, Ipo[]>; today: st
                 ? '예정된 청약이 없어요'
                 : '상장 예정 종목이 없어요'
             }
-            desc={cur === 'subscription' && lists.upcoming.length ? '청약 예정 탭에서 다음 일정을 확인해 보세요' : undefined}
+            desc={cur === 'subscription' && lists.upcoming.length ? '청약 예정에서 다음 일정을 볼 수 있어요' : undefined}
           />
         ) : null}
         {spacOpen && spacs.map((i) => <IpoRow key={i.id} ipo={i} stage={cur} today={today} />)}

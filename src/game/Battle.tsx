@@ -76,7 +76,7 @@ export function Battle({ active, onTap }: { active: boolean; onTap?: () => void 
     <div className="battle-canvas" ref={wrap}>
       <canvas
         ref={ref}
-        aria-label="전투 화면 — 탭하면 추가 공격"
+        aria-label="전투 화면. 탭하면 한 번 더 공격해요"
         role="img"
         onPointerDown={() => {
           if (tapAttack()) onTap?.()
@@ -244,7 +244,7 @@ function render(ctx: CanvasRenderingContext2D, k: number) {
     ctx.font = `800 ${Math.round(9 * k)}px 'Pretendard Variable', sans-serif`
     ctx.textAlign = 'center'
     ctx.fillStyle = '#fff'
-    ctx.fillText('후퇴! 이전 스테이지에서 재정비해요', (LW / 2) * k, 40 * k)
+    ctx.fillText('후퇴해서 한 스테이지 뒤로 물러나요', (LW / 2) * k, 40 * k)
     ctx.globalAlpha = 1
   }
   ctx.restore()

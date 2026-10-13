@@ -64,7 +64,7 @@ export function MyTab() {
           <span className="asset-unit">원</span>
         </div>
         <div className="asset-pnl num" style={{ color: returnColor(pnl) }}>
-          {pnl === 0 ? '시작 자산 그대로예요' : `${pnl > 0 ? '+' : ''}${fmtWon(pnl)} (${pnl > 0 ? '+' : ''}${pnlPct.toFixed(2)}%)`}
+          {pnl === 0 ? '시작 자산과 같아요' : `${pnl > 0 ? '+' : ''}${fmtWon(pnl)} (${pnl > 0 ? '+' : ''}${pnlPct.toFixed(2)}%)`}
         </div>
         <div className="asset-split">
           <div>

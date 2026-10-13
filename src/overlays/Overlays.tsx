@@ -98,7 +98,7 @@ export function SettleResult() {
                   <Emoji e={r.predictionCorrect ? '🎯' : '💨'} size={22} />
                   <span>
                     예측 ‘{OUTCOME_META[r.prediction].label}’{' '}
-                    {r.predictionCorrect ? '적중했어요!' : `→ 실제 ‘${OUTCOME_META[r.realOutcome].label}’`}
+                    {r.predictionCorrect ? '맞혔어요' : `→ 실제 ‘${OUTCOME_META[r.realOutcome].label}’`}
                   </span>
                   {r.predictionCorrect && r.combo > 1 && <span className="pill tone-up sm">{r.combo}연속</span>}
                 </div>
@@ -112,7 +112,7 @@ export function SettleResult() {
                 <span>라운지 골드{r.comboMult > 1 ? ` · 연속 적중 ×${r.comboMult.toFixed(1)}` : ''}</span>
                 <b className="num">+{fmtBig(r.goldGain)}</b>
               </div>
-              <p className="rew-note">골드로 라운지 기사를 강화할 수 있어요</p>
+              <p className="rew-note">라운지에서 기사를 강화할 때 쓸 수 있어요</p>
             </div>
           )}
         </div>
