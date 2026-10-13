@@ -20,7 +20,7 @@ import { SearchPage } from './pages/Search'
 import { LicensesPage, SettingsPage } from './pages/Settings'
 import { AchievementsPage, CardDexPage, IpoDexPage, ListedPage, MyBetsPage } from './pages/Collections'
 import { CardReveal, SettleResult } from './overlays/Overlays'
-import { computeOffline, startGame } from './game/engine'
+import { computeOffline, game, startGame } from './game/engine'
 import { fmtBig, rewardScale } from './game/balance'
 import { OfflineSheet } from './sheets/GameSheets'
 
@@ -177,4 +177,4 @@ function renderRoute(r: Route) {
 }
 
 // 개발 편의: 콘솔에서 페이지 열기 (window.__nav.push({k:'settings'}))
-if (import.meta.env.DEV) (window as unknown as { __nav: typeof nav }).__nav = nav
+if (import.meta.env.DEV) Object.assign(window as object, { __nav: nav, __game: game })

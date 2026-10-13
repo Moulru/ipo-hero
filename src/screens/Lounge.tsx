@@ -102,7 +102,7 @@ function BattleCard({ active }: { active: boolean }) {
             </button>
           </>
         ) : (
-          <span className="t3 fs13">화면을 탭하면 한 번 더 공격해요</span>
+          <span className="t3 fs13">탭하면 한 번 더 공격해요</span>
         )}
         <span className="auto-row">
           <span className="fs13 t2">자동 재도전</span>
