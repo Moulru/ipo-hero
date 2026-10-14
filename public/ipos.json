@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T11:20:57.122Z",
+  "generatedAt": "2026-10-14T15:55:18.925Z",
   "count": 58,
   "ipos": [
     {
@@ -222,9 +222,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 13000,
-      "priceLow": 10500,
-      "priceHigh": 13000,
+      "offerPrice": 9867,
+      "priceLow": 1128,
+      "priceHigh": 9867,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
@@ -294,9 +294,9 @@
       "id": "n2321",
       "name": "엠비디",
       "sector": "기타",
-      "offerPrice": 11700,
-      "priceLow": 9600,
-      "priceHigh": 11700,
+      "offerPrice": 11500,
+      "priceLow": 9400,
+      "priceHigh": 11500,
       "priceConfirmed": false,
       "subscriptionStart": "2026-10-28",
       "subscriptionEnd": "2026-10-29",
