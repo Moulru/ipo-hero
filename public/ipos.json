@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T15:55:18.925Z",
+  "generatedAt": "2026-10-14T20:01:52.739Z",
   "count": 58,
   "ipos": [
     {
@@ -222,9 +222,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 9867,
-      "priceLow": 1128,
-      "priceHigh": 9867,
+      "offerPrice": 13000,
+      "priceLow": 10500,
+      "priceHigh": 13000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
@@ -294,9 +294,9 @@
       "id": "n2321",
       "name": "엠비디",
       "sector": "기타",
-      "offerPrice": 11500,
-      "priceLow": 9400,
-      "priceHigh": 11500,
+      "offerPrice": 11700,
+      "priceLow": 9600,
+      "priceHigh": 11700,
       "priceConfirmed": false,
       "subscriptionStart": "2026-10-28",
       "subscriptionEnd": "2026-10-29",
@@ -621,7 +621,7 @@
       "expectedPer10": 0.38,
       "underwriter": "하나증권",
       "ticker": "250030",
-      "market": "코넥스",
+      "market": "코스닥",
       "demandForecastDate": "2026-09-16",
       "rarity": "rare",
       "isReal": true
@@ -644,8 +644,8 @@
       "listingReturn": null,
       "expectedPer10": 0.24,
       "underwriter": "대신증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "179880",
+      "market": "코스닥",
       "demandForecastDate": "2026-09-16",
       "rarity": "legendary",
       "isReal": true
