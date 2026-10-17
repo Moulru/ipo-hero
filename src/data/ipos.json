@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T17:38:22.770Z",
+  "generatedAt": "2026-10-17T01:25:47.259Z",
   "count": 60,
   "ipos": [
     {
@@ -1227,30 +1227,6 @@
       "isReal": true
     },
     {
-      "id": "k288180",
-      "name": "케이피항공산업",
-      "sector": "플랫폼",
-      "offerPrice": 0,
-      "priceLow": null,
-      "priceHigh": null,
-      "priceConfirmed": false,
-      "subscriptionStart": "2026-03-24",
-      "subscriptionEnd": "2026-03-24",
-      "listingDate": "2026-05-19",
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": null,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": null,
-      "ticker": "288180",
-      "market": "코스닥",
-      "demandForecastDate": null,
-      "rarity": "common",
-      "isReal": true
-    },
-    {
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
@@ -1271,6 +1247,30 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-10-07",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "k288180",
+      "name": "케이피항공산업",
+      "sector": "플랫폼",
+      "offerPrice": 0,
+      "priceLow": null,
+      "priceHigh": null,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-03-24",
+      "subscriptionEnd": "2026-03-24",
+      "listingDate": "2026-05-19",
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": null,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": null,
+      "ticker": "288180",
+      "market": "코스닥",
+      "demandForecastDate": null,
       "rarity": "common",
       "isReal": true
     },
