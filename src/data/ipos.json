@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T23:48:42.047Z",
+  "generatedAt": "2026-10-18T03:19:40.375Z",
   "count": 60,
   "ipos": [
     {
@@ -1203,30 +1203,6 @@
       "isReal": true
     },
     {
-      "id": "k477850",
-      "name": "마키나락스",
-      "sector": "기타",
-      "offerPrice": 15000,
-      "priceLow": 12500,
-      "priceHigh": 15000,
-      "priceConfirmed": true,
-      "subscriptionStart": "2026-05-11",
-      "subscriptionEnd": "2026-05-12",
-      "listingDate": "2026-05-20",
-      "competitionRate": 2807.8,
-      "institutionalRate": 1196.08,
-      "lockupRatio": 78.17,
-      "offerAmount": 395,
-      "listingReturn": 300,
-      "expectedPer10": 0.19,
-      "underwriter": "미래에셋증권,현대차증권",
-      "ticker": "477850",
-      "market": "코스닥",
-      "demandForecastDate": null,
-      "rarity": "legendary",
-      "isReal": true
-    },
-    {
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
@@ -1248,6 +1224,30 @@
       "market": null,
       "demandForecastDate": "2026-10-07",
       "rarity": "common",
+      "isReal": true
+    },
+    {
+      "id": "k477850",
+      "name": "마키나락스",
+      "sector": "기타",
+      "offerPrice": 15000,
+      "priceLow": 12500,
+      "priceHigh": 15000,
+      "priceConfirmed": true,
+      "subscriptionStart": "2026-05-11",
+      "subscriptionEnd": "2026-05-12",
+      "listingDate": "2026-05-20",
+      "competitionRate": 2807.8,
+      "institutionalRate": 1196.08,
+      "lockupRatio": 78.17,
+      "offerAmount": 395,
+      "listingReturn": 300,
+      "expectedPer10": 0.19,
+      "underwriter": "미래에셋증권,현대차증권",
+      "ticker": "477850",
+      "market": "코스닥",
+      "demandForecastDate": null,
+      "rarity": "legendary",
       "isReal": true
     },
     {
