@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T18:47:42.141Z",
+  "generatedAt": "2026-10-18T21:19:03.896Z",
   "count": 60,
   "ipos": [
     {
@@ -294,9 +294,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 9867,
-      "priceLow": 1128,
-      "priceHigh": 9867,
+      "offerPrice": 13000,
+      "priceLow": 10500,
+      "priceHigh": 13000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
