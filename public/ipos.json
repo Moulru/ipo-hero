@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T11:01:08.648Z",
+  "generatedAt": "2026-10-20T22:57:07.708Z",
   "count": 61,
   "ipos": [
     {
@@ -22,7 +22,7 @@
       "underwriter": "KB증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-11-30",
       "rarity": "common",
       "isReal": true
     },
@@ -94,7 +94,7 @@
       "underwriter": "미래에셋증권,한국투자증권,삼성증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-11-09",
       "rarity": "common",
       "isReal": true
     },
@@ -342,9 +342,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 13000,
-      "priceLow": 10500,
-      "priceHigh": 13000,
+      "offerPrice": 9867,
+      "priceLow": 1128,
+      "priceHigh": 9867,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
@@ -1024,7 +1024,7 @@
       "competitionRate": 5.53,
       "institutionalRate": 213.31,
       "lockupRatio": 0,
-      "offerAmount": 483,
+      "offerAmount": 383,
       "listingReturn": -34.6,
       "expectedPer10": 4.25,
       "underwriter": "미래에셋증권,삼성증권",
