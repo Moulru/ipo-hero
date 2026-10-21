@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T12:12:49.921Z",
+  "generatedAt": "2026-10-21T17:32:19.882Z",
   "count": 62,
   "ipos": [
     {
@@ -46,7 +46,7 @@
       "underwriter": "한국투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-11-26",
       "rarity": "common",
       "isReal": true
     },
@@ -70,7 +70,7 @@
       "underwriter": "NH투자증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": null,
+      "demandForecastDate": "2026-11-19",
       "rarity": "common",
       "isReal": true
     },
@@ -318,9 +318,9 @@
       "id": "n2338",
       "name": "옵토닉스",
       "sector": "기타",
-      "offerPrice": 12000,
-      "priceLow": 10000,
-      "priceHigh": 12000,
+      "offerPrice": 90600,
+      "priceLow": 57818,
+      "priceHigh": 90600,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-05",
       "subscriptionEnd": "2026-11-06",
@@ -390,9 +390,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 13000,
-      "priceLow": 10500,
-      "priceHigh": 13000,
+      "offerPrice": 9867,
+      "priceLow": 1128,
+      "priceHigh": 9867,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
