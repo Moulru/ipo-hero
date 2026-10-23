@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T11:56:23.822Z",
+  "generatedAt": "2026-10-23T20:13:31.145Z",
   "count": 61,
   "ipos": [
     {
@@ -727,11 +727,11 @@
       "name": "디티에스",
       "sector": "기타",
       "offerPrice": 18500,
-      "priceLow": null,
-      "priceHigh": null,
+      "priceLow": 17000,
+      "priceHigh": 18500,
       "priceConfirmed": true,
-      "subscriptionStart": null,
-      "subscriptionEnd": null,
+      "subscriptionStart": "2026-10-13",
+      "subscriptionEnd": "2026-10-14",
       "listingDate": "2026-10-23",
       "competitionRate": null,
       "institutionalRate": 983.98,
