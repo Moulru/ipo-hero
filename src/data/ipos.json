@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T08:06:11.187Z",
+  "generatedAt": "2026-10-29T15:26:26.367Z",
   "count": 64,
   "ipos": [
     {
@@ -318,9 +318,9 @@
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
-      "offerPrice": 26000,
-      "priceLow": 21000,
-      "priceHigh": 26000,
+      "offerPrice": 23000,
+      "priceLow": 19000,
+      "priceHigh": 23000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-18",
       "subscriptionEnd": "2026-11-19",
@@ -534,9 +534,9 @@
       "id": "n2336",
       "name": "넥스아이",
       "sector": "기타",
-      "offerPrice": 9867,
-      "priceLow": 1128,
-      "priceHigh": 9867,
+      "offerPrice": 13000,
+      "priceLow": 10500,
+      "priceHigh": 13000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-03",
       "subscriptionEnd": "2026-11-04",
