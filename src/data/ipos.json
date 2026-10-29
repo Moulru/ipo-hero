@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T15:26:26.367Z",
+  "generatedAt": "2026-10-29T20:28:48.460Z",
   "count": 64,
   "ipos": [
     {
@@ -716,8 +716,8 @@
       "listingReturn": null,
       "expectedPer10": 0.27,
       "underwriter": "미래에셋증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "420610",
+      "market": "코스닥",
       "demandForecastDate": "2026-10-12",
       "rarity": "epic",
       "isReal": true
@@ -1011,6 +1011,30 @@
       "isReal": true
     },
     {
+      "id": "n2323",
+      "name": "크리에이츠",
+      "sector": "기타",
+      "offerPrice": 15000,
+      "priceLow": 15000,
+      "priceHigh": 18000,
+      "priceConfirmed": true,
+      "subscriptionStart": "2026-10-20",
+      "subscriptionEnd": "2026-10-21",
+      "listingDate": "2026-10-30",
+      "competitionRate": 6.92,
+      "institutionalRate": 240.46,
+      "lockupRatio": 0,
+      "offerAmount": 210,
+      "listingReturn": null,
+      "expectedPer10": 3.8,
+      "underwriter": "삼성증권",
+      "ticker": "439270",
+      "market": "코스닥",
+      "demandForecastDate": "2026-10-12",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
       "id": "n2306",
       "name": "스카이랩스",
       "sector": "기타",
@@ -1272,30 +1296,6 @@
       "market": "코스닥",
       "demandForecastDate": null,
       "rarity": "legendary",
-      "isReal": true
-    },
-    {
-      "id": "n2323",
-      "name": "크리에이츠",
-      "sector": "기타",
-      "offerPrice": 15000,
-      "priceLow": 15000,
-      "priceHigh": 18000,
-      "priceConfirmed": true,
-      "subscriptionStart": "2026-10-20",
-      "subscriptionEnd": "2026-10-21",
-      "listingDate": "2026-10-30",
-      "competitionRate": 6.92,
-      "institutionalRate": 240.46,
-      "lockupRatio": 0,
-      "offerAmount": 210,
-      "listingReturn": null,
-      "expectedPer10": 3.8,
-      "underwriter": "삼성증권",
-      "ticker": null,
-      "market": null,
-      "demandForecastDate": "2026-10-12",
-      "rarity": "common",
       "isReal": true
     },
     {
