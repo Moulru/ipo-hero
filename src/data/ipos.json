@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-29T20:28:48.460Z",
-  "count": 64,
+  "generatedAt": "2026-10-30T00:10:25.456Z",
+  "count": 63,
   "ipos": [
     {
       "id": "n2355",
@@ -1296,30 +1296,6 @@
       "market": "코스닥",
       "demandForecastDate": null,
       "rarity": "legendary",
-      "isReal": true
-    },
-    {
-      "id": "n2330",
-      "name": "한화플러스스팩6호",
-      "sector": "스팩",
-      "offerPrice": 2000,
-      "priceLow": 2000,
-      "priceHigh": 2000,
-      "priceConfirmed": true,
-      "subscriptionStart": "2026-10-20",
-      "subscriptionEnd": "2026-10-21",
-      "listingDate": "2026-10-30",
-      "competitionRate": 185.75,
-      "institutionalRate": 1256.48,
-      "lockupRatio": 0,
-      "offerAmount": 120,
-      "listingReturn": null,
-      "expectedPer10": 0.73,
-      "underwriter": "한화투자증권",
-      "ticker": null,
-      "market": null,
-      "demandForecastDate": null,
-      "rarity": "common",
       "isReal": true
     },
     {
