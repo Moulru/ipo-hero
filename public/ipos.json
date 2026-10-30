@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T18:44:29.049Z",
+  "generatedAt": "2026-10-30T22:50:07.189Z",
   "count": 62,
   "ipos": [
     {
@@ -318,9 +318,9 @@
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
-      "offerPrice": 26000,
-      "priceLow": 21000,
-      "priceHigh": 26000,
+      "offerPrice": 23000,
+      "priceLow": 19000,
+      "priceHigh": 23000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-18",
       "subscriptionEnd": "2026-11-19",
