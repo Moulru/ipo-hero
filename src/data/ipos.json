@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-05T01:41:50.422Z",
+  "generatedAt": "2026-11-05T09:01:41.694Z",
   "count": 62,
   "ipos": [
     {
@@ -342,9 +342,9 @@
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
-      "offerPrice": 23000,
-      "priceLow": 19000,
-      "priceHigh": 23000,
+      "offerPrice": 26000,
+      "priceLow": 21000,
+      "priceHigh": 26000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-18",
       "subscriptionEnd": "2026-11-19",
@@ -517,17 +517,17 @@
       "subscriptionStart": "2026-11-04",
       "subscriptionEnd": "2026-11-05",
       "listingDate": "2026-11-16",
-      "competitionRate": null,
+      "competitionRate": 1342.66,
       "institutionalRate": 1163.35,
       "lockupRatio": 7.21,
       "offerAmount": 253,
       "listingReturn": null,
-      "expectedPer10": null,
+      "expectedPer10": 0.27,
       "underwriter": "대신증권",
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-10-27",
-      "rarity": "rare",
+      "rarity": "epic",
       "isReal": true
     },
     {
