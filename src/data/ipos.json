@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T11:33:40.254Z",
+  "generatedAt": "2026-11-10T19:23:50.029Z",
   "count": 63,
   "ipos": [
     {
@@ -366,9 +366,9 @@
       "id": "n2337",
       "name": "유캐스트",
       "sector": "기타",
-      "offerPrice": 23000,
-      "priceLow": 19000,
-      "priceHigh": 23000,
+      "offerPrice": 26000,
+      "priceLow": 21000,
+      "priceHigh": 26000,
       "priceConfirmed": false,
       "subscriptionStart": "2026-11-18",
       "subscriptionEnd": "2026-11-19",
@@ -406,7 +406,7 @@
       "underwriter": "하나증권",
       "ticker": null,
       "market": null,
-      "demandForecastDate": "2026-10-16",
+      "demandForecastDate": "2026-11-02",
       "rarity": "common",
       "isReal": true
     },
