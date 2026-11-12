@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-11T21:51:02.614Z",
+  "generatedAt": "2026-11-12T02:44:31.408Z",
   "count": 63,
   "ipos": [
     {
@@ -99,6 +99,30 @@
       "isReal": true
     },
     {
+      "id": "n2327",
+      "name": "다비오",
+      "sector": "기타",
+      "offerPrice": 16600,
+      "priceLow": 12300,
+      "priceHigh": 16600,
+      "priceConfirmed": false,
+      "subscriptionStart": "2026-12-09",
+      "subscriptionEnd": "2026-12-10",
+      "listingDate": null,
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": 123,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": "대신증권",
+      "ticker": null,
+      "market": null,
+      "demandForecastDate": "2026-11-23",
+      "rarity": "common",
+      "isReal": true
+    },
+    {
       "id": "n2359",
       "name": "마더스제약",
       "sector": "바이오",
@@ -191,30 +215,6 @@
       "ticker": null,
       "market": null,
       "demandForecastDate": "2026-11-20",
-      "rarity": "common",
-      "isReal": true
-    },
-    {
-      "id": "n2327",
-      "name": "다비오",
-      "sector": "기타",
-      "offerPrice": 16600,
-      "priceLow": 12300,
-      "priceHigh": 16600,
-      "priceConfirmed": false,
-      "subscriptionStart": "2026-12-01",
-      "subscriptionEnd": "2026-12-02",
-      "listingDate": null,
-      "competitionRate": null,
-      "institutionalRate": null,
-      "lockupRatio": null,
-      "offerAmount": 123,
-      "listingReturn": null,
-      "expectedPer10": null,
-      "underwriter": "대신증권",
-      "ticker": null,
-      "market": null,
-      "demandForecastDate": "2026-11-23",
       "rarity": "common",
       "isReal": true
     },
