@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T06:58:15.240Z",
+  "generatedAt": "2026-11-15T20:10:19.841Z",
   "count": 61,
   "ipos": [
     {
@@ -524,8 +524,8 @@
       "listingReturn": null,
       "expectedPer10": 0.27,
       "underwriter": "대신증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "345290",
+      "market": "코스닥",
       "demandForecastDate": "2026-10-27",
       "rarity": "epic",
       "isReal": true
