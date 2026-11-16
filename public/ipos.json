@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T07:05:05.996Z",
+  "generatedAt": "2026-11-16T17:19:17.235Z",
   "count": 61,
   "ipos": [
     {
@@ -500,8 +500,8 @@
       "listingReturn": null,
       "expectedPer10": 0.27,
       "underwriter": "한국투자증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "493260",
+      "market": "코스닥",
       "demandForecastDate": "2026-10-21",
       "rarity": "epic",
       "isReal": true
@@ -521,7 +521,7 @@
       "institutionalRate": 1163.35,
       "lockupRatio": 7.21,
       "offerAmount": 253,
-      "listingReturn": null,
+      "listingReturn": -16.4,
       "expectedPer10": 0.27,
       "underwriter": "대신증권",
       "ticker": "345290",
