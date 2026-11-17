@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T08:56:46.477Z",
+  "generatedAt": "2026-11-17T18:18:07.334Z",
   "count": 63,
   "ipos": [
     {
@@ -372,7 +372,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-11-23",
       "subscriptionEnd": "2026-11-24",
-      "listingDate": "2026-11-26",
+      "listingDate": "2026-12-02",
       "competitionRate": null,
       "institutionalRate": null,
       "lockupRatio": null,
@@ -476,8 +476,8 @@
       "listingReturn": null,
       "expectedPer10": 0.35,
       "underwriter": "대신증권",
-      "ticker": null,
-      "market": null,
+      "ticker": "471800",
+      "market": "코스닥",
       "demandForecastDate": "2026-10-28",
       "rarity": "rare",
       "isReal": true
