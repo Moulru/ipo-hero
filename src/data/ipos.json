@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T17:19:17.235Z",
+  "generatedAt": "2026-11-17T00:58:59.391Z",
   "count": 61,
   "ipos": [
     {
@@ -82,8 +82,8 @@
       "priceLow": 8000,
       "priceHigh": 11000,
       "priceConfirmed": false,
-      "subscriptionStart": "2026-12-14",
-      "subscriptionEnd": "2026-12-15",
+      "subscriptionStart": "2026-12-11",
+      "subscriptionEnd": "2026-12-14",
       "listingDate": null,
       "competitionRate": null,
       "institutionalRate": null,
