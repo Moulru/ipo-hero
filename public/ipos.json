@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-18T23:56:29.931Z",
-  "count": 64,
+  "generatedAt": "2026-11-19T16:00:42.795Z",
+  "count": 65,
   "ipos": [
     {
       "id": "n2361",
@@ -396,7 +396,7 @@
       "priceConfirmed": true,
       "subscriptionStart": "2026-11-23",
       "subscriptionEnd": "2026-11-24",
-      "listingDate": "2026-11-26",
+      "listingDate": "2026-12-02",
       "competitionRate": null,
       "institutionalRate": null,
       "lockupRatio": null,
@@ -864,6 +864,30 @@
       "market": null,
       "demandForecastDate": null,
       "rarity": "rare",
+      "isReal": true
+    },
+    {
+      "id": "k271160",
+      "name": "하나에어로",
+      "sector": "기타",
+      "offerPrice": 0,
+      "priceLow": null,
+      "priceHigh": null,
+      "priceConfirmed": false,
+      "subscriptionStart": null,
+      "subscriptionEnd": null,
+      "listingDate": "2026-11-20",
+      "competitionRate": null,
+      "institutionalRate": null,
+      "lockupRatio": null,
+      "offerAmount": null,
+      "listingReturn": null,
+      "expectedPer10": null,
+      "underwriter": null,
+      "ticker": "271160",
+      "market": "코스닥",
+      "demandForecastDate": null,
+      "rarity": "common",
       "isReal": true
     },
     {
